@@ -1,1 +1,15 @@
-theme: jekyll-theme-cayman
+# 站点设置
+theme: jekyll-theme-slate
+title: "个人笔记"
+description: SongPinru 的小仓库
+show_downloads: false
+
+github:
+  is_project_page: true
+
+# 构建选项
+exclude: ["README.md", "LICENSE.md", "CNAME", "vendor"] # 在构建时排除的文件和目录
+timezone: "Asia/Shanghai" # 网站时区
+
+
+
