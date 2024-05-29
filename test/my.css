@@ -1,0 +1,59 @@
+body{
+    /*overflow-y: hidden;*/
+}
+
+#layout {
+    /*position: relative; !* 父元素需要相对定位 *!*/
+    max-width: 100vw;
+    height: 100vh; /* 设置父元素的高度 */
+    display: flex;
+    /*min-width: max-content;*/
+    /*overflow-x: auto;*/
+}
+
+#sidebar {
+    /*position: absolute;*/
+    max-width: 300px;
+    width: 100%;
+    height: 100%;
+    background-color: #dfdfdf;
+    /*box-sizing: border-box;*/
+    /*left:0px;*/
+    /*top:0px;*/
+    display:none;
+}
+#sidebar_hide{
+    /*position: absolute;*/
+    height: 100%;
+    /*left: 0px;*/
+    width: 20px;
+    background-color: #dfdfdf;
+    border: 1px solid #dfdfdf;
+}
+
+#sidebar_hide:active{
+    opacity: 0.5;
+    border: 1px;
+}
+
+#toc {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    /*box-sizing: border-box;*/
+}
+
+#main_wrap{
+    display: flex;
+    flex-direction: column;
+    /*align-items: center;*/
+    /*justify-content: space-between;*/
+    width:100%;
+    height:100%;
+    overflow: auto;
+    background-color: #f2f2f2;
+    /*box-sizing: border-box;*/
+}
+#main_content_wrap{
+    flex: 1;
+}
