@@ -1,0 +1,47 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+#layout {
+  max-width: 100vw;
+  height: 100vh; /* 设置父元素的高度 */
+  display: flex;
+}
+
+#sidebar {
+  max-width: 300px;
+  width: 100%;
+  height: 100%;
+  background-color: #dfdfdf;
+  display:none;
+  overflow-y: auto;
+}
+#sidebar_hide{
+  height: 100%;
+  width: 20px;
+  background-color: #dfdfdf;
+  border: 1px solid #dfdfdf;
+}
+
+#sidebar_hide:active{
+  opacity: 0.5;
+  border: 1px;
+}
+
+#toc {
+  width: 100%;
+  height: 100%;
+}
+
+#main_wrap{
+  display: flex;
+  flex-direction: column;
+  width:100%;
+  height:100%;
+  overflow: auto;
+  background-color: #f2f2f2;
+}
+#main_content_wrap{
+  flex: 1;
+}

@@ -8,7 +8,7 @@ github:
   is_project_page: true
 
 # 构建选项
-exclude: ["README.md", "LICENSE.md", "CNAME", "vendor"] # 在构建时排除的文件和目录
+exclude: ["README.md", "LICENSE.md", "CNAME", "vendor","test"] # 在构建时排除的文件和目录
 timezone: "Asia/Shanghai" # 网站时区
 
 
