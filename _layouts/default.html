@@ -1,83 +1,84 @@
 <!DOCTYPE html>
-<html lang="{{ site.lang | default: " en-US" }}">
+<html lang="{{ site.lang | default: 'en-US' }}">
 
 <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=5">
     <link rel="stylesheet" type="text/css" media="screen"
           href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="/javascript/toc.js" type="text/javascript"></script>
-    <style>
-        #sidebar_wrap {
-            float: left; /* 或者使用 display: flex; */
-            width: 200px; /* 导航栏宽度 */
-            height: 100%; /* 使导航栏高度充满页面 */
-            position: fixed; /* 固定导航栏位置 */
-            left: 0px;
-            overflow-y: auto; /* 如果内容过多，添加滚动条 */
-        }
-
-        /* 导航栏内容样式 */
-        #toc {
-            /* 添加您想要的样式 */
-            padding: 10px;
-        }
-
-        /* 主要内容样式调整，避免与导航栏重叠 */
-        #main_content_wrap {
-            margin-left: 200px; /* 根据导航栏宽度调整 */
-        }
-    </style>
     {% seo %}
     {% include head-custom.html %}
 </head>
 
 <body>
+<div id="layout">
+    <!-- SIDEBAR/NAVIGATION -->
+    <div id="sidebar" >
+        <aside id="toc" ></aside>
+    </div>
+    <button id="sidebar_hide"> > </button>
+    <div id="main_wrap">
+        <!-- HEADER -->
+        <div id="header_wrap" class="outer">
+            <header class="inner">
+                {% if site.github.is_project_page %}
+                <a id="forkme_banner" href="{{ site.github.repository_url }}">View on GitHub</a>
+                {% endif %}
 
-<!-- HEADER -->
-<div id="header_wrap" class="outer">
-    <header class="inner">
-        {% if site.github.is_project_page %}
-        <a id="forkme_banner" href="{{ site.github.repository_url }}">View on GitHub</a>
-        {% endif %}
+                <p id="project_title">{{ site.title | default: site.github.repository_name }}</p>
+                <p id="project_tagline">{{ site.description | default: site.github.project_tagline }}</p>
 
-        <h1 id="project_title">{{ site.title | default: site.github.repository_name }}</h1>
-        <h2 id="project_tagline">{{ site.description | default: site.github.project_tagline }}</h2>
+                {% if site.show_downloads %}
+                <section id="downloads">
+                    <a class="zip_download_link" href="{{ site.github.zip_url }}">Download this project as a .zip file</a>
+                    <a class="tar_download_link" href="{{ site.github.tar_url }}">Download this project as a tar.gz file</a>
+                </section>
+                {% endif %}
+            </header>
+        </div>
 
-        {% if site.show_downloads %}
-        <section id="downloads">
-            <a class="zip_download_link" href="{{ site.github.zip_url }}">Download this project as a .zip file</a>
-            <a class="tar_download_link" href="{{ site.github.tar_url }}">Download this project as a tar.gz file</a>
-        </section>
-        {% endif %}
-    </header>
-</div>
-<!-- SIDEBAR/NAVIGATION -->
-<div id="sidebar_wrap" class="outer">
-    <aside id="toc" class="inner"></aside>
-</div>
-<!-- MAIN CONTENT -->
-<div id="main_content_wrap" class="outer">
-    <section id="main_content" class="inner">
-        {{ content }}
-    </section>
-</div>
+        <!-- MAIN CONTENT -->
+        <div id="main_content_wrap" class="outer">
+            <section id="main_content" class="inner">
+                {{ content }}
+            </section>
+        </div>
 
-<!-- FOOTER  -->
-<div id="footer_wrap" class="outer">
-    <footer class="inner">
-        {% if site.github.is_project_page %}
-        <p class="copyright">{{ site.title | default: site.github.repository_name }} maintained by <a
-                href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></p>
-        {% endif %}
-        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
-    </footer>
+        <!-- FOOTER  -->
+        <div id="footer_wrap" class="outer">
+            <footer class="inner">
+                {% if site.github.is_project_page %}
+                <p class="copyright">{{ site.title | default: site.github.repository_name }} maintained by <a
+                        href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></p>
+                {% endif %}
+                <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+            </footer>
+        </div>
+    </div>
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#toc').toc();
+        $('#toc').toc({ listType: 'ul' });
+        var isHide=true;
+        $("#sidebar_hide").click(function (){
+            // let sidebar_width = $("#sidebar").width();
+            if(isHide){
+                $(this).text("<");
+                // $(this).css("left","+="+sidebar_width);
+                // $("#main_wrap").css("padding-left","+="+sidebar_width);
+                $("#sidebar").toggle()
+                isHide=false;
+            }else{
+                $(this).text(">");
+                // $(this).css("left",0);
+                // $("#main_wrap").css("padding-left","-="+sidebar_width);
+                $("#sidebar").toggle()
+                isHide=true;
+            }
+        });
     });
 </script>
 </body>

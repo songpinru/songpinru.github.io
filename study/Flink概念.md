@@ -1,6 +1,6 @@
 Flink概念
 
-![640?wx_fmt=png](Flink概念.assets/sssss)
+![640?wx_fmt=png](Flink概念.assets/sssss.jpg)
 
 # Task和slot
 
