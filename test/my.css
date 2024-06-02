@@ -17,7 +17,7 @@ body{
     /*min-width: 200px;*/
     width: 100%;
     height: 100%;
-    background-color: #dfdfdf;
+    background-color: #f2f2f2;
     /*box-sizing: border-box;*/
     /*left:0px;*/
     /*top:0px;*/
@@ -43,6 +43,14 @@ body{
     width: 100%;
     height: 100%;
     /*box-sizing: border-box;*/
+}
+
+#toc a{
+    color: #000000;
+}
+#toc a:hover{
+    color: #0F79D0;
+    text-decoration: none;
 }
 
 #main_wrap{
