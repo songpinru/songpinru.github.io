@@ -13,7 +13,7 @@
   max-width: 300px;
   width: 100%;
   height: 100%;
-  background-color: #dfdfdf;
+  background-color: #f2f2f2;
   display:none;
   overflow-y: auto;
 }
@@ -32,6 +32,13 @@
 #toc {
   width: 100%;
   height: 100%;
+}
+#toc a{
+  color: #000000;
+}
+#toc a:hover{
+  color: #0F79D0;
+  text-decoration: none;
 }
 
 #main_wrap{
