@@ -71,6 +71,6 @@ body{
 .inner {
     max-width: 800px;
 }
-pre code {
+code {
     white-space: pre-wrap;
 }
