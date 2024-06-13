@@ -67,3 +67,10 @@ body{
 #main_content_wrap{
     flex: 1;
 }
+
+.inner {
+    max-width: 800px;
+}
+pre code {
+    white-space: pre-wrap;
+}
