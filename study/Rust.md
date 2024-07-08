@@ -1225,7 +1225,7 @@ match x {
 
 以上代码打印出`one or two`。
 
-###条件 守卫
+### 条件守卫
 
 通过`if`引入子分支的条件守卫：
 
@@ -1606,6 +1606,14 @@ let other_weak_foo = Weak::clone(&weak_foo);
 1. `Cell<T> `和`RefCell<T>`都可以通过共享引用改变内部的T。它们的区别是`Cell<T>`是直接将T move in和move out，而RefCell是通过可变引用来改变T。所以Cell适合copy type，而RefCell适合handle type。(handle type即智能指针）
 2. 它们都是建立在`UnsafeCell`上。`UnsafeCell` Rust 是Rust类型系统的“后门”，可以实现将共享引用转换成可变引用。实现的技巧是按顺序转换类型:` &T->*const T-*mut T-> mut T-> &mut T`。
 3. 他们都是非Sync的，所以不能在多线程间共享
+
+### Cow
+
+在 Rust 中，缩写 "Cow "代表 "Clone on Write "。它是一个枚举，包含两种状态： 借用(Borrow)和拥有(Owned)。这意味着您可以用它来抽象出您是拥有数据还是只是拥有数据的引用。
+
+当获取可变引用时，cow会发生clone，内部会自动切换成Owned，否则就是创建时的状态。创建时如果是值类型，就是Owned，引用就是Borrow。
+
+
 
 # 所有权和生命周期
 
@@ -2399,6 +2407,48 @@ mod tests {
 
 # 宏！
 
+
+
+[“The Little Book of Rust Macros”](https://veykril.github.io/tlborm/)。
+
+在 Rust 中宏分为两大类：**声明式宏( _declarative macros_ )** `macro_rules!` 和三种**过程宏( _procedural macros_ )**:
+
+* `#[derive]`，在之前多次见到的派生宏，可以为目标结构体或枚举派生指定的代码，例如 `Debug` 特征
+* 类属性宏(Attribute-like macro)，用于为目标添加自定义的属性
+* 类函数宏(Function-like macro)，看上去就像是函数调用
+
+## 声明式宏
+
+[声明式宏 `macro_rules!`](https://course.rs/advance/macro.html#%E5%A3%B0%E6%98%8E%E5%BC%8F%E5%AE%8F-macro_rules)
+
+在 Rust 中使用最广的就是声明式宏，它们也有一些其它的称呼，例如示例宏( macros by example )、`macro_rules!` 或干脆直接称呼为**宏**。
+
+声明式宏允许我们写出类似 `match` 的代码。`match` 表达式是一个控制结构，其接收一个表达式，然后将表达式的结果与多个模式进行匹配，一旦匹配了某个模式，则该模式相关联的代码将被执行:
+
+```
+match target {
+    模式1 => 表达式1,
+    模式2 => {
+        语句1;
+        语句2;
+        表达式2
+    },
+    _ => 表达式3
+}
+```
+
+## 过程宏
+
+
+
+## 作用域
+
+宏是有顺序的，调用宏的代码必须在宏定义之后，但是宏与宏之间没有顺序要求。
+
+宏的作用域是可以突破mod的。
+
+
+
 # 标准库
 
 ## thread
@@ -2826,7 +2876,7 @@ Mutex实质上也实现了内部可变性，所以不需要RefCell和Cell
 
 > RwLock读写锁同Mutex，也实现了内部可变性，多线程中使用
 
-[Rust标准库中的互斥(Mutex) | Rust学习笔记 (skyao.io)](https://skyao.io/learning-rust/std/sync/mutex.html)
+[ Rust学习笔记 (skyao.io)](https://skyao.io/learning-rust/std/)
 
 ### atomic
 
