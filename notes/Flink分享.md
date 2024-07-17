@@ -20,8 +20,8 @@ Apache Flink是一个框架和分布式处理引擎，用于对==无界和有界
   * 内存管理
   * 故障恢复
   * 高可用
-
-
+    
+    
 
 <img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2017/cb5357a8.png" alt="Identity 单线程吞吐量" style="zoom:50%;" />
 
@@ -107,8 +107,8 @@ flink中有状态函数和运算符在各个元素(element)/事件(event)的处�
 
 * 必须单调递增，以确保任务的事件时间时钟在向前推进，而不是在后退。
 * 它们与数据的时间戳相关。带有时间戳T的水位线表示，所有后续数据的时间戳都应该大于T。
-
-
+  
+  
 
 当前消息时间戳最大值-最大延迟~=水位线
 
@@ -235,8 +235,8 @@ checkpoint成功，否则删除已收到回执的快照
 * 对所有被越过的数据标记为异步存储,并创建这个算子的快照
 * 处理异步标记的数据时,更新算子的快照
 * 如果标记的数据都处理完成,这个快照就标记为对齐快照
-
-
+  
+  
 
 未对齐检查点的恢复
 
@@ -305,39 +305,39 @@ flink的设计目标是7*24h不间断运行的,可靠性也是一个必须要解
 
 flink的解决方案:
 
-![img](https://upload-images.jianshu.io/upload_images/19063731-e8413293c9d3e1b5.png)
+![img](Flink分享.assets/img-fanya01.png)
 
 
 
 了解了数据传输流程，我们再具体了解一下跨 TaskManager 的反压过程，如下图所示，Producer 端生产数据速率为 2，Consumer 消费数据速率为 1。Flink 反压是怎么做的？
 
- 
 
-![img](https://upload-images.jianshu.io/upload_images/19063731-02d12ebd165008a8.png)
+
+![loading-ag-5080](Flink分享.assets/img-fanya02.png)
 
 
 
 这里，NetWork BufferPool 是 TaskManager 内所有 Task 共享的 BufferPool，TaskManager 初始化时就会向堆外内存申请 NetWork BufferPool。LocalBufferPool 是每个 Task 自己的 BufferPool，假如一个 TaskManager 内运行着 5 个 Task，那么就会有 5 个 LocalBufferPool，但 TaskManager 内永远只有一个 NetWork BufferPool。Netty 的 Buffer 也是初始化时直接向堆外内存申请内存空间。虽然可以申请，但是必须明白内存申请肯定是有限制的，不可能无限制的申请，我们在启动任务时可以指定该任务最多可能申请多大的内存空间用于 NetWork Buffer。
 
- 
 
-![img](https://upload-images.jianshu.io/upload_images/19063731-006976ee445d75cc.png)
+
+![loading-ag-5082](Flink分享.assets/img-fanya03.png)
 
 * sink写入慢
 * 导致消费InputChannel变慢
 * InputChannel满了
 * InputChannel向LocalBufferPool申请内存
+  
+  
 
-
-
-![img](https://upload-images.jianshu.io/upload_images/19063731-19c39fbbba7af8a2.png)
+![loading-ag-5084](Flink分享.assets/img-fanya04.png)
 
 * LocalBufferPool也满了
 * LocalBufferPool再向NetworkBufferPool申请
+  
+  
 
-
-
-![img](https://upload-images.jianshu.io/upload_images/19063731-b2c4c8439057cda9.png)
+![loading-ag-5086](Flink分享.assets/img-fanya05.png)
 
 * NetworkBufferPool满了
 * 不能申请了,NetBufferPool再初始化的时候就申请好了,不能扩展
@@ -348,44 +348,44 @@ flink的解决方案:
 
 可以看到上图中多个 ❌，表示 Buffer 已满，数据已经不能往下游写了，发生了阻塞。
 
- 
 
-![img](https://upload-images.jianshu.io/upload_images/19063731-773455caeb895958.png)
+
+![loading-ag-5088](Flink分享.assets/img-fanya06.png)
 
 * TCP 的 Socket 通信有动态反馈的流控机制
 * 上游没有缓存来接收消息,上游不会往下游发送
+  
+  
 
- 
-
-![img](https://upload-images.jianshu.io/upload_images/19063731-c92ee50dc46c5fd0.png)
+![loading-ag-5090](Flink分享.assets/img-fanya07.png)
 
 * 上游的socket缓存满了
 * netty不能往socket写了,数据存到netty的缓存
+  
+  
 
- 
-
-![img](https://upload-images.jianshu.io/upload_images/19063731-ca5141c85802c2ed.png)
+![loading-ag-5092](Flink分享.assets/img-fanya08.png)
 
 * netty的缓存满了
 * ResultSubpartition不能往netty写数据了
+  
+  
 
- 
-
-![img](https://upload-images.jianshu.io/upload_images/19063731-1d294a8b2b7ad8d6.png)
+![loading-ag-5094](Flink分享.assets/img-fanya09.png)
 
 * ResultSubpartition的内存用完了
 * 向LocalBufferPool申请
+  
+  
 
- 
-
-![img](https://upload-images.jianshu.io/upload_images/19063731-55d62a00216d6a59.png)
+![loading-ag-5096](Flink分享.assets/img-fanya10.png)
 
 * LocalBufferPool内存也用完了
 * LocalBufferPool向NetWorkBufferPool申请
+  
+  
 
-
-
-![img](https://upload-images.jianshu.io/upload_images/19063731-e56eb2374a8393c9.png)
+![loading-ag-5098](Flink分享.assets/img-fanya11.png)
 
 * NetworkBufferPool内存用完
 * NetworkBufferPool不在申请
@@ -393,7 +393,7 @@ flink的解决方案:
 
 task内的反压机制
 
-![img](https://upload-images.jianshu.io/upload_images/19063731-e6ca5c49ed1b72c0.png)
+![loading-ag-5100](Flink分享.assets/img-fanya12.png)
 
 整个TaskManager只有一个NetworkBufferPool,
 
@@ -414,10 +414,10 @@ flink通过反压机制实现了动态流控,数据摄入速度完全取决于�
 ## 内存管理
 
 > 在 JVM 中处理大量数据最直接的方式就是将这些数据做为对象存储在堆内存中，然后直接在内存中操作这些数据，如果想进行排序则就是对对象列表进行排序。然而这种方法有一些明显的缺点，首先，在频繁的创建和销毁大量对象的时候，监视和控制堆内存的使用并不是一件很简单的事情。如果对象分配过多的话，那么会导致内存过度使用，从而触发 OutOfMemoryError，导致 JVM 进程直接被杀死。另一个方面就是因为这些对象大都是生存在新生代，当 JVM 进行垃圾回收时，垃圾收集的开销很容易达到 50% 甚至更多。最后就是 Java 对象具有一定的空间开销（具体取决于 JVM 和平台）。
->
+> 
 > 在此背景下，Flink 一直有自己的内存数据处理方法。Flink 将对象序列化为固定数量的预先分配的内存段，而不是直接把对象放在堆内存上。它的 DBMS 风格的排序和连接算法尽可能多地对这个二进制数据进行操作，以此将序列化和反序列化开销降到最低。如果需要处理的数据多于可以保存在内存中的数据，==Flink 的operator会将部分数据溢出到磁盘==。
 
-![image-20210826104207373](Flink%E5%88%86%E4%BA%AB.assets/image-20210826104207373.png)
+![image-20210826104207373](Flink分享.assets/image-20210826104207373.png)
 
 
 
@@ -441,13 +441,13 @@ Managed Memory内存也是初始化分配的,超过了不会申请,只会写入�
    2. 代码有问题
 
 > spark也在主动管理内存，
->
+> 
 > 但是spark的网络io这块，内存不是固定的，需要和计算、缓存用到的内存争夺
->
+> 
 > 因此很多堆外内存不足报错都是netty申请不到内存
->
+> 
 > 但是实际上有可能是用户代码申请了堆外内存，或者计算和缓存用的内存太多（笛卡尔积，数据倾斜）
->
+> 
 > 影响问题的定位
 
 ## 故障恢复
@@ -480,8 +480,8 @@ Flink 通过重启策略和故障恢复策略来控制 Task 重启：
   * 两次重启之间有固定的重启间隔
   * 没有重启次数限制，当一段时间内重启次数超过固定值，任务失败
   * 适用于能够重启成功，但运行时间不长的情况（通常是代码有bug）
-
-
+    
+    
 
 ### 故障恢复策略：
 
@@ -533,8 +533,8 @@ Yarn的重试机制经过了长时间的检验，是非常可靠的
 * 舆情监控功能设计
 * 直播监控功能设计
 * 账号监控功能设计
-
-
+  
+  
 
 与离线处理模块相比,离线模块满足的通常是以天为粒度,时效性为T+1的需求
 
@@ -545,4 +545,3 @@ flink优势是数据粒度更细,可以提供分钟甚至秒级的数据粒度,�
 未来展望
 
 可以利用flink-sql做实时数仓,实现流批一体,简化整个项目的结构
-
