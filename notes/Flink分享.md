@@ -179,12 +179,12 @@ checkpoint,目标是为了能够在任务失败或者停止后能够恢复任务
 
 实际执行时，jobManager会发起checkpoint，然后source算子插入屏障，屏障记录流经的每个算子的状态值![在这里插入图片描述](https://img-blog.csdnimg.cn/20210103230410131.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMDgxODQy,size_16,color_FFFFFF,t_70)
 Source Task自身做快照，并保存到状态后端；
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20210103230419534.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMDgxODQy,size_16,color_FFFFFF,t_70)
+![在这里插入图片描述](Flink%E5%88%86%E4%BA%AB.assets/image-20210103230419534.png)
 Source Task将barrier跟数据流一块往下游发送；
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20210103230431793.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMDgxODQy,size_16,color_FFFFFF,t_70)
+![在这里插入图片描述](Flink%E5%88%86%E4%BA%AB.assets/image-20210103230431793.png)
 当下游的Operator实例接收到CheckPoint barrier后，对自身做快照
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20210103230445711.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMDgxODQy,size_16,color_FFFFFF,t_70)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20210103230450392.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMDgxODQy,size_16,color_FFFFFF,t_70)
+![在这里插入图片描述](Flink%E5%88%86%E4%BA%AB.assets/image-20210103230445711.png)
+![在这里插入图片描述](Flink%E5%88%86%E4%BA%AB.assets/image-20210103230450392.png)
 
 task做完快照后会告诉Jobmanager，他把快照保存到了哪里，
 
@@ -210,7 +210,7 @@ checkpoint成功，否则删除已收到回执的快照
 
 
 
-![kkk](https://img-blog.csdnimg.cn/20210103230607829.png)
+![kkk](Flink%E5%88%86%E4%BA%AB.assets/image-20210103230607829.png)
 
 这里从图中可以看到，当上游的第一个屏障先到达时，这个数据流的数据没有继续消费，而是阻塞等待其他数据流的屏障到达
 
@@ -258,9 +258,9 @@ flink是分布式计算引擎,想要实现分布式事务,还是不太容易的
 
 这里flink采用的算法是经典的==二阶段提交算法==
 
-![2pc-success](http://segmentfault.com/img/bV0KNR)
+![2pc-success](Flink%E5%88%86%E4%BA%AB.assets/img-bV0KNR.png)
 
-![2pc-failed](https://segmentfault.com/img/bV0KOc)
+![2pc-failed](Flink%E5%88%86%E4%BA%AB.assets/img-bV0KOc.png)
 
 * precommit
 * commit/abort
