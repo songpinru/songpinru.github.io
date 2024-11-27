@@ -370,7 +370,7 @@ b.  其中2台复用旧的namenode域名(ip和域名都可以更换,但是为了
 
 hadoopu1.optaim.com节点需要新安装一个mysql
 
- ```Python
+ ```python
  apt install mariadb-server-10.1
  ```
 
@@ -378,7 +378,7 @@ hadoopu1.optaim.com节点需要新安装一个mysql
 
 备份10.11.20.49节点的数据
 
-  ```Python
+  ```python
   mysqldump -h10.11.20.49 -uroot -p123456 \
   --all-databases  \
   --add-drop-database \
@@ -395,7 +395,7 @@ hadoopu1.optaim.com节点需要新安装一个mysql
 
 设置10.11.20.49节点为master,并load数据
 
-  ```Python
+  ```python
   change master to
   master_host='10.11.20.49',master_port=3306,master_user='root',master_password='Qwaszx'
   source master.sql
@@ -416,14 +416,14 @@ clouderanManger进入维护模式
 
 10.11.20.49停止clouderaManager server
 
-  ```Shell
+  ```shell
   systemctl stop cloudera-scm-server
 
   ```
 
 hadoopu1.optaim.com安装clouderaManager
 
-  ```Shell
+  ```shell
   #! /bin/bash
 
   SOURCE="$(readlink -f ${BASH_SOURCE[0]})"
@@ -472,7 +472,7 @@ hadoopu1.optaim.com安装clouderaManager
 
 修改/etc/cloudera-scm-agent/config.ini,并启动server
 
-  ```Shell
+  ```shell
   systemctl start cloudera-scm-server
 
   ```
@@ -480,7 +480,7 @@ hadoopu1.optaim.com安装clouderaManager
 启动完成后会发现没有agent,需要陆续修改所有cloudera
 agent(包括hadoopm3.optaim.com和hadoopu1.optaim.com)
 
-  ```Shell
+  ```shell
   sed -i 's|server_host=bjuc49.optaim.com|server_host=hadoopu1.optaim.com|'  /etc/cloudera-scm-agent/config.ini
 
   ```
@@ -493,7 +493,7 @@ agent(包括hadoopm3.optaim.com和hadoopu1.optaim.com)
 
 连接10.11.20.49 mysql ,查看已经建立的所有连接
 
-  ```Shell
+  ```shell
   show processlist;
   ```
 
@@ -543,13 +543,13 @@ PS:
 
 注意:此处可以先不要重启服务,后续一起重启即可
 
-**NameNode迁移**
+#### NameNode迁移
 
 NameNode需要复用旧的agent的uuid,先停止10.11.20.51并取得uuid
 
 ![](hadoop集群关键角色迁移.assert/image16.png)
 
-  ```Shell
+  ```shell
   systemctl stop cloudera-scm-agent.service
   cat /var/lib/cloudera-scm-agent/uuid
 
@@ -557,14 +557,14 @@ NameNode需要复用旧的agent的uuid,先停止10.11.20.51并取得uuid
 
 把得到的uuid写入 bjuc51.optaim.com节点
 
-  ```Shell
+  ```shell
   echo -n 'xxxxx' > /var/lib/cloudera-scm-agent/uuid
 
   ```
 
 然后重启cloudera-scm-agent
 
-  ```Shell
+  ```shell
   systemctl restart cloudera-scm-agent.service
 
   ```
@@ -575,7 +575,7 @@ NameNode需要复用旧的agent的uuid,先停止10.11.20.51并取得uuid
 
 或者使用命令行(手动编辑配置文件)
 
-  ```Shell
+  ```shell
   hdfs namenode -conf /tmp/hdfs-site.xml -bootstrapStandby
 
   ```
@@ -612,7 +612,7 @@ journalNode有3个,其中2个和NameNode一起\`借壳重生\`了,还有一个�
 1.  使用scp,然后修改权限
 2.  使用10.11.20.51执行-initializeSharedEdits
 
-  ```Shell
+  ```shell
   hdfs namenode -conf tmp/hdfs-site.xml -initializeSharedEdits\
   ```
 hdfs-site.xml
