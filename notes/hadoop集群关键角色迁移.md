@@ -672,7 +672,7 @@ zookeeper线上节点是bjuc53.optaim.com,bjuc54.optaim.com,bjuc55.optaim.com
 
 节点对应id
 
-  ------------------------------------------------------ ----------------
+```
   节点                                                   myid
 
   bjuc53.optaim.com                                      1
@@ -686,7 +686,7 @@ zookeeper线上节点是bjuc53.optaim.com,bjuc54.optaim.com,bjuc55.optaim.com
   bjuc52.optaim.com                                      5
 
   hadoopm3.optaim.com                                    6
-  ------------------------------------------------------ ----------------
+```
 
 ![](hadoop集群关键角色迁移.assert/image22.png)
 
