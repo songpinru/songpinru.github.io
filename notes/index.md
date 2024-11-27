@@ -31,3 +31,5 @@
 * [正确使用channel](./%E6%AD%A3%E7%A1%AE%E4%BD%BF%E7%94%A8channel)
 * [集群高可用专项](./%E9%9B%86%E7%BE%A4%E9%AB%98%E5%8F%AF%E7%94%A8%E4%B8%93%E9%A1%B9)
 * [数仓开发规范](./%E6%95%B0%E4%BB%93%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83)
+* [hadoop集群关键角色迁移](./hadoop集群关键角色迁移)
+* [230801-HadoopNN迁移故障](./230801-HadoopNN迁移故障ß)
