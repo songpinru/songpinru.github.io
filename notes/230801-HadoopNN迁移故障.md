@@ -2,7 +2,7 @@
 
 ## NameNode迁移
 
-**时间线**
+### 时间线
 
 10:00 开始切换前准备，验证各项配置，手动切换 active NameNode，无异常
 
@@ -71,7 +71,7 @@ NameNode，进行验证，如还有问题，及时通知回滚
 
 同步旧的NameNode节点的权限后刷新，权限问题解决
 
-**问题产生原因**
+### 问题产生原因
 
 首先有两个现象：
 
@@ -79,23 +79,21 @@ NameNode，进行验证，如还有问题，及时通知回滚
 
 任务重启失败
 
-**checkpoint失败**
+### checkpoint失败
 
 先说第一个现象的原因，java代码使用HDFS一般都是使用的hdfs-client这个包，核心的一个类是NameNodeRpcServer：
 
-![](230801-HadoopNN迁移故障.assert/image1.png){width="5.75in"
-height="3.59375in"}
+![](230801-HadoopNN迁移故障.assert/image1.png)
 
 其实从这里其实就可以看到为什么active
 NameNode切换后会失败了，我们先看一下InetSocketAddress的构造器：
 
-![](230801-HadoopNN迁移故障.assert/image2.png){width="5.75in"
-height="2.2604166666666665in"}
+![](230801-HadoopNN迁移故障.assert/image2.png)
 
 InetSocketAddress里存的是构造时NameNode的ip，所以我们迁移之后ip变化，会导致和NameNode的连接失败，所以checkpoint会在切换active
 NameNode后失败。
 
-**重启失败**
+### 重启失败
 
 下午观察ResourceManager和flink 的日志，发现RM分给了Application
 Master的container，但是状态一直是Accept，没有转化为Start或者Running，flink那边则报Yarn没有申请到容器，可能没有可用的资源，但是此时资源是充足的。
@@ -163,15 +161,11 @@ b.发现flink12提交任务阻塞
 
 17:35-后续 恢复其它任务；
 
-a.遇到权限问题，单纯用root或者optz无法重启
-
-b.启动成功后并未处于阻塞状态flink并未进行消费计算
-
-c.此时数据不完整，小时任务执行不完整
-
-d.此前未出现用户权限限制，但这次由于用户权限不对，导致恢复时间花费较长
-
-e.定位问题来源花费时间较长导致恢复缓慢
+1. 遇到权限问题，单纯用root或者optz无法重启
+2. 启动成功后并未处于阻塞状态flink并未进行消费计算
+3. 此时数据不完整，小时任务执行不完整
+4. 此前未出现用户权限限制，但这次由于用户权限不对，导致恢复时间花费较长
+5. 定位问题来源花费时间较长导致恢复缓慢
 
 18:04
 report报表小时数据恢复完毕，几分钟过后报警群开始告警，告警信息为消耗数据长时间未更新
