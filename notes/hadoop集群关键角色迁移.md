@@ -76,7 +76,7 @@ PS：硬件故障的3台机器服役年龄均为7-8年，和关键角色机器�
 
 ### 原本的迁移计划
 
-[集群高可用专项](集群高可用专项)
+[集群高可用专项](../集群高可用专项/)
 
 [parllay 基础平台 k8s
 化进度表](https://mh4k64q7w1.feishu.cn/base/bascnRLnNeuhr4vY02coUsSEmYc)

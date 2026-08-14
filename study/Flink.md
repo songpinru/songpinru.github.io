@@ -230,7 +230,7 @@ class MyCoFlatMap extends CoFlatMapFunction[SourceReading,SourceReading,SourceRe
 
 >  `rebalance()`和`rescale()`的根本区别在于任务之间连接的机制不同。 `rebalance()`将会针对所有发送者任务和所有接收者任务之间建立通信通道，而`rescale()`仅仅针对每一个任务和下游算子的一部分子并行任务之间建立通信通道。rescale的示意图为图5-7。
 
-![spaf 0507](src\reblance和rescale.png)
+![spaf 0507](src/reblance和rescale.png)
 
 **Broadcast**
 
@@ -301,7 +301,7 @@ class MyFlatMap extends RichFlatMapFunction[Int, (Int, Int)] {
 
 # Window API
 
-![640?wx_fmt=png](Flink概念.assets/sssss)
+![640?wx_fmt=png](Flink概念.assets/sssss.jpg)
 
 coGroup和join类似,coGroup返回的是两个列表(相同key) 
 
@@ -512,7 +512,7 @@ object TriggerExample {
 
 # Process Function(Low-Level API)
 
-![640?wx_fmt=png](Flink.assets/sssss)
+<!-- 原图缺失：Flink.assets/sssss -->
 
 Flink提供了8个Process Function：(processElement,onTimer)
 
@@ -1057,4 +1057,3 @@ val timeoutResult = complexResult.getSideOutput(orderTimeoutOutput)
 complexResult.print()
 timeoutResult.print()
 ```
-

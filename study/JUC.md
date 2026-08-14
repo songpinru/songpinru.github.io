@@ -1515,7 +1515,7 @@ public class BlockingQueueDemo {
 
 Java中的线程池是通过Executor框架实现的，该框架中用到了Executor，Executors，ExecutorService，ThreadPoolExecutor
 
-![image-20211129145842493](C:\Users\xzhang17\AppData\Roaming\Typora\typora-user-images\image-20211129145842493.png)
+<!-- 原图缺失：image-20211129145842493.png（本机 Typora 路径未随仓库迁移） -->
 
 ### 9.3分类
 
@@ -1631,7 +1631,7 @@ public class ThreadPoolDemo1 {
 
 上面几种创建线程池的方法都是使用了ThreadPoolExecutor
 
-![image-20211129154552741](C:\Users\xzhang17\AppData\Roaming\Typora\typora-user-images\image-20211129154552741.png)
+<!-- 原图缺失：image-20211129154552741.png（本机 Typora 路径未随仓库迁移） -->
 
 一共有七个参数
 
@@ -1734,4 +1734,3 @@ public class ThreadPoolDemo2 {
     }
 }
 ```
-

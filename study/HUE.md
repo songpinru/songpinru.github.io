@@ -2,7 +2,7 @@
 
 # 什么是HUE？
 
-![image-20200626094805815](HUE.assets\image-20200626094805815.png)
+![image-20200626094805815](HUE.assets/image-20200626094805815.png)
 
  	==HUE=HadoopUser Experience==，是一个==开源==的Apache Hadoop UI系统，由Cloudera Desktop演化而来，最后Cloudera公司将其贡献给Apache基金会的Hadoop社区。通过HUE我们可以在浏览器端完成与Hadoop集群的交互工作。
 

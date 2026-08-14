@@ -1,3 +1,8 @@
+---
+aliases:
+  - /notes/spark 调优总结
+---
+
 # 总览
 
 ```shell

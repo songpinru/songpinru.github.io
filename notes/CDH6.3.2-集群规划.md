@@ -1,3 +1,8 @@
+---
+aliases:
+  - /notes/CDH6.3.2 集群规划
+---
+
 # CDH6.3.2 集群规划
 
 # 基础
@@ -151,4 +156,3 @@ hive.spark.client.server.connect.timeout=600s
 
 beeline --hiveconf hive.server2.logging.operation.level=NONE  -u "jdbc:hive2://10.11.20.55:2181,10.11.20.54:2181,10.11.20.53:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2"  -n hive
 ```
-

@@ -1,6 +1,6 @@
 # GIT
 
-![git&github](src\Git&GitHub.bmp)
+![git&github](src/Git&GitHub.bmp)
 
 # Git指令
 

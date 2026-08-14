@@ -30,9 +30,9 @@
 
 | 数据类型 | 描述                                  | 语法示例                                            |
 | -------- | ------------------------------------- | --------------------------------------------------- |
-| STRUCT   | 结构化数据，使用`.`  来获得元素       | struct()   例如struct<street:string,   city:string> |
-| MAP      | K-V键值对，那么可以通过字段名获取元素 | map()   例如map<string, int>                        |
-| ARRAY    | 通过数组下标获取元素                  | Array()   例如array<string>                         |
+| STRUCT   | 结构化数据，使用`.`  来获得元素       | `struct()`   例如 `struct<street:string, city:string>` |
+| MAP      | K-V键值对，那么可以通过字段名获取元素 | `map()`   例如 `map<string, int>`                     |
+| ARRAY    | 通过数组下标获取元素                  | `Array()`   例如 `array<string>`                      |
 
 # 安装
 
@@ -452,4 +452,3 @@ desc formatted student;
 
 
 [1]:https://www.jianshu.com/p/9c43f03b97e7	"SerDe详解"
-

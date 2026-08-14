@@ -1,0 +1,6 @@
+{{- with .File -}}
+  {{- $editURL := urls.JoinPath "https://github.com/songpinru/songpinru.github.io/edit/main" .Path -}}
+  <a class="kb-edit-link" href="{{ $editURL }}" target="_blank" rel="noreferrer">
+    在 GitHub 编辑
+  </a>
+{{- end -}}

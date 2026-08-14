@@ -224,9 +224,9 @@ $(document).ready(function () {
 
 ### 视频
 
-您可以使用 <video> HTML标记嵌入视频，例如：
+您可以使用 `<video>` HTML标记嵌入视频，例如：
 
-<video src="xxx.mp4" />
+`<video src="xxx.mp4" />`
 
 # Markdown 表格
 
@@ -306,7 +306,6 @@ $$
 \frac{\partial X}{\partial u} &  \frac{\partial Y}{\partial u} & 0 \\
 \frac{\partial X}{\partial v} &  \frac{\partial Y}{\partial v} & 0 \\
 \end{vmatrix}
-${fs}{\style{visibility:hidden}{(x+1)(x+1)}}
 $$
 # 图形和流
 
@@ -606,4 +605,3 @@ Note right of C: 没人陪我玩
 > Quote here.
 >
 > -- <cite>Benjamin Franklin</cite>
-

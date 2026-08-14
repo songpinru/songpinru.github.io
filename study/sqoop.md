@@ -101,12 +101,12 @@ $ bin/sqoop export \
 
 |      | **参数**                        | **说明**                                                     |
 | ---- | ------------------------------- | ------------------------------------------------------------ |
-| 1    | --enclosed-by <char>            | 给字段值前加上指定的字符                                     |
-| 2    | --escaped-by <char>             | 对字段中的双引号加转义符                                     |
-| 3    | --fields-terminated-by <char>   | 设定每个字段是以什么符号作为结束，默认为逗号                 |
-| 4    | --lines-terminated-by <char>    | 设定每行记录之间的分隔符，默认是\n                           |
+| 1    | --enclosed-by `<char>`            | 给字段值前加上指定的字符                                     |
+| 2    | --escaped-by `<char>`             | 对字段中的双引号加转义符                                     |
+| 3    | --fields-terminated-by `<char>`   | 设定每个字段是以什么符号作为结束，默认为逗号                 |
+| 4    | --lines-terminated-by `<char>`    | 设定每行记录之间的分隔符，默认是\n                           |
 | 5    | --mysql-delimiters              | Mysql默认的分隔符设置，字段之间以逗号分隔，行之间以\n分隔，默认转义符是\，字段值以单引号包裹。 |
-| 6    | --optionally-enclosed-by <char> | 给带有双引号或单引号的字段值前后加上指定字符。               |
+| 6    | --optionally-enclosed-by `<char>` | 给带有双引号或单引号的字段值前后加上指定字符。               |
 
 
 
@@ -116,59 +116,59 @@ $ bin/sqoop export \
 | 2    | --as-avrodatafile                 | 将数据导入到一个Avro数据文件中                               |
 | 3    | --as-sequencefile                 | 将数据导入到一个sequence文件中                               |
 | 4    | --as-textfile                     | 将数据导入到一个普通文本文件中                               |
-| 5    | --boundary-query <statement>      | 边界查询，导入的数据为该参数的值（一条sql语句）所执行的结果区间内的数据。 |
-| 6    | --columns   <col1, col2, col3>    | 指定要导入的字段                                             |
+| 5    | --boundary-query `<statement>`      | 边界查询，导入的数据为该参数的值（一条sql语句）所执行的结果区间内的数据。 |
+| 6    | --columns   `<col1, col2, col3>`    | 指定要导入的字段                                             |
 | 7    | --direct                          | 直接导入模式，使用的是关系数据库自带的导入导出工具，以便加快导入导出过程。 |
 | 8    | --direct-split-size               | 在使用上面direct直接导入的基础上，对导入的流按字节分块，即达到该阈值就产生一个新的文件 |
 | 9    | --inline-lob-limit                | 设定大对象数据类型的最大值                                   |
 | 10   | --m或–num-mappers                 | 启动N个map来并行导入数据，默认4个。                          |
-| 11   | --query或--e <statement>          | 将查询结果的数据导入，使用时必须伴随参--target-dir，--hive-table，如果查询中有where条件，则条件后必须加上$CONDITIONS关键字 |
-| 12   | --split-by   <column-name>        | 按照某一列来切分表的工作单元，不能与--autoreset-to-one-mapper连用（请参考官方文档） |
-| 13   | --table   <table-name>            | 关系数据库的表名                                             |
-| 14   | --target-dir   <dir>              | 指定HDFS路径                                                 |
-| 15   | --warehouse-dir   <dir>           | 与14参数不能同时使用，导入数据到HDFS时指定的目录             |
+| 11   | --query或--e `<statement>`          | 将查询结果的数据导入，使用时必须伴随参--target-dir，--hive-table，如果查询中有where条件，则条件后必须加上$CONDITIONS关键字 |
+| 12   | --split-by   `<column-name>`        | 按照某一列来切分表的工作单元，不能与--autoreset-to-one-mapper连用（请参考官方文档） |
+| 13   | --table   `<table-name>`            | 关系数据库的表名                                             |
+| 14   | --target-dir   `<dir>`              | 指定HDFS路径                                                 |
+| 15   | --warehouse-dir   `<dir>`           | 与14参数不能同时使用，导入数据到HDFS时指定的目录             |
 | 16   | --where                           | 从关系数据库导入数据时的查询条件                             |
 | 17   | --z或--compress                   | 允许压缩                                                     |
 | 18   | --compression-codec               | 指定hadoop压缩编码类，默认为gzip(Use Hadoop codec default gzip) |
-| 19   | --null-string   <null-string>     | string类型的列如果null，替换为指定字符串                     |
-| 20   | --null-non-string   <null-string> | 非string类型的列如果null，替换为指定字符串                   |
-| 21   | --check-column   <col>            | 作为增量导入判断的列名                                       |
-| 22   | --incremental   <mode>            | mode：append或lastmodified                                   |
-| 23   | --last-value   <value>            | 指定某一个值，用于标记增量导入的位置                         |
+| 19   | --null-string   `<null-string>`     | string类型的列如果null，替换为指定字符串                     |
+| 20   | --null-non-string   `<null-string>` | 非string类型的列如果null，替换为指定字符串                   |
+| 21   | --check-column   `<col>`            | 作为增量导入判断的列名                                       |
+| 22   | --incremental   `<mode>`            | mode：append或lastmodified                                   |
+| 23   | --last-value   `<value>`            | 指定某一个值，用于标记增量导入的位置                         |
 
 ## export参数
 
 | **序号** | **参数**                              | **说明**                                   |
 | -------- | ------------------------------------- | ------------------------------------------ |
-| 1        | --input-enclosed-by <char>            | 对字段值前后加上指定字符                   |
-| 2        | --input-escaped-by <char>             | 对含有转移符的字段做转义处理               |
-| 3        | --input-fields-terminated-by <char>   | 字段之间的分隔符                           |
-| 4        | --input-lines-terminated-by <char>    | 行之间的分隔符                             |
-| 5        | --input-optionally-enclosed-by <char> | 给带有双引号或单引号的字段前后加上指定字符 |
+| 1        | --input-enclosed-by `<char>`            | 对字段值前后加上指定字符                   |
+| 2        | --input-escaped-by `<char>`             | 对含有转移符的字段做转义处理               |
+| 3        | --input-fields-terminated-by `<char>`   | 字段之间的分隔符                           |
+| 4        | --input-lines-terminated-by `<char>`    | 行之间的分隔符                             |
+| 5        | --input-optionally-enclosed-by `<char>` | 给带有双引号或单引号的字段前后加上指定字符 |
 
 |      | **参数**                                | **说明**                                                     |
 | ---- | --------------------------------------- | ------------------------------------------------------------ |
 | 1    | --direct                                | 利用数据库自带的导入导出工具，以便于提高效率                 |
-| 2    | --export-dir <dir>                      | 存放数据的HDFS的源目录                                       |
-| 3    | -m或--num-mappers <n>                   | 启动N个map来并行导入数据，默认4个                            |
-| 4    | --table <table-name>                    | 指定导出到哪个RDBMS中的表                                    |
-| 5    | --update-key <col-name>                 | 对某一列的字段进行更新操作                                   |
-| 6    | --update-mode <mode>                    | updateonly   allowinsert(默认)                               |
-| 7    | --input-null-string <null-string>       | 请参考import该类似参数说明                                   |
-| 8    | --input-null-non-string   <null-string> | 请参考import该类似参数说明                                   |
-| 9    | --staging-table   <staging-table-name>  | 创建一张临时表，用于存放所有事务的结果，然后将所有事务结果一次性导入到目标表中，防止错误。 |
+| 2    | --export-dir `<dir>`                      | 存放数据的HDFS的源目录                                       |
+| 3    | -m或--num-mappers `<n>`                   | 启动N个map来并行导入数据，默认4个                            |
+| 4    | --table `<table-name>`                    | 指定导出到哪个RDBMS中的表                                    |
+| 5    | --update-key `<col-name>`                 | 对某一列的字段进行更新操作                                   |
+| 6    | --update-mode `<mode>`                    | updateonly   allowinsert(默认)                               |
+| 7    | --input-null-string `<null-string>`       | 请参考import该类似参数说明                                   |
+| 8    | --input-null-non-string   `<null-string>` | 请参考import该类似参数说明                                   |
+| 9    | --staging-table   `<staging-table-name>`  | 创建一张临时表，用于存放所有事务的结果，然后将所有事务结果一次性导入到目标表中，防止错误。 |
 | 10   | --clear-staging-table                   | 如果第9个参数非空，则可以在导出操作执行前，清空临时事务结果表 |
 
 ## Hive参数
 
 | **序号** | **参数**                        | **说明**                                                  |
 | -------- | ------------------------------- | --------------------------------------------------------- |
-| 1        | --hive-delims-replacement <arg> | 用自定义的字符串替换掉数据中的\r\n和\013 \010等字符       |
+| 1        | --hive-delims-replacement `<arg>` | 用自定义的字符串替换掉数据中的\r\n和\013 \010等字符       |
 | 2        | --hive-drop-import-delims       | 在导入数据到hive时，去掉数据中的\r\n\013\010这样的字符    |
-| 3        | --map-column-hive <arg>         | 生成hive表时，可以更改生成字段的数据类型                  |
+| 3        | --map-column-hive `<arg>`         | 生成hive表时，可以更改生成字段的数据类型                  |
 | 4        | --hive-partition-key            | 创建分区，后面直接跟分区名，分区字段的默认类型为string    |
-| 5        | --hive-partition-value <v>      | 导入数据时，指定某个分区的值                              |
-| 6        | --hive-home <dir>               | hive的安装目录，可以通过该参数覆盖之前默认配置的目录      |
+| 5        | --hive-partition-value `<v>`      | 导入数据时，指定某个分区的值                              |
+| 6        | --hive-home `<dir>`               | hive的安装目录，可以通过该参数覆盖之前默认配置的目录      |
 | 7        | --hive-import                   | 将数据从关系数据库中导入到hive表中                        |
 | 8        | --hive-overwrite                | 覆盖掉在hive表中已经存在的数据                            |
 | 9        | --create-hive-table             | 默认是false，即，如果目标表已经存在了，那么创建任务失败。 |

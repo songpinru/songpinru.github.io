@@ -470,7 +470,7 @@ jdk1.5支持的注解，Spring2.5就支持注解了！
 要使用注解须知：
 
 1. 导入约束
-2. 配置注解的支持 <context:annotation-config/>
+2. 配置注解的支持 `<context:annotation-config/>`
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>

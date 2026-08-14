@@ -1,0 +1,176 @@
+baseURL: "https://songpinru.github.io/"
+title: "SongPinru 知识库"
+locale: "zh-CN"
+defaultContentLanguage: "zh-cn"
+hasCJKLanguage: true
+enableGitInfo: true
+enableRobotsTXT: true
+capitalizeListTitles: false
+summaryLength: 80
+disablePathToLower: true
+
+disableKinds:
+  - taxonomy
+  - term
+
+permalinks:
+  page:
+    notes: "/:sections/:contentbasename/"
+    study: "/:sections/:contentbasename/"
+    docs: "/:sections/:contentbasename/"
+
+outputs:
+  home: [html, rss]
+  page: [html, markdown]
+  section: [html, rss]
+
+module:
+  hugoVersion:
+    extended: true
+    min: "0.146.0"
+  imports:
+    - path: github.com/imfing/hextra
+  mounts:
+    - source: assets
+      target: assets
+    - source: layouts
+      target: layouts
+    - source: _index.md
+      target: content/_index.md
+    - source: notes
+      target: content/notes
+      files:
+        - "*.md"
+        - "**/*.md"
+    - source: notes
+      target: static/notes
+    - source: study
+      target: content/study
+      files:
+        - "*.md"
+        - "**/*.md"
+    - source: study
+      target: static/study
+    - source: 源码编译
+      target: content/源码编译
+      files:
+        - "*.md"
+        - "**/*.md"
+    - source: 源码编译
+      target: static/源码编译
+    - source: docs
+      target: content/docs
+      files:
+        - "*.md"
+        - "**/*.md"
+    - source: docs
+      target: static/docs
+
+markup:
+  highlight:
+    noClasses: false
+  goldmark:
+    renderer:
+      unsafe: true
+    parser:
+      attribute:
+        block: true
+        title: true
+    extensions:
+      passthrough:
+        delimiters:
+          block:
+            - ['\[', '\]']
+            - ['$$', '$$']
+          inline:
+            - ['\(', '\)']
+        enable: true
+  tableOfContents:
+    startLevel: 2
+    endLevel: 4
+    ordered: false
+
+enableInlineShortcodes: true
+
+menu:
+  main:
+    - name: "工作笔记"
+      pageRef: /notes
+      weight: 1
+    - name: "学习记录"
+      pageRef: /study
+      weight: 2
+    - name: "源码编译"
+      pageRef: /源码编译
+      weight: 3
+    - name: "文档资料"
+      pageRef: /docs
+      weight: 4
+    - name: "搜索"
+      weight: 5
+      params:
+        type: search
+    - name: "GitHub"
+      url: "https://github.com/songpinru/songpinru.github.io"
+      weight: 6
+      params:
+        icon: github
+
+params:
+  description: "SongPinru 的技术笔记、工作经验与学习记录"
+  externalLinkDecoration: true
+
+  navbar:
+    displayTitle: true
+    displayLogo: false
+    width: wide
+
+  theme:
+    default: system
+    displayToggle: true
+
+  footer:
+    enable: true
+    displayCopyright: true
+    displayPoweredBy: false
+    width: wide
+
+  displayUpdatedDate: false
+  displayUpdatedAuthor: false
+  dateFormat: "2006-01-02"
+
+  search:
+    enable: true
+    type: flexsearch
+    flexsearch:
+      index: content
+      tokenize: full
+      maxPageResults: 20
+      maxSectionResults: 10
+
+  editURL:
+    enable: false
+    base: "https://github.com/songpinru/songpinru.github.io/edit/main"
+
+  toc:
+    displayTags: false
+
+  highlight:
+    copy:
+      enable: true
+      display: hover
+
+  page:
+    width: wide
+    displayPagination: true
+    contextMenu:
+      enable: true
+
+  imageZoom:
+    enable: true
+
+  math:
+    engine: katex
+
+  comments:
+    enable: false

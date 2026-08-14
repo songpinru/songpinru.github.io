@@ -28,7 +28,7 @@ Java之父是詹姆斯.高斯林(James Gosling)。
 
 原理：只要在需要运行 java 应用程序的操作系统上，先安装一个Java虚拟机 (JVM Java Virtual Machine) 即可。由JVM来负责Java程序在该系统中的运行。因为有了JVM，同一个Java 程序在三个不同的操作系统中都可以执行。这样就实现了Java 程序的跨平台性。
 
-![](imgs\1557828366412.png)
+![](imgs/1557828366412.png)
 
 ## 1.3 Java环境搭建
 
@@ -46,13 +46,13 @@ JDK = JRE + 开发工具
 
 JRE = JVM + 核心类库
 
-![](imgs\1553593811117.png)
+![](imgs/1553593811117.png)
 
 ### 1.3.2  Java环境搭建
 
 1、安装JDK
 
-![](imgs\1553644600381.png)
+![](imgs/1553644600381.png)
 
 2、配置JDK的开发工具目录到path环境变量中
 
@@ -60,7 +60,7 @@ JRE = JVM + 核心类库
 
 ​	注意：这个安装目录以你自己的安装目录为准
 
-![](imgs\1553644724825.png)
+![](imgs/1553644724825.png)
 
 （1）为什么配置path？
 
@@ -1880,7 +1880,7 @@ for(int i=0; i<arr.length; i++){
 
 （4）每一个元素
 
-​	二维数组名\[行下标\]\[列下标\]
+​	二维数组名[行下标][列下标]
 
 > 理解：
 >
@@ -2138,7 +2138,7 @@ class TestCircle{
 
 5、对象属性的内存图
 
-![1565916598575](E:/%E5%B0%9A%E7%A1%85%E8%B0%B7/%E5%B0%9A%E7%A1%85%E8%B0%B7-%E8%AF%BE%E7%A8%8B%E8%B5%84%E6%96%99/JAVASE3_note_test/note/imgs/1565916598575.png)
+![1565916598575](imgs/1565916598575.png)
 
 
 
@@ -2946,9 +2946,9 @@ final：表示最终的
 
 ## 6.10 类初始化
 
-1、类初始化过程就是执行一个<clinit>()的方法
+1、类初始化过程就是执行一个 `<clinit>()` 的方法
 
-2、一个类只有一个<clinit>()方法
+2、一个类只有一个 `<clinit>()` 方法
 
 3、这个方法的代码由两部分代码组装而成：
 
@@ -2960,7 +2960,7 @@ final：表示最终的
 
 4、这个方法的执行特点：
 
-（1）当首次使用这个类时，需要加载和初始化这个类，就会执行<clinit>()方法
+（1）当首次使用这个类时，需要加载和初始化这个类，就会执行 `<clinit>()` 方法
 
 （2）这个方法只会执行一次
 
@@ -2974,7 +2974,7 @@ final：表示最终的
 
 ## 6.11 实例初始化
 
-1、实例初始化的过程就是执行对应的<init>(【。。。】)的方法
+1、实例初始化的过程就是执行对应的 `<init>(【。。。】)` 的方法
 
 2、一个类可能有多个，至少有一个
 
@@ -2992,7 +2992,7 @@ final：表示最终的
 
 > （1）和（2）按顺序组装，（3）在最后。
 >
-> 构造器中的super()或super(实参列表)会组装到实例初始化的首行。并且super()实际上是对应父类的<init>()无参的实例初始化方法。super(实参列表)实际上是对应父类的<init>(...)有参的实例初始化方法。
+> 构造器中的super()或super(实参列表)会组装到实例初始化的首行。并且super()实际上是对应父类的 `<init>()` 无参的实例初始化方法。super(实参列表)实际上是对应父类的 `<init>(...)` 有参的实例初始化方法。
 
 4、实例初始化方法执行的特点：
 
@@ -5086,8 +5086,8 @@ class Thread92 extends Thread{
  		6.泛型不支持基本数据类型
 
  	b. 泛型在排序机制上的应用
- 		Comparable<Person>
- 		Comparator<Person>
+             `Comparable<Person>`
+             `Comparator<Person>`
  		主要是设置比较方法的形式参数类型
 
 ## 12.2 自定义泛型
@@ -5096,10 +5096,10 @@ class Thread92 extends Thread{
 
 自定义泛型类步骤
     a. 先创建一个类
- 		class Animal<a,T>{
+             `class Animal<a,T>{`
 
  		}
- 	b. 在类名后加<任意字母,任意字母...>   泛型的个数没有要求
+         b. 在类名后加 `<任意字母,任意字母...>`   泛型的个数没有要求
  	c. 泛型在类中都可以在哪些地方出现
  		属性的类型  private A birthday;
  		方法的参数  public void setBirthday(A birthday)
@@ -5108,11 +5108,11 @@ class Thread92 extends Thread{
        泛型也不能用于声明数组
    e. 自定义泛型类的使用
    	e.1   自己创建本类对象，直接指定泛型类型，直接使用
-   		Animal<Date> a=new Animal<>();
+               `Animal<Date> a=new Animal<>();`
    	e.2  作为父类，指定泛型类型
-   		class Dog extends Animal<Date>{}
+               `class Dog extends Animal<Date>{}`
    		作为父类暂时不指定类型，需要子类去指定类型   子类的泛型个数和类型必须包含父类的个数和类型
-   		class Dog<A> extends Animal<A>{}
+               `class Dog<A> extends Animal<A>{}`
 
 ```java
 class Animal<A>{
@@ -5136,15 +5136,15 @@ class Dog<A,C> extends Animal<A>{
 
 自定义泛型接口步骤
  	a. 创建一个接口
- 	b. 在接口名后面加<任意字母...>
+         b. 在接口名后面加 `<任意字母...>`
  	c. 特点
  		可以作为抽象方法和默认方法的参数和方法的返回值(静态方法不行)
  		泛型不可以应用在属性上(因为属性是静态资源)
  	d. 使用
  		实现类去实现该接口时，就指定泛型类型
- 			class Impl implements Super<String,Integer>
+                 `class Impl implements Super<String,Integer>`
  		实现类去实现该接口时，不指定泛型类型
- 			class Impl<H,J> implements Super<H,J>
+                 `class Impl<H,J> implements Super<H,J>`
 
 ```java
 interface Super<H,J>{
@@ -5163,9 +5163,9 @@ interface Super<H,J>{
 
 自定义泛型方法步骤  
  	a. 创建一个方法  
- 	b. 在方法的修饰符后面加<任意字母...>
+         b. 在方法的修饰符后面加 `<任意字母...>`
  		//自定义泛型方法 (设置泛型只能在当前方法使用)
-		public<G,H> H fun2(G g){
+			`public<G,H> H fun2(G g){`
 			return null;
 		}
 	c. 如何使用
@@ -5204,11 +5204,11 @@ interface Super<H,J>{
  	单列集合   Collection              (存储单个数据)
  	双列集合   Map			(存储的键值对：key-value)
 
-![](imgs/7%E3%80%81Collection%E5%92%8CMap.png)
+<!-- 原图缺失：imgs/7、Collection和Map.png -->
 
 ## 13.2 Collection集合的体系结构图
 
-![](imgs/1563547137571.png)
+<!-- 原图缺失：imgs/1563547137571.png -->
 
 **Collection   容器常用方法**
  		新建容器：Collection coll=new ArrayList();
@@ -5779,19 +5779,19 @@ final Node<K,V>[] resize() {
 
 Collections 是一个操作 Set、List 和 Map 等集合的工具类。Collections 中提供了一系列静态的方法对集合元素进行排序、查询和修改等操作，还提供了对集合对象设置不可变、对集合对象实现同步控制等方法：
 
-- public static <T> boolean addAll(Collection<? super T> c,T... elements)将所有指定元素添加到指定 collection 中。
-- public static <T> int binarySearch(List<? extends Comparable<? super T>> list,T key)在List集合中查找某个元素的下标，但是List的元素必须是T或T的子类对象，而且必须是可比较大小的，即支持自然排序的。而且集合也事先必须是有序的，否则结果不确定。
-- public static <T> int binarySearch(List<? extends T> list,T key,Comparator<? super T> c)在List集合中查找某个元素的下标，但是List的元素必须是T或T的子类对象，而且集合也事先必须是按照c比较器规则进行排序过的，否则结果不确定。
-- public static <T extends Object & Comparable<? super T>> T max(Collection<? extends T> coll)在coll集合中找出最大的元素，集合中的对象必须是T或T的子类对象，而且支持自然排序
-- public static <T> T max(Collection<? extends T> coll,Comparator<? super T> comp)在coll集合中找出最大的元素，集合中的对象必须是T或T的子类对象，按照比较器comp找出最大者
-- public static void reverse(List<?> list)反转指定列表List中元素的顺序。
-- public static void shuffle(List<?> list) List 集合元素进行随机排序，类似洗牌
-- public static <T extends Comparable<? super T>> void sort(List<T> list)根据元素的自然顺序对指定 List 集合元素按升序排序
-- public static <T> void sort(List<T> list,Comparator<? super T> c)根据指定的 Comparator 产生的顺序对 List 集合元素进行排序
-- public static void swap(List<?> list,int i,int j)将指定 list 集合中的 i 处元素和 j 处元素进行交换
-- public static int frequency(Collection<?> c,Object o)返回指定集合中指定元素的出现次数
-- public static <T> void copy(List<? super T> dest,List<? extends T> src)将src中的内容复制到dest中
-- public static <T> boolean replaceAll(List<T> list，T oldVal，T newVal)：使用新值替换 List 对象的所有旧值
+- `public static <T> boolean addAll(Collection<? super T> c,T... elements)` 将所有指定元素添加到指定 collection 中。
+- `public static <T> int binarySearch(List<? extends Comparable<? super T>> list,T key)` 在List集合中查找某个元素的下标，但是List的元素必须是T或T的子类对象，而且必须是可比较大小的，即支持自然排序的。而且集合也事先必须是有序的，否则结果不确定。
+- `public static <T> int binarySearch(List<? extends T> list,T key,Comparator<? super T> c)` 在List集合中查找某个元素的下标，但是List的元素必须是T或T的子类对象，而且集合也事先必须是按照c比较器规则进行排序过的，否则结果不确定。
+- `public static <T extends Object & Comparable<? super T>> T max(Collection<? extends T> coll)` 在coll集合中找出最大的元素，集合中的对象必须是T或T的子类对象，而且支持自然排序
+- `public static <T> T max(Collection<? extends T> coll,Comparator<? super T> comp)` 在coll集合中找出最大的元素，集合中的对象必须是T或T的子类对象，按照比较器comp找出最大者
+- `public static void reverse(List<?> list)` 反转指定列表List中元素的顺序。
+- `public static void shuffle(List<?> list)` List 集合元素进行随机排序，类似洗牌
+- `public static <T extends Comparable<? super T>> void sort(List<T> list)` 根据元素的自然顺序对指定 List 集合元素按升序排序
+- `public static <T> void sort(List<T> list,Comparator<? super T> c)` 根据指定的 Comparator 产生的顺序对 List 集合元素进行排序
+- `public static void swap(List<?> list,int i,int j)` 将指定 list 集合中的 i 处元素和 j 处元素进行交换
+- `public static int frequency(Collection<?> c,Object o)` 返回指定集合中指定元素的出现次数
+- `public static <T> void copy(List<? super T> dest,List<? extends T> src)` 将src中的内容复制到dest中
+- `public static <T> boolean replaceAll(List<T> list，T oldVal，T newVal)`：使用新值替换 List 对象的所有旧值
 - Collections 类中提供了多个 synchronizedXxx() 方法，该方法可使将指定集合包装成线程同步的集合，从而可以解决多线程并发访问集合时的线程安全问题
 - Collections类中提供了多个unmodifiableXxx()方法，该方法返回指定 Xxx的不可修改的视图。
 
@@ -6786,13 +6786,13 @@ public static void main(String[] args) throws Exception {
   				Thread t=new Thread(()->System.out.println("aaaaaaa"));
   			b. 如果抽象方法中只有一行代码并且这行代码是一个return语句
   				那么大括号和return都可以省略
-  				Comparator<Person> com=(Person o1, Person o2)->o1.getAge()-o2.getAge();
+                      `Comparator<Person> com=(Person o1, Person o2)->o1.getAge()-o2.getAge();`
   			c. 如果小括号中有参数
   				那么参数的类型可以省略
-  				Comparator<Person> com=(o1,o2)->o1.getAge()-o2.getAge();
+                      `Comparator<Person> com=(o1,o2)->o1.getAge()-o2.getAge();`
   			d. 如果小括号中有参数并且只有一个
   				类型可以省略的同时小括号也可以省略
-  				Comparable<Person> com=o->10-o.getAge();
+                      `Comparable<Person> com=o->10-o.getAge();`
   				Ps: 如果没有参数  小括号是不可以去掉
 
 ## 17.2 函数式接口
@@ -6801,7 +6801,7 @@ public static void main(String[] args) throws Exception {
   **标识**：在定义接口上方具有注解  @FunctionalInterface
 
 （1）消费型接口        有参无返回值的
-		Consumer<T>  
+			`Consumer<T>`
  			T是抽象方法的参数类型
  			public void accept(String t)
 
@@ -6816,7 +6816,7 @@ public static void main(String[] args) throws Exception {
 		con.accept("atguigu");
 ```
 
- 		BiConsumer<T, V>
+             `BiConsumer<T, V>`
  			T和V都是抽象方法的参数类型
  			public void accept(String t, Integer u)
 
@@ -6833,7 +6833,7 @@ public static void main(String[] args) throws Exception {
 ```
 
 （2）供给型接口	       无参有返回值
-		Supplier<T>
+			`Supplier<T>`
  			T是抽象方法的返回值
  			public Double get()
 
@@ -6850,7 +6850,7 @@ public static void main(String[] args) throws Exception {
 ```
 
 （3）断定型接口	       有参也有返回值(boolean)
-		Predicate<T>
+			`Predicate<T>`
  			T是抽象方法的参数，返回值默认是boolean
  			public boolean test(String t)
 
@@ -6865,7 +6865,7 @@ public static void main(String[] args) throws Exception {
 		System.out.println(pr.test("aaajava"));
 ```
 
- 		BiPredicate<T, K>
+             `BiPredicate<T, K>`
  			T和K是抽象方法的参数，返回值默认是boolean
  			public boolean test(String t, String u)
 
@@ -6880,7 +6880,7 @@ public static void main(String[] args) throws Exception {
 ```
 
 （4）函数型接口	       有参有返回值
-		Function<T, R>
+			`Function<T, R>`
  			T是抽象方法的参数
  			R是抽象方法的返回值
  			public String apply(String t)
@@ -6896,7 +6896,7 @@ public static void main(String[] args) throws Exception {
 		System.out.println(fun.apply("MySQl"));
 ```
 
- 		BiFunction<T,K,R>
+             `BiFunction<T,K,R>`
  			T和K是抽象方法的参数
  			R是抽象方法的返回值
  			public R apply(T t, K k)
@@ -6915,7 +6915,7 @@ public static void main(String[] args) throws Exception {
  			这一行代码是方法调用 
  			抽象方法的参数列表要和调用方法的参数列表保持一致，或者调用方法的调用者是抽象方法的第一个参数，抽象方法的剩余参数和调用方法的参数保持一致
  		a. 对象.普通方法        对象::普通方法名称
- 			Consumer<String> con2=System.out::println;
+                 `Consumer<String> con2=System.out::println;`
 
 ```java
 	@Test
@@ -6932,7 +6932,7 @@ public static void main(String[] args) throws Exception {
 ```
 
  		b. 类名.静态方法        类名::静态方法名
- 			BiFunction<Double, Double, Integer> bifun1=Double::compare;
+                 `BiFunction<Double, Double, Integer> bifun1=Double::compare;`
 
 ```java
 	@Test
@@ -6943,7 +6943,7 @@ public static void main(String[] args) throws Exception {
 ```
 
  		c. 类名::普通方法
- 			BiFunction<String, String, Boolean> bifun1=String::contains;
+                 `BiFunction<String, String, Boolean> bifun1=String::contains;`
 
 ```java
 	@Test
@@ -6962,8 +6962,8 @@ public static void main(String[] args) throws Exception {
  			创建的对象类型必须和返回值类型一致
  			抽象方法的参数列表和构造器的参数列表保持一致
  		类名::new
- 			Supplier<String> su=String::new;
- 			Function<Integer, StringBuffer> fun=StringBuffer::new;
+                 `Supplier<String> su=String::new;`
+                 `Function<Integer, StringBuffer> fun=StringBuffer::new;`
 
 ```java
 	@Test
@@ -6985,7 +6985,7 @@ public static void main(String[] args) throws Exception {
  			创建的数组类型必须和返回值类型一致
  			参数必须是数组的长度
  		数组类型[]::new
- 		Function<Integer, String[]> fun=String[]::new;
+             `Function<Integer, String[]> fun=String[]::new;`
 
 ```java
 	@Test
@@ -7170,4 +7170,3 @@ public static <T> void main(String[] args) {
 		ofNullable.ifPresent(t->System.out.println(t.length()));
 		System.out.println(ofNullable.map(t->t.length()));
 ```
-

@@ -1,3 +1,8 @@
+---
+aliases:
+  - /study/scala 总结
+---
+
 # 入门
 
 ##  计算机语言发展历史
@@ -416,7 +421,6 @@ Int，String，函数 (参数类型)=>返回值类型,代码块 =>返回值类�
      reduce|reduceLeft|reduceRight
 - 折叠
     fold|foldLeft|foldRight
-
 
 
 
