@@ -1,3 +1,8 @@
+---
+aliases:
+  - /study/Hadoop 概念及安装
+---
+
 # 结构
 
 * hdfs
@@ -1038,4 +1043,3 @@ make install
     mvn package -Dmaven.test.skip=true
 2.5 进入target，hadoop-lzo-0.4.21-SNAPSHOT.jar 即编译成功的hadoop-lzo组件
 ```
-

@@ -1,4 +1,7 @@
-
+---
+aliases:
+  - /study/Delta lake
+---
 
 # 数据湖是什么？
 
@@ -352,4 +355,3 @@ schema可以动态的扩展，开启相关选项即可
 # 数据湖架构探索
 
 ![img](https://dbaplus.cn/uploadfile/2020/0318/20200318104854610.jpg)
-

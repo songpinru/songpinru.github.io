@@ -1285,7 +1285,7 @@ ps：结构体或枚举里面的元素需要明确元素名，后面再跟 变�
 
 ## 语法
 
-泛型使用<T，U>表示，只支持==大坨峰命名法==，且必须出现在函数名或结构体明后面
+泛型使用 `<T，U>` 表示，只支持==大坨峰命名法==，且必须出现在函数名或结构体明后面
 
 ```rust
 // 这个不是泛型
@@ -1351,7 +1351,7 @@ impl dyn Summary{
 
 ## trait bound
 
-可以使用\<T:Trait1+Trait2\>来指定多个特质，或者是使用where字句
+可以使用 `<T:Trait1+Trait2>` 来指定多个特质，或者是使用where字句
 
 ```rust
 impl <A: TraitB + TraitC, D: TraitE + TraitF> MyTrait<A, D> for YourType {}
@@ -1580,7 +1580,7 @@ let other_weak_foo = Weak::clone(&weak_foo);
 
 ### Cell & RefCell & UnsafeCell
 
-如果一个类型可以通过共享引用&T来改变其内部数据，则该类型具有内部可变性。这个明显违反了Rust的借用规则：共享引用不能改变的。`UnsafeCell<T>`是Rust中唯一允许的可跳过这个规则的类型。即使`UnsafeCell<T>`是不可变的，依然可以安全的对其内部数据进行修改。对于`UnsafeCell<T>`，创建多个&mut UnsafeCell<T>是Undefined Behavior的。
+如果一个类型可以通过共享引用 `&T` 来改变其内部数据，则该类型具有内部可变性。这个明显违反了Rust的借用规则：共享引用不能改变的。`UnsafeCell<T>`是Rust中唯一允许的可跳过这个规则的类型。即使`UnsafeCell<T>`是不可变的，依然可以安全的对其内部数据进行修改。对于`UnsafeCell<T>`，创建多个 `&mut UnsafeCell<T>` 是Undefined Behavior的。
 
 在`UnsafeCell<T>`基础上，你可以构建自己的内部可变性类型，某个字段包含为`UnsafeCell<T>`即可，如标准库中的`RefCell<T>`，`Cell<T>`，以及std::sync::atomic中的很多类型。
 
@@ -1739,7 +1739,7 @@ fn read_username_from_file() -> Result<String, io::Error> {
 
 # 集合
 
-**线性序列：向量 vec<T>**
+**线性序列：向量 `vec<T>`**
 
 向量是一种可动态增长的数组，用法和一般数组类似，如果要往向量中增加元素，需要用 mut 来创建。
 
@@ -1751,7 +1751,7 @@ vec! 是一个宏，用来创建向量字面量，可以用 push 方法往向量
 
 Rust 对向量和数组都会做越界检查。
 
-**线性序列：双端队列 VecDeque<T>**
+**线性序列：双端队列 `VecDeque<T>`**
 
 双端队列是一种同时具有队列和栈性质的数据结构。
 
@@ -1765,7 +1765,7 @@ VecDeque 实现了两种 push 方法，push_front 的行为像栈，push_back �
 
 通过 get 方法加索引来获取队列中相应值。
 
-**线性序列：链表 LinkedList<T>**
+**线性序列：链表 `LinkedList<T>`**
 
 Rust 提供的链表是双向链表，允许从任意一端插入或弹出元素，但通常更推荐使用 vec 或 VecDeque，因为后两者更加高效。
 
@@ -1779,7 +1779,7 @@ use std::collections::LinkedList;
 
 提供两种方法向链表中添加元素，push_back 和 push_front，同时也提供 append 方法，用来连接两个链表。
 
-**Key-Value 映射表：HashMap<K, V>（无序）**
+**Key-Value 映射表：`HashMap<K, V>`（无序）**
 
 key 必须是可哈希的类型，value 必须是在编译器已知大小的类型。
 
@@ -1792,7 +1792,7 @@ let mut hmap = HashMap::new();
 
 通过 insert 方法插入键值对。
 
-**Key-Value 映射表：BTreeMap<K, V>（有序）**
+**Key-Value 映射表：`BTreeMap<K, V>`（有序）**
 
 key 必须是可哈希的类型，value 必须是在编译器已知大小的类型。
 
@@ -1805,7 +1805,7 @@ let mut bmap = BtreeMap::new();
 
 通过 insert 方法插入键值对。
 
-**集合：HashSet<K> 和 BTreeSet<K>**
+**集合：`HashSet<K>` 和 `BTreeSet<K>`**
 
 集合类型可以看做是没有值的映射表。
 
@@ -1818,7 +1818,7 @@ use std::collections::BtreeSet;
 
 同样使用 insert 方法添加新元素。
 
-**优先队列：BinaryHeap<T>**
+**优先队列：`BinaryHeap<T>`**
 
 Rust 提供的优先队列，就是一个**二叉最大堆**。
 

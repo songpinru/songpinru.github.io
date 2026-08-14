@@ -188,7 +188,7 @@ p[id $="first"]{
 
 ------
 
-![Note](CSS.assets/icon_small_star.gif)菜鸟教程的 CSS 参考手册在所有主流浏览器中测试通过.
+<!-- 原图缺失：CSS.assets/icon_small_star.gif -->菜鸟教程的 CSS 参考手册在所有主流浏览器中测试通过.
 
 "CSS" 列指示属性是在哪个 CSS 版本中定义的 (CSS1, CSS2, 或者 CSS3).
 

@@ -1,3 +1,8 @@
+---
+aliases:
+  - '/study/Nginx '
+---
+
 # 安装
 
 1） yum安装依赖包

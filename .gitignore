@@ -1,1 +1,6 @@
 /.idea/
+
+# Hugo output and caches
+public/
+resources/
+.hugo_build.lock

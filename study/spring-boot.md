@@ -1,3 +1,8 @@
+---
+aliases:
+  - /study/spring boot
+---
+
 # 一、运行原理初探
 
 我们之前写的HelloSpringBoot，到底是怎么运行的呢，Maven项目，我们一般从pom.xml文件探究起；
@@ -1515,4 +1520,3 @@ Dubbo：jar包
 [狂神说SpringBoot17：Dubbo和Zookeeper集成](http://mp.weixin.qq.com/s?__biz=Mzg2NTAzMTExNg%3D%3D&chksm=ce610488f9168d9eee180472c9e225c737ed56075370c1174eb29ae214326a5f8e49147c2d65&idx=1&mid=2247483947&scene=21&sn=0c8efabbaf9b8ca835d862e6e0a2254f#wechat_redirect)
 
 [狂神说SpringBoot18：集成SpringSecurity](http://mp.weixin.qq.com/s?__biz=Mzg2NTAzMTExNg%3D%3D&chksm=ce610496f9168d8082bf6cb2e54b0b8628a1db596c1d297d06e756e621569dc3047334b3062c&idx=1&mid=2247483957&scene=21&sn=fc30511490b160cd1519e7a7ee3d4ed0#wechat_redirect)
-

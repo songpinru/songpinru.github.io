@@ -659,8 +659,8 @@ sed [-hnV][-e<script>][-f<script文件>][文本文件]
 
 **参数说明**：
 
-- -e<script>或--expression=<script> 以选项中指定的script来处理输入的文本文件。多个指令时使用
-- -f<script文件>或--file=<script文件> 以选项中指定的script文件来处理输入的文本文件。
+- `-e<script>` 或 `--expression=<script>`：以选项中指定的 script 处理输入的文本文件，多个指令时使用。
+- `-f<script文件>` 或 `--file=<script文件>`：以选项中指定的 script 文件处理输入的文本文件。
 - -i 直接修改源文件，慎用
 - -h或--help 显示帮助。
 - -n或--quiet或--silent 仅显示script处理后的结果。
@@ -1002,4 +1002,3 @@ options常用的有下选项：
 
 
 [ Linux 命令大全 ](https://www.runoob.com/linux/linux-command-manual.html)
-

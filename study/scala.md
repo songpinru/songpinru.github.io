@@ -2062,15 +2062,15 @@ def foo(implicit a: Int) = {
 
 所有的集合框架有一些共同的方法。这方法虽然操作的集合不同，但是用法基本相同。另外提供了很多的高阶函数，用于操作集合中的元素。
 
-![image-20200427213441475](C:\Users\Jeffery\AppData\Roaming\Typora\typora-user-images\image-20200427213441475.png)
+<!-- 原图缺失：image-20200427213441475.png（本机 Typora 路径未随仓库迁移） -->
 
 1. 不可变集合继承图
 
-![image-20200427213505466](C:\Users\Jeffery\AppData\Roaming\Typora\typora-user-images\image-20200427213505466.png)
+<!-- 原图缺失：image-20200427213505466.png（本机 Typora 路径未随仓库迁移） -->
 
 2. 可变集合继承图
 
-![image-20200427213545348](C:\Users\Jeffery\AppData\Roaming\Typora\typora-user-images\image-20200427213545348.png)
+<!-- 原图缺失：image-20200427213545348.png（本机 Typora 路径未随仓库迁移） -->
 
 
 
@@ -2178,7 +2178,7 @@ arr1 :+= 100
 
 和`java`完全一样，底层就是`java`的多维数组。本质都是假的多维数组，都是用一维数组模拟出来的。
 
-![img](E:\note\youdao\qq745C056D5E743D9039FEE344813AA557\2133c230049e464ea5beacb7b7ef9f9d\clipboard.png)
+<!-- 原图缺失：clipboard.png（有道云笔记本地路径未随仓库迁移） -->
 
 案例：
 
@@ -3936,4 +3936,3 @@ scala: 运行字节码文件
    ```
 
    
-

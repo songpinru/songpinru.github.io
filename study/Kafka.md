@@ -436,7 +436,7 @@ public static void deleteKafaTopic(String ZkStr,KafkaTopicBean topic) {
 
 * 需要一个properties，设置Producer参数
 
-* 创建KafkaProducer实例<K,V>
+* 创建 `KafkaProducer<K,V>` 实例
 
 * 调用send()方法
   
@@ -485,7 +485,7 @@ producer.close();
 ### 自动提交offset
 
 - 需要一个properties，设置Producer参数
-- 创建KafkaConsumer<K,V>实例
+- 创建 `KafkaConsumer<K,V>` 实例
 - subscribe()方法，绑定topics
 - 调用poll()方法，消费数据
 
@@ -537,7 +537,7 @@ consumer.commitAsync(new OffsetCommitCallback() {
 
 ### 自定义存储offset
 
-1. 维护一个集合Map<TopicPartition,Long>，用于存放offset；
+1. 维护一个集合 `Map<TopicPartition,Long>`，用于存放offset；
 
 2. 订阅topic时，传入ConsumerRebalanceListener()的实现类；
 

@@ -1,3 +1,8 @@
+---
+aliases:
+  - /study/Apache Maven Assembly Plugin
+---
+
 # Apache Maven Assembly Plugin
 
 ## 支持的打包格式
@@ -174,17 +179,17 @@ assembly:directory-inline
 | Element                                                      | Type                   | Description                                                  |
 | ------------------------------------------------------------ | ---------------------- | ------------------------------------------------------------ |
 | `ID`                                                         | `String`               | 设置此程序集的ID。这是该项目中文件的特定程序集的符号名称。另外，除了用于通过将其值附加到生成的归档文件中来明确命名组装好的程序包之外，该ID还在部署时用作工件的分类器。 |
-| `formats/format*`                                            | `List<String>`         | **（许多）**指定程序集的格式。通常最好通过目标参数而不是此处指定格式。例如，这允许不同的配置文件生成不同类型的档案。可以提供多种格式，并且Assembly Plugin将为每种所需格式生成一个存档。部署项目时，所有指定的文件格式也将被部署。通过在<format>子元素中提供以下值之一来指定格式：<br />**“ zip”** -创建一个ZIP文件格式<br />**“ tar”** -创建TAR格式<br />**“ tar.gz”**或**“ tgz”** -创建gzip格式的TAR格式<br />**“ tar.bz2”**或**“ tbz2”** -创建bzip格式的TAR格式<br />**“ tar.snappy”** -创建一个活泼的TAR格式<br />**“ tar.xz”**或**“ txz”** -创建xz'd TAR格式<br />**“ jar”** -创建一个JAR格式<br />**“ dir”** -创建爆炸的目录格式<br />**“war”** -创建WAR格式 |
+| `formats/format*`                                            | `List<String>`         | **（许多）**指定程序集的格式。通常最好通过目标参数而不是此处指定格式。例如，这允许不同的配置文件生成不同类型的档案。可以提供多种格式，并且Assembly Plugin将为每种所需格式生成一个存档。部署项目时，所有指定的文件格式也将被部署。通过在`<format>`子元素中提供以下值之一来指定格式：`<br />`**“ zip”** -创建一个ZIP文件格式`<br />`**“ tar”** -创建TAR格式`<br />`**“ tar.gz”**或**“ tgz”** -创建gzip格式的TAR格式`<br />`**“ tar.bz2”**或**“ tbz2”** -创建bzip格式的TAR格式`<br />`**“ tar.snappy”** -创建一个活泼的TAR格式`<br />`**“ tar.xz”**或**“ txz”** -创建xz'd TAR格式`<br />`**“ jar”** -创建一个JAR格式`<br />`**“ dir”** -创建爆炸的目录格式`<br />`**“war”** -创建WAR格式 |
 | `includeBaseDirectory`                                       | `boolean`              | 在最终归档文件中包含基本目录。例如，如果要创建一个名为“ your-app”的程序集，则将includeBaseDirectory设置为true将创建一个包含此基本目录的存档。如果将此选项设置为false，则创建的归档文件会将其内容解压缩到当前目录。 **默认值是**：`true`。 |
 | `baseDirectory`                                              | `String`               | 设置生成的程序集档案的基本目录。如果未设置，并且includeBaseDirectory == true，则将使用$ {project.build.finalName}。（自2.2-beta-1开始） |
 | `includeSiteDirectory`                                       | `boolean`              | 在最终存档中包含站点目录。项目的站点目录位置由Assembly Plugin的configuration中siteDirectory参数确定。 **默认值为**：`false`。 |
 | `containerDescriptorHandlers / containerDescriptorHandler *` | `List`                 | **（许多）**从常规归档流中过滤掉各种容器描述符的组件集，因此可以对其进行汇总然后添加。 |
-| `moduleSets / moduleSet *`                                   | `List <<ModuleSet>`    | **（许多）**指定程序集中要包含的模块文件。通过提供一个或多个<moduleSet>子元素来指定moduleSet。 |
-| `fileSets / fileSet *`                                       | `List<FileSet>`        | **（许多）**指定程序集中要包括的文件组。通过提供一个或多个<fileSet>子元素来指定fileSet。 |
-| `files/ file*`                                               | `List<FileItem>`       | **（许多）**指定程序集中要包含的单个文件。通过提供一个或多个<file>子元素来指定文件。 |
-| `dependencySets / dependencySet *`                           | `List <DependencySet>` | **（许多）**指定要在程序集中包括的依赖项。通过提供一个或多个<dependencySet>子元素来指定dependencySet。 |
-| `repositories / repository* `                                | `List<Repository>`     | **（许多）**指定程序集中要包含的存储库文件。通过提供一个或多个<repository>子元素来指定存储库。 |
-| `componentDescriptors / componentDescriptor *`               | `List<String>`         | **（许多）**指定要包含在程序集中的共享组件xml文件的位置。指定的位置必须相对于描述符的基本位置。如果描述符是通过类路径中的<descriptorRef />元素找到的，则它指定的任何组件也都可以在类路径中找到。如果通过<descriptor />元素通过路径名找到它，则此处的值将解释为相对于基于项目的路径。当找到多个componentDescriptor时，它们的内容将合并。查看 [描述符组件](http://maven.apache.org/plugins/maven-assembly-plugin/assembly-component.html)以获取更多信息。通过提供一个或多个<componentDescriptor>子元素来指定componentDescriptor。 |
+| `moduleSets / moduleSet *`                                   | `List<ModuleSet>`      | **（许多）**指定程序集中要包含的模块文件。通过提供一个或多个`<moduleSet>`子元素来指定moduleSet。 |
+| `fileSets / fileSet *`                                       | `List<FileSet>`        | **（许多）**指定程序集中要包括的文件组。通过提供一个或多个`<fileSet>`子元素来指定fileSet。 |
+| `files/ file*`                                               | `List<FileItem>`       | **（许多）**指定程序集中要包含的单个文件。通过提供一个或多个`<file>`子元素来指定文件。 |
+| `dependencySets / dependencySet *`                           | `List <DependencySet>` | **（许多）**指定要在程序集中包括的依赖项。通过提供一个或多个`<dependencySet>`子元素来指定dependencySet。 |
+| `repositories / repository* `                                | `List<Repository>`     | **（许多）**指定程序集中要包含的存储库文件。通过提供一个或多个`<repository>`子元素来指定存储库。 |
+| `componentDescriptors / componentDescriptor *`               | `List<String>`         | **（许多）**指定要包含在程序集中的共享组件xml文件的位置。指定的位置必须相对于描述符的基本位置。如果描述符是通过类路径中的`<descriptorRef />`元素找到的，则它指定的任何组件也都可以在类路径中找到。如果通过`<descriptor />`元素通过路径名找到它，则此处的值将解释为相对于基于项目的路径。当找到多个componentDescriptor时，它们的内容将合并。查看 [描述符组件](http://maven.apache.org/plugins/maven-assembly-plugin/assembly-component.html)以获取更多信息。通过提供一个或多个`<componentDescriptor>`子元素来指定componentDescriptor。 |
 
 
 
@@ -203,14 +208,14 @@ assembly:directory-inline
 
 ###  moduleSet
 
-moduleSet表示项目的pom.xml中存在的一个或多个项目<module>。这使您可以包括属于项目<modules>的源或二进制文件。
+moduleSet表示项目的pom.xml中存在的一个或多个项目`<module>`。这使您可以包括属于项目`<modules>`的源或二进制文件。
 
 | Element                 | Type             | Description                                                  |
 | ----------------------- | ---------------- | ------------------------------------------------------------ |
-| `useAllReactorProjects` | `boolean`        | 如果设置为true，则该插件将包括当前反应堆中的所有项目，以便在此ModuleSet中进行处理。这些将受包含/排除规则的约束。（自2.2开始）<br/>**默认值为**：`false` |
-| `includeSubModules`     | `boolean`        | 如果设置为false，则插件将在此ModuleSet中排除子模块。否则，它将处理所有子模块，每个子模块都要包含/排除规则。（自2.2-beta-1开始）<br/>**默认值为**：`true`。 |
-| `includes/include*`     | `List<String>`   | **（许多）**存在<include>子元素时，它们定义要包含的一组项目坐标。如果不存在，则<includes>代表所有有效值。工件坐标可以以简单的groupId：artifactId形式给出，或者可以以groupId：artifactId：type [：classifier]：version形式完全限定。此外，可以使用通配符，如*：maven- * |
-| `excludes/exclude*`     | `List<String>`   | **（许多）**存在<exclude>子元素时，它们定义一组要排除的项目工件坐标。如果不存在，则<excludes>表示没有排除。工件坐标可以以简单的groupId：artifactId形式给出，或者可以以groupId：artifactId：type [：classifier]：version形式完全限定。此外，可以使用通配符，如*：maven- * |
+| `useAllReactorProjects` | `boolean`        | 如果设置为true，则该插件将包括当前反应堆中的所有项目，以便在此ModuleSet中进行处理。这些将受包含/排除规则的约束。（自2.2开始）`<br/>`**默认值为**：`false` |
+| `includeSubModules`     | `boolean`        | 如果设置为false，则插件将在此ModuleSet中排除子模块。否则，它将处理所有子模块，每个子模块都要包含/排除规则。（自2.2-beta-1开始）`<br/>`**默认值为**：`true`。 |
+| `includes/include*`     | `List<String>`   | **（许多）**存在`<include>`子元素时，它们定义要包含的一组项目坐标。如果不存在，则`<includes>`代表所有有效值。工件坐标可以以简单的groupId：artifactId形式给出，或者可以以groupId：artifactId：type [：classifier]：version形式完全限定。此外，可以使用通配符，如*：maven- * |
+| `excludes/exclude*`     | `List<String>`   | **（许多）**存在`<exclude>`子元素时，它们定义一组要排除的项目工件坐标。如果不存在，则`<excludes>`表示没有排除。工件坐标可以以简单的groupId：artifactId形式给出，或者可以以groupId：artifactId：type [：classifier]：version形式完全限定。此外，可以使用通配符，如*：maven- * |
 | `sources`               | `ModuleSources`  | 如果存在此选项，则插件将在结果程序集中包含该集合中所包含模块的源文件 |
 | `binaries`              | `ModuleBinaries` | 如果存在此选项，则插件将在结果程序集中包含该集合中所包含模块的二进制文件。 |
 
@@ -222,11 +227,11 @@ moduleSet表示项目的pom.xml中存在的一个或多个项目<module>。这�
 | ----------------------------- | --------------- | ------------------------------------------------------------ |
 | `useDefaultExcludes`          | `boolean`       | 计算受此集合影响的文件时，是否应使用标准排除模式，例如与CVS和Subversion元数据文件匹配的那些。为了向后兼容，默认值为true。（自2.2-beta-1开始） **默认值为**：`true`。 |
 | `outputDirectory`             | `String`        | 设置相对于程序集根目录根目录的输出目录。例如，“ log”会将指定的文件放在log目录中。 |
-| `includes/include*`           | `List<String>`  | **（许多）**存在<include>子元素时，它们定义一组要包括的文件和目录。如果不存在，则<includes>代表所有有效值。 |
-| `excludes/exclude*`           | `List<String>`  | **（许多 ）**存在<exclude>子元素时，它们定义一组要排除的文件和目录。如果不存在，则<excludes>表示没有排除。 |
+| `includes/include*`           | `List<String>`  | **（许多）**存在`<include>`子元素时，它们定义一组要包括的文件和目录。如果不存在，则`<includes>`代表所有有效值。 |
+| `excludes/exclude*`           | `List<String>`  | **（许多 ）**存在`<exclude>`子元素时，它们定义一组要排除的文件和目录。如果不存在，则`<excludes>`表示没有排除。 |
 | `fileMode`                    | `String`        | 类似于UNIX权限，设置包含文件的文件模式。这是一个重要的价值。格式：（User）（Group）（Other），其中每个组件的总和为Read = 4，Write = 2和Execute =1。例如，值0644转换为User read-write，Group和Other只读。默认值为0644 [（有关Unix样式的更多权限）](http://www.onlamp.com/pub/a/bsd/2000/09/06/FreeBSD_Basics.html) |
 | `directoryMode`               | `String`        | 类似于UNIX权限，设置包含目录的目录模式。这是一个重要的价值。格式：（User）（Group）（Other），其中每个组件的总和为Read = 4，Write = 2和Execute =1。例如，值0755转换为User read-write，Group和Other只读。默认值为0755。 [（有关Unix风格的权限的更多信息）](http://www.onlamp.com/pub/a/bsd/2000/09/06/FreeBSD_Basics.html) |
-| `fileSets / fileSet *`        | `List<FileSet>` | **（许多）**指定每个包括的模块中的文件组要包括在程序集中。通过提供一个或多个<fileSet>子元素来指定fileSet。（自2.2-beta-1开始） |
+| `fileSets / fileSet *`        | `List<FileSet>` | **（许多）**指定每个包括的模块中的文件组要包括在程序集中。通过提供一个或多个`<fileSet>`子元素来指定fileSet。（自2.2-beta-1开始） |
 | `includeModuleDirectory`      | `boolean`       | 指定是否将模块的finalName附加到应用于该模块的任何fileSet的outputDirectory值之前。（自2.2-beta-1开始） **默认值为**：`true`。 |
 | `excludeSubModuleDirectories` | `boolean`       | 指定是否应将当前模块下的子模块目录从应用于该模块的文件集中排除。如果仅打算复制与此ModuleSet匹配的确切模块列表的源，而忽略（或单独处理）当前目录下目录中存在的模块，则这可能很有用。（自2.2-beta-1开始） **默认值为**：`true`。 |
 | `outputDirectoryMapping`      | `boolean`       | 设置此程序集中包含的所有模块基本目录的映射模式。注意：仅当includeModuleDirectory == true时才使用此字段。默认值为2.2-beta-1中模块的$ {artifactId}，以及后续版本中的$ {module.artifactId}。（自2.2-beta-1开始） **默认值为**：`$ {module.artifactId}`。 |
@@ -236,13 +241,13 @@ moduleSet表示项目的pom.xml中存在的一个或多个项目<module>。这�
 | Element                          | Type                  | Description                                                  |
 | -------------------------------- | --------------------- | ------------------------------------------------------------ |
 | `outputDirectory`                | `String`              | 设置相对于程序集根目录根目录的输出目录。例如，“ log”会将指定的文件放在日志目录中，该目录直接位于存档根目录下。 |
-| `includes/include*`              | `List<String>`        | **（许多）**当存在<include>子元素时，它们定义了一组要包含的伪像坐标。如果不存在，则<includes>代表所有有效值。工件坐标可以以简单的groupId：artifactId形式给出，或者可以以groupId：artifactId：type [：classifier]：version形式完全限定。此外，可以使用通配符，如*：maven- * |
-| `excludes/exclude*`              | `List<String>`        | **（许多）**存在<exclude>子元素时，它们定义一组要排除的依赖项工件坐标。如果不存在，则<excludes>表示没有排除。工件坐标可以以简单的groupId：artifactId形式给出，或者可以以groupId：artifactId：type [：classifier]：version形式完全限定。此外，可以使用通配符，如*：maven- * |
+| `includes/include*`              | `List<String>`        | **（许多）**当存在`<include>`子元素时，它们定义了一组要包含的伪像坐标。如果不存在，则`<includes>`代表所有有效值。工件坐标可以以简单的groupId：artifactId形式给出，或者可以以groupId：artifactId：type [：classifier]：version形式完全限定。此外，可以使用通配符，如*：maven- * |
+| `excludes/exclude*`              | `List<String>`        | **（许多）**存在`<exclude>`子元素时，它们定义一组要排除的依赖项工件坐标。如果不存在，则`<excludes>`表示没有排除。工件坐标可以以简单的groupId：artifactId形式给出，或者可以以groupId：artifactId：type [：classifier]：version形式完全限定。此外，可以使用通配符，如*：maven- * |
 | `fileMode`                       | `String`              | 类似于UNIX权限，设置包含文件的文件模式。这是一个重要的价值。格式：（User）（Group）（Other），其中每个组件的总和为Read = 4，Write = 2和Execute =1。例如，值0644转换为User read-write，Group和Other只读。默认值为0644 [（有关Unix样式的更多权限）](http://www.onlamp.com/pub/a/bsd/2000/09/06/FreeBSD_Basics.html) |
 | `directoryMode`                  | `String`              | 类似于UNIX权限，设置包含目录的目录模式。这是一个重要的价值。格式：（User）（Group）（Other），其中每个组件的总和为Read = 4，Write = 2和Execute =1。例如，值0755转换为User read-write，Group和Other只读。默认值为0755。 [（有关Unix风格的权限的更多信息）](http://www.onlamp.com/pub/a/bsd/2000/09/06/FreeBSD_Basics.html) |
 | `attachmentClassifier`           | `String`              | 指定后，attachmentClassifier将使汇编器查看附加到模块的工件，而不是主项目工件。如果可以找到与指定分类器匹配的附加工件，则将使用它；否则，它将使用它。否则，将引发异常。（自2.2-beta-1开始） |
 | `includeDependencies`            | `boolean`             | 如果设置为true，则该插件将包括此处包含的项目模块的直接和传递依赖关系。否则，它将仅包括模块软件包。 **默认值是**：`真`。 |
-| `dependencySets/ dependencySet*` | `List<DependencySet>` | **（许多）**指定要在程序集中包含模块的哪些依赖项。通过提供一个或多个<dependencySet>子元素来指定dependencySet。（自2.2-beta-1开始） |
+| `dependencySets/ dependencySet*` | `List<DependencySet>` | **（许多）**指定要在程序集中包含模块的哪些依赖项。通过提供一个或多个`<dependencySet>`子元素来指定dependencySet。（自2.2-beta-1开始） |
 | `unpack`                         | `boolean`             | 如果设置为true，则此属性会将所有模块包解压缩到指定的输出目录中。设置为false时，模块软件包将作为归档文件（jar）包含在内。 **默认值是**：`真`。 |
 | `unpackOptions`                  | `UnpackOptions`       | 允许为从模块工件中解包的项目指定包含和排除以及过滤选项。（自2.2-beta-1开始） |
 | `outputFileNameMapping`          | `String`              | 设置此程序集中包含的所有NON-UNPACKED依赖项的映射模式。（因为2.2-beta-2；从2.2-beta-1开始，使用$ {artifactId}-$ {version} $ {dashClassifier？}。$ {extension}作为默认值）注：如果dependencySet指定unpack == true，则outputFileNameMapping将不被使用；在这种情况下，请使用outputDirectory。有关outputFileNameMapping参数中可用条目的更多详细信息，请参见插件FAQ。 **默认值为**：`$ {module.artifactId}-$ {module.version} $ {dashClassifier？}。$ {module.extension}`。 |
@@ -253,12 +258,12 @@ moduleSet表示项目的pom.xml中存在的一个或多个项目<module>。这�
 | ------------------------------------------------------ | -------------- | ------------------------------------------------------------ |
 | `useDefaultExcludes`                                   | `boolean`      | 计算受此集合影响的文件时，是否应使用标准排除模式，例如与CVS和Subversion元数据文件匹配的那些。为了向后兼容，默认值为true。（自2.2-beta-1开始） **默认值为**：`true`。 |
 | `outputDirectory`                                      | `String`       | 设置相对于程序集根目录根目录的输出目录。例如，“ log”会将指定的文件放在log目录中。 |
-| `includes/include*`                                    | `List<String>` | **（许多）**存在<include>子元素时，它们定义一组要包括的文件和目录。如果不存在，则<includes>代表所有有效值。 |
-| `excludes/exclude*`                                    | `List<String>` | **（许多）**存在<exclude>子元素时，它们定义一组要排除的文件和目录。如果不存在，则<excludes>表示没有排除。 |
+| `includes/include*`                                    | `List<String>` | **（许多）**存在`<include>`子元素时，它们定义一组要包括的文件和目录。如果不存在，则`<includes>`代表所有有效值。 |
+| `excludes/exclude*`                                    | `List<String>` | **（许多）**存在`<exclude>`子元素时，它们定义一组要排除的文件和目录。如果不存在，则`<excludes>`表示没有排除。 |
 | `fileMode`                                             | `String`       | 类似于UNIX权限，设置包含文件的文件模式。这是一个重要的价值。格式：（User）（Group）（Other），其中每个组件的总和为Read = 4，Write = 2和Execute =1。例如，值0644转换为User read-write，Group和Other只读。默认值为0644。 [（有关Unix样式的更多权限）](http://www.onlamp.com/pub/a/bsd/2000/09/06/FreeBSD_Basics.html) |
 | `directoryMode`                                        | `String`       | 类似于UNIX权限，设置包含目录的目录模式。这是一个重要的价值。格式：（User）（Group）（Other），其中每个组件的总和为Read = 4，Write = 2和Execute =1。例如，值0755转换为User read-write，Group和Other只读。默认值为0755。 [（有关Unix风格的权限的更多信息）](http://www.onlamp.com/pub/a/bsd/2000/09/06/FreeBSD_Basics.html) |
 | `directory`                                            | `String`       | 从模块目录设置绝对或相对位置。例如，“ src / main / bin”将选择在其中定义此依赖项的项目的此子目录。 |
-| `lineEnding`                                           | `String`       | 设置此fileSet中文件的行尾。有效值：<br />**“keep”** -保留所有行尾<br />**“ unix”** -使用Unix样式的行尾（即“ \ n”）<br />**“ lf”** -使用单个换行符（例如“ \ n”）<br />**“ dos”** -使用DOS- / Windows样式的行尾（例如“ \ r \ n”）<br />**“ windows”** -使用DOS- / Windows样式的行尾（例如“ \ r \ n”）<br />**“ crlf”** -使用回车符，换行符（例如“ \ r \ n”） |
+| `lineEnding`                                           | `String`       | 设置此fileSet中文件的行尾。有效值：`<br />`**“keep”** -保留所有行尾`<br />`**“ unix”** -使用Unix样式的行尾（即“ \ n”）`<br />`**“ lf”** -使用单个换行符（例如“ \ n”）`<br />`**“ dos”** -使用DOS- / Windows样式的行尾（例如“ \ r \ n”）`<br />`**“ windows”** -使用DOS- / Windows样式的行尾（例如“ \ r \ n”）`<br />`**“ crlf”** -使用回车符，换行符（例如“ \ r \ n”） |
 | `filtered`                                             | `boolean`      | 是否使用bulid中的属性在复制文件时过滤符号。（自2.2-beta-1开始） **默认值为**：`false`。 |
 | `nonFilteredFileExtensions/ nonFilteredFileExtension*` | `List<String>` | **（许多）**其他文件扩展名不应用过滤（自3.2.0版开始）        |
 
@@ -267,8 +272,8 @@ moduleSet表示项目的pom.xml中存在的一个或多个项目<module>。这�
 | Element                     | Type            | Description                                                  |
 | --------------------------- | --------------- | ------------------------------------------------------------ |
 | `outputDirectory`           | `String`        | 设置相对于程序集根目录根目录的输出目录。例如，“ log”会将指定的文件放在日志目录中，该目录直接位于存档根目录下。 |
-| `includes/include*`         | `List<String>`  | **（许多）**当存在<include>子元素时，它们定义了一组要包含的伪像坐标。如果不存在，则<includes>代表所有有效值。工件坐标可以以简单的groupId：artifactId形式给出，或者可以以groupId：artifactId：type [：classifier]：version形式完全限定。此外，可以使用通配符，如*：maven- * |
-| `excludes/exclude*`         | `List<String>`  | **（许多）**存在<exclude>子元素时，它们定义一组要排除的依赖项工件坐标。如果不存在，则<excludes>表示没有排除。工件坐标可以以简单的groupId：artifactId形式给出，或者可以以groupId：artifactId：type [：classifier]：version形式完全限定。此外，可以使用通配符，如*：maven- * |
+| `includes/include*`         | `List<String>`  | **（许多）**当存在`<include>`子元素时，它们定义了一组要包含的伪像坐标。如果不存在，则`<includes>`代表所有有效值。工件坐标可以以简单的groupId：artifactId形式给出，或者可以以groupId：artifactId：type [：classifier]：version形式完全限定。此外，可以使用通配符，如*：maven- * |
+| `excludes/exclude*`         | `List<String>`  | **（许多）**存在`<exclude>`子元素时，它们定义一组要排除的依赖项工件坐标。如果不存在，则`<excludes>`表示没有排除。工件坐标可以以简单的groupId：artifactId形式给出，或者可以以groupId：artifactId：type [：classifier]：version形式完全限定。此外，可以使用通配符，如*：maven- * |
 | `fileMode`                  | `String`        | 类似于UNIX权限，设置包含文件的文件模式。这是一个重要的价值。格式：（User）（Group）（Other），其中每个组件的总和为Read = 4，Write = 2和Execute =1。例如，值0644转换为User read-write，Group和Other只读。默认值为0644 [（有关Unix样式的更多权限）](http://www.onlamp.com/pub/a/bsd/2000/09/06/FreeBSD_Basics.html) |
 | `directoryMode`             | `String`        | 类似于UNIX权限，设置包含目录的目录模式。这是一个重要的价值。格式：（User）（Group）（Other），其中每个组件的总和为Read = 4，Write = 2和Execute =1。例如，值0755转换为User read-write，Group和Other只读。默认值为0755。 [（有关Unix风格的权限的更多信息）](http://www.onlamp.com/pub/a/bsd/2000/09/06/FreeBSD_Basics.html) |
 | `useStrictFiltering`        | `boolean`       | 当指定为true时，任何在装配创建期间未用于过滤实际工件的包含/排除模式都将导致构建失败并显示错误。这是为了突出显示过时的包含或排除，或者表示装配描述符配置不正确。（自2.2开始） **默认值为**：`false`。 |
@@ -287,8 +292,8 @@ moduleSet表示项目的pom.xml中存在的一个或多个项目<module>。这�
 
 | Element                                                | Type           | Description                                                  |
 | ------------------------------------------------------ | -------------- | ------------------------------------------------------------ |
-| `includes/include*`                                    | `List<String>` | **（许多）**文件和/或目录模式集，用于在解压缩档案时包含在档案中的匹配项目。每个项目都指定为<include> some / path </ include>（从2.2-beta-1开始） |
-| `excludes/exclude*`                                    | `List<String>` | **（许多）**文件和/或目录模式集，用于在解压缩存档时将其排除在存档之外的匹配项。每个项目均指定为<exclude> some / path </ exclude>（自2.2-beta-1开始） |
+| `includes/include*`                                    | `List<String>` | **（许多）**文件和/或目录模式集，用于在解压缩档案时包含在档案中的匹配项目。每个项目都指定为`<include>` some / path `</include>`（从2.2-beta-1开始） |
+| `excludes/exclude*`                                    | `List<String>` | **（许多）**文件和/或目录模式集，用于在解压缩存档时将其排除在存档之外的匹配项。每个项目均指定为`<exclude>` some / path `</exclude>`（自2.2-beta-1开始） |
 | `filtered`                                             | `boolean`      | 是否使用构建配置中的属性过滤从归档文件中解压缩的文件中的符号。（自2.2-beta-1开始） **默认值为**：`false`。 |
 | `nonFilteredFileExtensions/ nonFilteredFileExtension*` | `List<String>` | **（许多）**其他文件扩展名不应用过滤（自3.2.0版开始）        |
 | `lineEnding`                                           | `String`       | 设置文件的行尾。（自2.2开始）有效值：**“保持”** -保留所有行尾**“ unix”** -使用Unix样式的行尾**“ lf”** -使用单个换行符**“ dos”** -使用DOS样式的行尾**“** crlf **”** -使用回车符，换行符 |
@@ -306,7 +311,7 @@ moduleSet表示项目的pom.xml中存在的一个或多个项目<module>。这�
 | `outputDirectory` | `String`       | 设置相对于程序集根目录根目录的输出目录。例如，“ log”会将指定的文件放在log目录中。 |
 | `destName`        | `String`       | 在outputDirectory中设置目标文件名。默认名称与源文件的名称相同。 |
 | `fileMode`        | `String`       | 类似于UNIX权限，设置包含文件的文件模式。这是一个重要的价值。格式：（User）（Group）（Other），其中每个组件的总和为Read = 4，Write = 2和Execute =1。例如，值0644转换为User read-write，Group和Other只读。默认值为0644 [（有关Unix样式的更多权限）](http://www.onlamp.com/pub/a/bsd/2000/09/06/FreeBSD_Basics.html) |
-| `lineEnding`      | `String`       | 设置此文件中文件的行尾。有效值为：<br />**“keep”** -保留所有行尾<br />**“ unix”** -使用Unix样式的行尾（即“ \ n”）<br />**“ lf”** -使用单个换行符（例如“ \ n”）<br />**“ dos”** -使用DOS- / Windows样式的行尾（例如“ \ r \ n”）<br />**“ windows”** -使用DOS- / Windows样式的行尾（例如“ \ r \ n”）<br />**“ crlf”** -使用回车符，换行符（例如“ \ r \ n”） |
+| `lineEnding`      | `String`       | 设置此文件中文件的行尾。有效值为：`<br />`**“keep”** -保留所有行尾`<br />`**“ unix”** -使用Unix样式的行尾（即“ \ n”）`<br />`**“ lf”** -使用单个换行符（例如“ \ n”）`<br />`**“ dos”** -使用DOS- / Windows样式的行尾（例如“ \ r \ n”）`<br />`**“ windows”** -使用DOS- / Windows样式的行尾（例如“ \ r \ n”）`<br />`**“ crlf”** -使用回车符，换行符（例如“ \ r \ n”） |
 | `filtered`        | `boolean`      | 设置是否确定文件是否被过滤。 **默认值为**：`false`。         |
 
 ### repository
@@ -318,12 +323,12 @@ moduleSet表示项目的pom.xml中存在的一个或多个项目<module>。这�
 | Element                                                | Type                          | Description                                                  |
 | ------------------------------------------------------ | ----------------------------- | ------------------------------------------------------------ |
 | `outputDirectory`                                      | `String`                      | 设置相对于程序集根目录根目录的输出目录。例如，“ log”会将指定的文件放在日志目录中，该目录直接位于存档根目录下。 |
-| `includes/include*`                                    | `List<String>`                | **（许多）**当存在<include>子元素时，它们定义了一组要包含的伪像坐标。如果不存在，则<includes>代表所有有效值。工件坐标可以以简单的groupId：artifactId形式给出，或者可以以groupId：artifactId：type [：classifier]：version形式完全限定。此外，可以使用通配符，如*：maven- * |
-| `excludes/exclude*`                                    | `List<String>`                | **（许多）**存在<exclude>子元素时，它们定义一组要排除的依赖项工件坐标。如果不存在，则<excludes>表示没有排除。工件坐标可以以简单的groupId：artifactId形式给出，或者可以以groupId：artifactId：type [：classifier]：version形式完全限定。此外，可以使用通配符，如*：maven- * |
+| `includes/include*`                                    | `List<String>`                | **（许多）**当存在`<include>`子元素时，它们定义了一组要包含的伪像坐标。如果不存在，则`<includes>`代表所有有效值。工件坐标可以以简单的groupId：artifactId形式给出，或者可以以groupId：artifactId：type [：classifier]：version形式完全限定。此外，可以使用通配符，如*：maven- * |
+| `excludes/exclude*`                                    | `List<String>`                | **（许多）**存在`<exclude>`子元素时，它们定义一组要排除的依赖项工件坐标。如果不存在，则`<excludes>`表示没有排除。工件坐标可以以简单的groupId：artifactId形式给出，或者可以以groupId：artifactId：type [：classifier]：version形式完全限定。此外，可以使用通配符，如*：maven- * |
 | `fileMode`                                             | `String`                      | 类似于UNIX权限，设置包含文件的文件模式。这是一个重要的价值。格式：（User）（Group）（Other），其中每个组件的总和为Read = 4，Write = 2和Execute =1。例如，值0644转换为User read-write，Group和Other只读。默认值为0644 [（有关Unix样式的更多权限）](http://www.onlamp.com/pub/a/bsd/2000/09/06/FreeBSD_Basics.html) |
 | `directoryMode`                                        | `String`                      | 类似于UNIX权限，设置包含目录的目录模式。这是一个重要的价值。格式：（User）（Group）（Other），其中每个组件的总和为Read = 4，Write = 2和Execute =1。例如，值0755转换为User read-write，Group和Other只读。默认值为0755。 [（有关Unix风格的权限的更多信息）](http://www.onlamp.com/pub/a/bsd/2000/09/06/FreeBSD_Basics.html) |
 | `includeMetadata`                                      | `boolean`                     | 如果设置为true，则此属性将触发创建存储库元数据，这将使该存储库可用作功能性远程存储库。 **默认值为**：`false`。 |
-| `groupVersionAlignments/ groupVersionAlignment*` | `List<GroupVersionAlignment>` | **（许多）**指定您要将一组工件与指定版本对齐。通过提供一个或多个<groupVersionAlignment>子元素来指定groupVersionAlignment。 |
+| `groupVersionAlignments/ groupVersionAlignment*` | `List<GroupVersionAlignment>` | **（许多）**指定您要将一组工件与指定版本对齐。通过提供一个或多个`<groupVersionAlignment>`子元素来指定groupVersionAlignment。 |
 | `scope`                                                | `String`                      | 指定此存储库中包含的工件的范围。（自2.2-beta-1开始） **默认值为**：`runtime`。 |
 
 #### groupVersionAlignment
@@ -334,7 +339,7 @@ moduleSet表示项目的pom.xml中存在的一个或多个项目<module>。这�
 | ------------------- | -------------- | ------------------------------------------------------------ |
 | `id`                | `String`       | 要为其对齐版本的工件的groupId。                              |
 | `version`           | `String`       | 您要与此组对齐的版本。                                       |
-| `excludes/exclude*` | `List<String>` | **（许多）**当存在<exclude>子元素时，它们定义要排除的工件的artifactIds。如果不存在，则<excludes>表示没有排除。通过提供一个或多个<exclude>子元素来指定排除。 |
+| `excludes/exclude*` | `List<String>` | **（许多）**当存在`<exclude>`子元素时，它们定义要排除的工件的artifactIds。如果不存在，则`<excludes>`表示没有排除。通过提供一个或多个`<exclude>`子元素来指定排除。 |
 
 ## 模板
 

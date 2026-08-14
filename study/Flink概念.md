@@ -663,7 +663,7 @@ class MyFlatMap extends RichFlatMapFunction[Int, (Int, Int)] {
 * ListState
 * MapState
 * ReducingState
-  * 底层存了哈希表<key,<name,value>>
+  * 底层存了哈希表 `<key,<name,value>>`
   * 描述符里存reduce函数,更新value
 * AggregatingState
   * 同window的aggregate,创建了一个累加器,所以输出类型可以不一致
