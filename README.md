@@ -1,4 +1,4 @@
-# SongPinru 知识库
+# Pinru's Home
 
 个人技术笔记、故障复盘与学习记录。站点使用 [Hugo](https://gohugo.io/) 和 [Hextra](https://imfing.github.io/hextra/) 构建，部署到 GitHub Pages。
 
@@ -19,19 +19,20 @@ hugo server
 
 ## 内容目录
 
-原有内容目录保持不变：
+内容采用 Hextra 原版结构：
 
-- `notes/`：工作笔记
-- `study/`：学习记录
-- `源码编译/`：框架源码编译记录
-- `docs/`：文档资料
+- `content/docs/notes/`：工作笔记
+- `content/docs/study/`：学习记录
+- `content/docs/源码编译/`：框架源码编译记录
+- `content/docs/JavaSE葵花宝典.md`、`content/docs/MySQL九阴真经.md`：参考文档
+- `content/blog/`：博客，当前为空
 
-Markdown 文件会被 Hugo 挂载为内容页面，图片等非 Markdown 文件会保留在 `static/` 中。文章内原有的相对图片路径可以继续使用。
+Markdown 位于 `content/`，图片等静态资源位于 `static/docs/` 对应路径下。
 
 ## 构建
 
 ```bash
-hugo --gc --minify
+hugo --minify --cleanDestinationDir
 ```
 
 生成的站点位于 `public/`，该目录与 `resources/`、`.hugo_build.lock` 已加入 `.gitignore`。

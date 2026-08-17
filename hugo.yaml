@@ -1,5 +1,5 @@
-baseURL: "https://songpinru.github.io/"
-title: "SongPinru 知识库"
+baseURL: "http://localhost:1313/"
+title: "Pinru's Home"
 locale: "zh-CN"
 defaultContentLanguage: "zh-cn"
 hasCJKLanguage: true
@@ -8,16 +8,6 @@ enableRobotsTXT: true
 capitalizeListTitles: false
 summaryLength: 80
 disablePathToLower: true
-
-disableKinds:
-  - taxonomy
-  - term
-
-permalinks:
-  page:
-    notes: "/:sections/:contentbasename/"
-    study: "/:sections/:contentbasename/"
-    docs: "/:sections/:contentbasename/"
 
 outputs:
   home: [html, rss]
@@ -30,41 +20,6 @@ module:
     min: "0.146.0"
   imports:
     - path: github.com/imfing/hextra
-  mounts:
-    - source: assets
-      target: assets
-    - source: layouts
-      target: layouts
-    - source: _index.md
-      target: content/_index.md
-    - source: notes
-      target: content/notes
-      files:
-        - "*.md"
-        - "**/*.md"
-    - source: notes
-      target: static/notes
-    - source: study
-      target: content/study
-      files:
-        - "*.md"
-        - "**/*.md"
-    - source: study
-      target: static/study
-    - source: 源码编译
-      target: content/源码编译
-      files:
-        - "*.md"
-        - "**/*.md"
-    - source: 源码编译
-      target: static/源码编译
-    - source: docs
-      target: content/docs
-      files:
-        - "*.md"
-        - "**/*.md"
-    - source: docs
-      target: static/docs
 
 markup:
   highlight:
@@ -94,25 +49,19 @@ enableInlineShortcodes: true
 
 menu:
   main:
-    - name: "工作笔记"
-      pageRef: /notes
-      weight: 1
-    - name: "学习记录"
-      pageRef: /study
-      weight: 2
-    - name: "源码编译"
-      pageRef: /源码编译
-      weight: 3
-    - name: "文档资料"
+    - name: "文档"
       pageRef: /docs
-      weight: 4
+      weight: 1
+    - name: "博客"
+      pageRef: /blog
+      weight: 2
     - name: "搜索"
-      weight: 5
+      weight: 3
       params:
         type: search
     - name: "GitHub"
       url: "https://github.com/songpinru/songpinru.github.io"
-      weight: 6
+      weight: 4
       params:
         icon: github
 
@@ -123,7 +72,6 @@ params:
   navbar:
     displayTitle: true
     displayLogo: false
-    width: wide
 
   theme:
     default: system
@@ -131,9 +79,6 @@ params:
 
   footer:
     enable: true
-    displayCopyright: true
-    displayPoweredBy: false
-    width: wide
 
   displayUpdatedDate: false
   displayUpdatedAuthor: false
@@ -149,8 +94,8 @@ params:
       maxSectionResults: 10
 
   editURL:
-    enable: false
-    base: "https://github.com/songpinru/songpinru.github.io/edit/main"
+    enable: true
+    base: "https://github.com/songpinru/songpinru.github.io/edit/main/content"
 
   toc:
     displayTags: false
@@ -161,7 +106,6 @@ params:
       display: hover
 
   page:
-    width: wide
     displayPagination: true
     contextMenu:
       enable: true
