@@ -27,7 +27,7 @@ hugo server
 - `content/docs/JavaSE葵花宝典.md`、`content/docs/MySQL九阴真经.md`：参考文档
 - `content/blog/`：博客，当前为空
 
-Markdown 位于 `content/`，图片等静态资源位于 `static/docs/` 对应路径下。
+Markdown 与对应图片资源放在同一 `content/docs/` 目录下。`static/` 仅用于全站级静态文件，目前不需要维护。
 
 ## 构建
 
