@@ -1,7 +1,5 @@
 ---
-title: "2.Hive编译"
-aliases:
-  - /study/源码编译/2.Hive编译
+title: "Hive编译"
 ---
 
 # Hive编译

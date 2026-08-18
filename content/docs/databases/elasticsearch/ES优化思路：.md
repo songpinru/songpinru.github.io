@@ -1,7 +1,5 @@
 ---
 title: "ES优化思路："
-aliases:
-  - /notes/ES优化思路：
 ---
 
 ES优化思路：

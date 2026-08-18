@@ -1,10 +1,11 @@
 ---
 title: "Git命令"
+description: "Git 常用命令、分支工作流与 SSH 配置速查。"
 ---
 
 # GIT
 
-![git&github](src/Git&GitHub.bmp)
+![git&github](Git命令.assets/Git&GitHub.bmp)
 
 # Git指令
 
@@ -105,7 +106,7 @@ git push [-f --force] [-d --delete] [-n --dry-run] [--progress] [-q --quiet]
 
 
 # GitFlow
-![官方命令](src/gitflow工作流.jpg)
+![官方命令](Git命令.assets/gitflow工作流.jpg)
 # Gitlab 服务器搭建过程
 ## 官网地址
 首页：https://about.gitlab.com/

@@ -1,7 +1,5 @@
 ---
 title: "Nginx"
-aliases:
-  - '/study/Nginx '
 ---
 
 # 安装

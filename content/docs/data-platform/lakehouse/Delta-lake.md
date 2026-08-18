@@ -1,7 +1,5 @@
 ---
 title: "Delta Lake"
-aliases:
-  - /study/Delta lake
 ---
 
 # 数据湖是什么？
@@ -95,7 +93,7 @@ Iceberg：
 
 ![img](http://codingdict.com/static/assets/osapp/images/706a301f07326ec69e09ad9911e91112.png)
 
-![image-20201013102334150](Delta lake.assets/image-20201013102334150.png)
+![image-20201013102334150](Delta-lake.assets/image-20201013102334150.png)
 
 几个重要的特性：
 
@@ -145,7 +143,7 @@ Delta的文件结构：
 
 分为parquet文件和meta文件目录
 
-![image-20201012182813001](Delta lake.assets/image-20201012182813001.png)
+![image-20201012182813001](Delta-lake.assets/image-20201012182813001.png)
 
 
 
@@ -155,7 +153,7 @@ Delta的文件结构：
 
 **事务日志**
 
-![image-20201012182857655](Delta lake.assets/image-20201012182857655.png)
+![image-20201012182857655](Delta-lake.assets/image-20201012182857655.png)
 
 ` _delta_log/`被称为事务日志目录,里面有很多个json文件和checkpoint.parquet文件,还有唯一的_last_checkpoint
 
@@ -281,7 +279,7 @@ json文件里面保存的就是json,我们可以格式化看看里面保存了�
 
 json文件一般都是小文件，而且如果读取所有的json文件信息，当commit很多的时候，性能会下降的非常厉害，Delta的解决方案是合并commit，默认会每10个commit合并一次，合并成一个parquet文件，这个文件叫做checkpoint，checkpoint里面保存的就是元数据（即schema信息）和文件指针，同时生成一个文本文件`_last_checkpoint`
 
-![image-20201013102836946](Delta lake.assets/image-20201013102836946.png)
+![image-20201013102836946](Delta-lake.assets/image-20201013102836946.png)
 
 # 如何支持更新删除的
 

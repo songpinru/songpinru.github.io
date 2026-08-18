@@ -1,5 +1,6 @@
 ---
 title: "Hadoop集群关键角色迁移"
+description: "Hadoop 集群 NameNode、ResourceManager 等关键角色的迁移方案与实施记录。"
 ---
 
 # hadoop 集群关键角色迁移方案
@@ -142,7 +143,7 @@ Utility（管理、监控等角色）:
 
 还有一台机器可以暂时用于datanode，后续如果集群扩增，可以转为Utility分担一些次要角色
 
-![](hadoop集群关键角色迁移.assert/image1.png)
+![](hadoop集群关键角色迁移.assets/image1.png)
 
 ### 迁移方案
 
@@ -220,15 +221,15 @@ NN和RM的切换至少需要一次运行任务的重启，以下是详细步骤
   2.  NN2、RM2-\>MS2
 4.  迁移NN2到MS2
 
-![](hadoop集群关键角色迁移.assert/image2.png)
+![](hadoop集群关键角色迁移.assets/image2.png)
 
 5.  停止并删除RM2节点
 
-![](hadoop集群关键角色迁移.assert/image3.png)
+![](hadoop集群关键角色迁移.assets/image3.png)
 
 6.  新增RM到MS2
 
-![](hadoop集群关键角色迁移.assert/image4.png)
+![](hadoop集群关键角色迁移.assets/image4.png)
 
 7.  重启所有datanode（依次重启）、任务
 8.  重启完成后继续迁移NN和RM
@@ -416,7 +417,7 @@ PS:切换前后MySQL数据做备份
 
 clouderanManger进入维护模式
 
-![](hadoop集群关键角色迁移.assert/image5.png)
+![](hadoop集群关键角色迁移.assets/image5.png)
 
 10.11.20.49停止clouderaManager server
 
@@ -503,19 +504,19 @@ agent(包括hadoopm3.optaim.com和hadoopu1.optaim.com)
 
 此时应该只有hive、hue、oozie等用户（scm已经迁到新的mysql了）
 
-![](hadoop集群关键角色迁移.assert/image6.png)
+![](hadoop集群关键角色迁移.assets/image6.png)
 
 修改这三个服务连接的mysql
 
-![](hadoop集群关键角色迁移.assert/image7.png)
+![](hadoop集群关键角色迁移.assets/image7.png)
 
-![](hadoop集群关键角色迁移.assert/image8.png)
+![](hadoop集群关键角色迁移.assets/image8.png)
 
-![](hadoop集群关键角色迁移.assert/image9.png)
+![](hadoop集群关键角色迁移.assets/image9.png)
 
 手动依次重启这三个服务,重启完成后再次查看已建立的连接
 
-![](hadoop集群关键角色迁移.assert/image10.png)
+![](hadoop集群关键角色迁移.assets/image10.png)
 
 此时应该发现除了自己本地客户端之外,其他的连接都断开了,mysql迁移结束
 
@@ -529,21 +530,21 @@ PS:
 
 停止所有ClouderaManager Service
 
-![](hadoop集群关键角色迁移.assert/image11.png)
+![](hadoop集群关键角色迁移.assets/image11.png)
 
 然后删除角色
 
-![](hadoop集群关键角色迁移.assert/image12.png)
+![](hadoop集群关键角色迁移.assets/image12.png)
 
 然后在hadoopu1.optaim.com上新增并启动这几个角色
 
-![](hadoop集群关键角色迁移.assert/image13.png)
+![](hadoop集群关键角色迁移.assets/image13.png)
 
-![](hadoop集群关键角色迁移.assert/image14.png)
+![](hadoop集群关键角色迁移.assets/image14.png)
 
 等待clouderaManager监控恢复
 
-![](hadoop集群关键角色迁移.assert/image15.png)
+![](hadoop集群关键角色迁移.assets/image15.png)
 
 注意:此处可以先不要重启服务,后续一起重启即可
 
@@ -551,7 +552,7 @@ PS:
 
 NameNode需要复用旧的agent的uuid,先停止10.11.20.51并取得uuid
 
-![](hadoop集群关键角色迁移.assert/image16.png)
+![](hadoop集群关键角色迁移.assets/image16.png)
 
   ```shell
   systemctl stop cloudera-scm-agent.service
@@ -575,7 +576,7 @@ NameNode需要复用旧的agent的uuid,先停止10.11.20.51并取得uuid
 
 等待节点重启完成,然后
 
-![](hadoop集群关键角色迁移.assert/image17.png)
+![](hadoop集群关键角色迁移.assets/image17.png)
 
 或者使用命令行(手动编辑配置文件)
 
@@ -586,13 +587,13 @@ NameNode需要复用旧的agent的uuid,先停止10.11.20.51并取得uuid
 
 然后去对应的目录下查看是否存在fsimage
 
-![](hadoop集群关键角色迁移.assert/image18.png)
+![](hadoop集群关键角色迁移.assets/image18.png)
 
 之后启动NameNode和FailoverController
 
 由于域名没有改变,此时应该不需要重启其他服务(没有新增需要重启的项)
 
-![](hadoop集群关键角色迁移.assert/image19.png)
+![](hadoop集群关键角色迁移.assets/image19.png)
 
 注意事项：
 
@@ -645,11 +646,11 @@ bjuc52.optaim.com上的NameNode和journalNode同样的方式操作
 
 先停止10.11.20.53上的journalNode
 
-![](hadoop集群关键角色迁移.assert/image20.png)
+![](hadoop集群关键角色迁移.assets/image20.png)
 
 然后新增journalNode并启动
 
-![](hadoop集群关键角色迁移.assert/image21.png)
+![](hadoop集群关键角色迁移.assets/image21.png)
 
 和刚才一样需要手动维护journalNode的数据,略
 
@@ -692,7 +693,7 @@ zookeeper线上节点是bjuc53.optaim.com,bjuc54.optaim.com,bjuc55.optaim.com
   hadoopm3.optaim.com                                    6
 ```
 
-![](hadoop集群关键角色迁移.assert/image22.png)
+![](hadoop集群关键角色迁移.assets/image22.png)
 
 #### ResourceManager等
 
@@ -712,7 +713,7 @@ zookeeper线上节点是bjuc53.optaim.com,bjuc54.optaim.com,bjuc55.optaim.com
 
 迁移结束之后需要退出维护模式
 
-![](hadoop集群关键角色迁移.assert/image23.png)
+![](hadoop集群关键角色迁移.assets/image23.png)
 
 修改dns至bjuc51.optaim.com、bjuc51.optaim.com
 

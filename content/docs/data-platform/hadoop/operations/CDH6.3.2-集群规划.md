@@ -1,7 +1,5 @@
 ---
 title: "CDH6.3.2 集群规划"
-aliases:
-  - /notes/CDH6.3.2 集群规划
 ---
 
 # CDH6.3.2 集群规划

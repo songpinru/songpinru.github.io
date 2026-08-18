@@ -1,7 +1,5 @@
 ---
-title: "3.Tez编译"
-aliases:
-  - /study/源码编译/3.Tez编译
+title: "Tez编译"
 ---
 
 # Tez编译
@@ -27,4 +25,3 @@ aliases:
   cd tez
   mvn clean package -Dhadoop.version=3.1.3 -Phadoop28 -P\!hadoop27 -DskipTests -Dmaven.javadoc.skip=true
   ```
-

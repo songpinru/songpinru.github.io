@@ -1,5 +1,6 @@
 ---
 title: "Flink"
+description: "Flink 项目搭建、数据源、转换算子、窗口与状态计算实践笔记。"
 ---
 
 # Flink
@@ -234,7 +235,7 @@ class MyCoFlatMap extends CoFlatMapFunction[SourceReading,SourceReading,SourceRe
 
 >  `rebalance()`和`rescale()`的根本区别在于任务之间连接的机制不同。 `rebalance()`将会针对所有发送者任务和所有接收者任务之间建立通信通道，而`rescale()`仅仅针对每一个任务和下游算子的一部分子并行任务之间建立通信通道。rescale的示意图为图5-7。
 
-![spaf 0507](src/reblance和rescale.png)
+![spaf 0507](Flink.assets/reblance和rescale.png)
 
 **Broadcast**
 

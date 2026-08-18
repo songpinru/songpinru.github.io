@@ -1,7 +1,5 @@
 ---
-title: "5.编译Spark"
-aliases:
-  - /study/源码编译/5.编译Spark
+title: "编译Spark"
 ---
 
 # 编译Spark

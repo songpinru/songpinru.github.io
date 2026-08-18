@@ -32,7 +32,7 @@ Java之父是詹姆斯.高斯林(James Gosling)。
 
 原理：只要在需要运行 java 应用程序的操作系统上，先安装一个Java虚拟机 (JVM Java Virtual Machine) 即可。由JVM来负责Java程序在该系统中的运行。因为有了JVM，同一个Java 程序在三个不同的操作系统中都可以执行。这样就实现了Java 程序的跨平台性。
 
-![](imgs/1557828366412.png)
+![](JavaSE葵花宝典.assets/1557828366412.png)
 
 ## 1.3 Java环境搭建
 
@@ -50,13 +50,13 @@ JDK = JRE + 开发工具
 
 JRE = JVM + 核心类库
 
-![](imgs/1553593811117.png)
+![](JavaSE葵花宝典.assets/1553593811117.png)
 
 ### 1.3.2  Java环境搭建
 
 1、安装JDK
 
-![](imgs/1553644600381.png)
+![](JavaSE葵花宝典.assets/1553644600381.png)
 
 2、配置JDK的开发工具目录到path环境变量中
 
@@ -64,7 +64,7 @@ JRE = JVM + 核心类库
 
 ​	注意：这个安装目录以你自己的安装目录为准
 
-![](imgs/1553644724825.png)
+![](JavaSE葵花宝典.assets/1553644724825.png)
 
 （1）为什么配置path？
 
@@ -184,9 +184,9 @@ javadoc -d 文件夹名 【-version -author】 源文件名.java
 修改源文件的编码，保持和命令行一致
 ```
 
-![1565139079529](imgs/1565139079529.png)
+![1565139079529](JavaSE葵花宝典.assets/1565139079529.png)
 
-![1565139107464](imgs/1565139107464.png)
+![1565139107464](JavaSE葵花宝典.assets/1565139107464.png)
 
 2、大小写问题
 
@@ -755,7 +755,7 @@ System.out.println("最大值：" + (a>b?a:b));
 
 ### 2.4.7 运算符优先级
 
-![1553858424335](imgs/1553858424335.png)
+![1553858424335](JavaSE葵花宝典.assets/1553858424335.png)
 
 提示说明：
 
@@ -1456,7 +1456,7 @@ for(int i=0; i <数组名.length; i++){
 int[] arr = {1,2,3,4,5};
 ```
 
-![1565657281936](imgs/1565657281936.png)
+![1565657281936](JavaSE葵花宝典.assets/1565657281936.png)
 
 ```java
 int[] arr = new int[5];
@@ -1467,7 +1467,7 @@ for(int i=0; i<arr.length; i++){
 
 
 
-![1565657453572](imgs/1565657453572.png)
+![1565657453572](JavaSE葵花宝典.assets/1565657453572.png)
 
 ## 4.3 数组的相关算法
 
@@ -2142,7 +2142,7 @@ class TestCircle{
 
 5、对象属性的内存图
 
-![1565916598575](imgs/1565916598575.png)
+![1565916598575](JavaSE葵花宝典.assets/1565916598575.png)
 
 
 
@@ -5208,11 +5208,11 @@ interface Super<H,J>{
  	单列集合   Collection              (存储单个数据)
  	双列集合   Map			(存储的键值对：key-value)
 
-<!-- 原图缺失：imgs/7、Collection和Map.png -->
+<!-- 原图缺失：JavaSE葵花宝典.assets/7、Collection和Map.png -->
 
 ## 13.2 Collection集合的体系结构图
 
-<!-- 原图缺失：imgs/1563547137571.png -->
+<!-- 原图缺失：JavaSE葵花宝典.assets/1563547137571.png -->
 
 **Collection   容器常用方法**
  		新建容器：Collection coll=new ArrayList();
