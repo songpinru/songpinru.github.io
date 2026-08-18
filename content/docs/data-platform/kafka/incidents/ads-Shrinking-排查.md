@@ -9,11 +9,11 @@ title: "Ads Shrinking 排查"
 ## 排查过程
 
 发现ads集群Shrinking频率相对也比较频繁，排除了已知的故障原因之后，增加处理FollowerFetchRequest的耗时日志，看看耗时主要是卡在什么地方
-![输入图片说明](ads-Shrinking-排查.assets/l17Mha604t1mIebW.png)
+![输入图片说明](ads-Shrinking-排查.assets/l17Mha604t1mIebW.jpg)
 
 从上图可以看到FollowerFetchRequest大部分耗时都在requestQueue上，在往上看还可以找到耗时再responseQueue的日志
 
-![输入图片说明](ads-Shrinking-排查.assets/cPS7NbcC3xwcPe5t.png)
+![输入图片说明](ads-Shrinking-排查.assets/cPS7NbcC3xwcPe5t.jpg)
 
 这个现象和common很类似，是processor线程阻塞的标志，但是日志也增加了对Processor.poll 长耗时的日志，ads集群此时没有相关日志打印，和common集群不一样，并不是冷读导致的，而且ads集群已经对listener做了拆分，冷读不会影响FollowerFetchRequest的Processor线程
 
@@ -21,16 +21,16 @@ title: "Ads Shrinking 排查"
 
 （截图时已加日志，和上面的Shrinking是同一次）
 
-![输入图片说明](ads-Shrinking-排查.assets/VWBHEuYRCkZXFQSn.png)![image2025-9-26_11-35-56.png](http://docs.ml.platform.data.sina.com.cn/download/attachments/40406120/image2025-9-26_11-35-56.png?version=1&modificationDate=1758857758000&api=v2)
+![输入图片说明](ads-Shrinking-排查.assets/VWBHEuYRCkZXFQSn.jpg)![image2025-9-26_11-35-56.png](http://docs.ml.platform.data.sina.com.cn/download/attachments/40406120/image2025-9-26_11-35-56.png?version=1&modificationDate=1758857758000&api=v2)
 
 可以看到确实是阻塞在了RequestQueue上，证明此时IO线程繁忙，处理Request不及时，应该是IO线程大范围阻塞了，增加日志看看到底是什么原因阻塞的
 
 （截图时已加日志，和上面的Shrinking是同一次）
-![输入图片说明](ads-Shrinking-排查.assets/JGjzfBrJptkA6e1v.png)
+![输入图片说明](ads-Shrinking-排查.assets/JGjzfBrJptkA6e1v.jpg)
 
 过滤apiLocalTime大于0的，发现都是PRODUCE请求，PRODUCE请求主要执行是append方法，对append方法耗时增加日志
 
-![输入图片说明](ads-Shrinking-排查.assets/P0IzbMWPqI6l5X3c.png)
+![输入图片说明](ads-Shrinking-排查.assets/P0IzbMWPqI6l5X3c.jpg)
 
 
 发现Shrinking时append方法阻塞在了获得lock锁上，有线程持有Log的锁长时间没有释放
@@ -40,7 +40,7 @@ title: "Ads Shrinking 排查"
 增加日志后发现是maybeIncrementLogStartOffset方法耗时比较长，并且耗时基本都在leaderEpochCache.clearAndFlushEarliest 方法上
 
 使用arthas排查clearAndFlushEarliest方法耗时大于1s的情况，看看主要耗时在哪：
-![输入图片说明](ads-Shrinking-排查.assets/Dqjgge7x2qR2pkP2.png)
+![输入图片说明](ads-Shrinking-排查.assets/Dqjgge7x2qR2pkP2.jpg)
 
 最终抓到了是deleteSegment时会触发leader-epoch-checkpoint文件刷盘，阻塞在了sync上，结合当时sar监控日志，发现这个partition当时的盘io 100%，磁盘正在写入数据
 

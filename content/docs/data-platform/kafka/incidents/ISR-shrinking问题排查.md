@@ -25,7 +25,7 @@ flush指标极低，其他磁盘相关指标也正常，排除磁盘问题
 
 找到最频繁发生Shrinking的几台节点，使用Arthas查看ReplicaFetcherThread 中doWork方法耗时情况（很难抓到Shrinking情况，但是可以看看是否有异常）：
 排查各项指标，没有明显的异常，找到最频繁发生Shrinking的几台节点，使用Arthas查看FollowerFerch耗时情况
-![输入图片说明](ISR-shrinking问题排查.assets/NXhu9hZumCq65chC.png)
+![输入图片说明](ISR-shrinking问题排查.assets/NXhu9hZumCq65chC.jpg)
 由于平均耗时很短，只有100ms左右，所以过滤了cost>1000的情况，看看最长耗时可能是多少，
 
 可以从中看到最长的一次fetch花了2131ms，虽然比replica.lag.time.max.ms=5000 值要低，但是相比平均值高了很多，
@@ -38,7 +38,7 @@ flush指标极低，其他磁盘相关指标也正常，排除磁盘问题
     
 
 buildFetchRequest方法耗时很短，主要是processFetchRequest耗时较长：
-![输入图片说明](ISR-shrinking问题排查.assets/BBDdHLulQGR4lQx1.png)
+![输入图片说明](ISR-shrinking问题排查.assets/BBDdHLulQGR4lQx1.jpg)
 processFetchRequest主要干两件事：
 
 1.  向leader发送fetch请求
@@ -46,7 +46,7 @@ processFetchRequest主要干两件事：
 
   
 
-看看fetch请求的耗时情况：![输入图片说明](ISR-shrinking问题排查.assets/ywwd3INj3qcJy1BK.png)
+看看fetch请求的耗时情况：![输入图片说明](ISR-shrinking问题排查.assets/ywwd3INj3qcJy1BK.jpg)
 可以看出来主要耗时都在fetch请求上，那基本就是leader的问题了，需要看看leader处理fetch请求耗时如何
 
 使用jmx exportor 获取leader处理FetchFollower请求的相关指标
@@ -61,14 +61,14 @@ replica.fetch.wait.max.ms=300
   
 所以理论上remoteTime应该是300左右，不应该有这么大，查看相关部分的源码，并排除其他可能后，怀疑是时间轮的问题，继续上arthas查看
 
-![输入图片说明](ISR-shrinking问题排查.assets/mp3DYuM00D3yNnpM.png)
+![输入图片说明](ISR-shrinking问题排查.assets/mp3DYuM00D3yNnpM.jpg)
 果然时间轮advance的耗时有异常，advanceColck源码中写死了是200ms时间轮向前滚动一次，但是这里耗时明显超过200ms
 
   
 使用trace 查看advanceClock耗时都在哪：
-![输入图片说明](ISR-shrinking问题排查.assets/85zh6MEfJpSiYjTf.png)
+![输入图片说明](ISR-shrinking问题排查.assets/85zh6MEfJpSiYjTf.jpg)
 定位到是jdk方法耗时最久，DelayQueue.poll方法耗时超过2000ms，这里poll的timeout参数来自advanceColck中的200ms，明显超出预期，继续使用trace看看是哪里耗时最久：
-![输入图片说明](ISR-shrinking问题排查.assets/Mw2HApWFwkmX9Cot.png)
+![输入图片说明](ISR-shrinking问题排查.assets/Mw2HApWFwkmX9Cot.jpg)
 
 这时候arthas就没有办法继续查了，看jdk源码awaitNanos方法主要调用的是LockSupport.parkNanos方法，只能写demo代码验证下：
 ![输入图片说明](ISR-shrinking问题排查.assets/YJUogiCtm69a9sEq.png)
