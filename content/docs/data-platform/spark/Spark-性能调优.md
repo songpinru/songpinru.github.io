@@ -1,7 +1,5 @@
 ---
 title: "Spark 性能调优"
-aliases:
-  - /study/Spark 性能调优
 ---
 
 # 第一章       Spark 性能调优
@@ -86,13 +84,13 @@ Spark性能调优的第一步，就是为任务分配更多的资源，在一定
 
 在对RDD进行算子时，要避免相同的算子和计算逻辑之下对RDD进行重复的计算，如图2-1所示：
 
-![img](src/clip_image002.jpg)
+![img](Spark-性能调优.assets/clip_image002.jpg)
 
 图2-1 RDD的重复计算
 
 对图2-1中的RDD计算架构进行修改，得到如图2-2所示的优化结果：
 
-![img](src/clip_image004.jpg)
+![img](Spark-性能调优.assets/clip_image004.jpg)
 
 图2-2 RDD架构优化
 
@@ -218,13 +216,13 @@ val conf = new SparkConf()
 
 普通的map算子对RDD中的每一个元素进行操作，而mapPartitions算子对RDD中每一个分区进行操作。如果是普通的map算子，假设一个partition有1万条数据，那么map算子中的function要执行1万次，也就是对每个元素进行操作。
 
-![img](src/clip_image006.jpg)
+![img](Spark-性能调优.assets/clip_image006.jpg)
 
 图2-3 map算子
 
 如果是mapPartition算子，由于一个task处理一个RDD的partition，那么一个task只会执行一次function，function一次接收所有的partition数据，效率比较高。
 
-![img](src/clip_image008.jpg)
+![img](Spark-性能调优.assets/clip_image008.jpg)
 
 图2-4 mapPartitions算子
 
@@ -244,7 +242,7 @@ mapPartitions算子也存在一些缺点：对于普通的map操作，一次处�
 
 与mapPartitions算子非常相似，foreachPartition是将RDD的每个分区作为遍历对象，一次处理一个分区的数据，也就是说，如果涉及数据库的相关操作，一个分区的数据只需要创建一次数据库连接，如图2-5所示：
 
-![img](src/clip_image010.jpg)
+![img](Spark-性能调优.assets/clip_image010.jpg)
 
 图2-5 foreachPartition算子
 
@@ -262,7 +260,7 @@ mapPartitions算子也存在一些缺点：对于普通的map操作，一次处�
 
 在Spark任务中我们经常会使用filter算子完成RDD中数据的过滤，在任务初始阶段，从各个分区中加载到的数据量是相近的，但是一旦进过filter过滤后，每个分区的数据量有可能会存在较大差异，如图2-6所示：
 
-![img](src/clip_image012.jpg)
+![img](Spark-性能调优.assets/clip_image012.jpg)
 
 图2-6 分区数据过滤结果
 
@@ -314,7 +312,7 @@ Spark SQL的并行度不允许用户自己指定，Spark SQL自己会默认根�
 
 为了解决Spark SQL无法设置并行度和task数量的问题，我们可以使用repartition算子。
 
-![img](src/clip_image014.jpg)
+![img](Spark-性能调优.assets/clip_image014.jpg)
 
 图2-7 repartition算子使用前后对比图
 
@@ -324,7 +322,7 @@ Spark SQL这一步的并行度和task数量肯定是没有办法去改变了，�
 
 reduceByKey相较于普通的shuffle操作一个显著的特点就是会进行map端的本地聚合，map端会先对本地的数据进行combine操作，然后将数据写入给下个stage的每个task创建的文件中，也就是在map端，对每一个key对应的value，执行reduceByKey算子函数。reduceByKey算子的执行过程如图2-8所示：
 
-![img](src/clip_image016.jpg)
+![img](Spark-性能调优.assets/clip_image016.jpg)
 
 图2-8 reduceByKey算子执行过程
 
@@ -340,11 +338,11 @@ reduceByKey相较于普通的shuffle操作一个显著的特点就是会进行ma
 
 基于reduceByKey的本地聚合特征，我们应该考虑使用reduceByKey代替其他的shuffle算子，例如groupByKey。reduceByKey与groupByKey的运行原理如图2-9和图2-10所示：
 
-![img](src/clip_image018.jpg)
+![img](Spark-性能调优.assets/clip_image018.jpg)
 
 图2-9 groupByKey原理
 
-![img](src/clip_image020.jpg)
+![img](Spark-性能调优.assets/clip_image020.jpg)
 
 图2-10 reduceByKey原理
 
@@ -546,7 +544,7 @@ key的数量增加，可能使数据倾斜更严重。
 
 当使用了类似于groupByKey、reduceByKey这样的算子时，可以考虑使用随机key实现双重聚合，如图3-1所示：
 
-![img](src/clip_image022.jpg)
+![img](Spark-性能调优.assets/clip_image022.jpg)
 
 图3-1 随机key实现双重聚合
 
@@ -560,7 +558,7 @@ key的数量增加，可能使数据倾斜更严重。
 
 正常情况下，join操作都会执行shuffle过程，并且执行的是reduce join，也就是先将所有相同的key和对应的value汇聚到一个reduce task中，然后再进行join。普通join的过程如下图所示：
 
-![img](src/clip_image024.jpg)
+![img](Spark-性能调优.assets/clip_image024.jpg)
 
 图3-2 普通join过程
 
@@ -576,7 +574,7 @@ key的数量增加，可能使数据倾斜更严重。
 
 当join操作有数据倾斜问题并且其中一个RDD的数据量较小时，可以优先考虑这种方式，效果非常好。map join的过程如图3-3所示：
 
-![img](src/clip_image026.jpg)
+![img](Spark-性能调优.assets/clip_image026.jpg)
 
 图3-3 map join过程
 
@@ -590,7 +588,7 @@ key的数量增加，可能使数据倾斜更严重。
 
 当由单个key导致数据倾斜时，可有将发生数据倾斜的key单独提取出来，组成一个RDD，然后用这个原本会导致倾斜的key组成的RDD根其他RDD单独join，此时，根据Spark的运行机制，此RDD中的数据会在shuffle阶段被分散到多个task中去进行join操作。倾斜key单独join的流程如图3-4所示：
 
-![img](src/clip_image028.jpg)
+![img](Spark-性能调优.assets/clip_image028.jpg)
 
 图3-4 倾斜key单独join流程
 
@@ -618,7 +616,7 @@ key的数量增加，可能使数据倾斜更严重。
 
 将两个处理后的RDD，进行join操作。
 
-![img](src/clip_image030.jpg)
+![img](Spark-性能调优.assets/clip_image030.jpg)
 
 图3-6 使用随机数以及扩容进行join
 
@@ -703,7 +701,7 @@ val conf = new SparkConf()
 
 YARN-client模式的运行原理如下图所示：
 
-![img](src/clip_image032.jpg)
+![img](Spark-性能调优.assets/clip_image032.jpg)
 
 图4-1 YARN-client模式运行原理
 
@@ -719,7 +717,7 @@ YARN-client模式的运行原理如下图所示：
 
 YARN-cluster模式的运行原理如下图所示：
 
-![img](src/clip_image034.jpg)
+![img](Spark-性能调优.assets/clip_image034.jpg)
 
 图4-1 YARN-client模式运行原理
 

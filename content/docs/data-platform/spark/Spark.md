@@ -1,5 +1,6 @@
 ---
 title: "Spark"
+description: "Spark 配置、运行模式、核心参数与开发实践笔记。"
 ---
 
 # Spark配置
@@ -1664,4 +1665,3 @@ val localData = initialRDD.map(convert)
 localData.saveAsHadoopDataset(jobConf)
 }
 ```
-

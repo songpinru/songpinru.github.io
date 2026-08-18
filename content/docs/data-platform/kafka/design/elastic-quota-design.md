@@ -1,5 +1,6 @@
 ---
 title: "Elastic Quota Design"
+description: "Kafka 弹性配额的保底、权重、上限与动态流量控制设计。"
 ---
 
 # 弹性配额（Elastic Quota）设计文档

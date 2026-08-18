@@ -1,7 +1,5 @@
 ---
 title: "Spring Boot"
-aliases:
-  - /study/spring boot
 ---
 
 # 一、运行原理初探
@@ -249,13 +247,13 @@ private static Map<String, List<String>> loadSpringFactories(@Nullable ClassLoad
 
 我们根据源头打开spring.factories ， 看到了很多自动配置的文件；这就是自动配置根源所在！
 
-![img](spring boot.assets/640.jpg)
+![img](spring-boot.assets/640.jpg)
 
 **WebMvcAutoConfiguration**
 
 我们在上面的自动配置类随便找一个打开看看，比如 ：WebMvcAutoConfiguration
 
-![img](spring boot.assets/640-1596297574839.jpg)
+![img](spring-boot.assets/640-1596297574839.jpg)
 
 可以看到这些一个个的都是JavaConfig配置类，而且都注入了一些Bean，可以找一些自己认识的类，看着熟悉一下！
 
@@ -321,7 +319,7 @@ public SpringApplication(ResourceLoader resourceLoader, Class... primarySources)
 
 ### run方法流程分析
 
-![img](spring boot.assets/640-1596297574860.jpg)
+![img](spring-boot.assets/640-1596297574860.jpg)
 
 跟着源码和这幅图就可以一探究竟了！
 
@@ -345,7 +343,7 @@ public class Person {
 
 运行结果 ：default message [不是一个合法的电子邮件地址];
 
-![img](spring boot.assets/640.png)
+![img](spring-boot.assets/640.png)
 
 **使用数据校验，可以保证数据的正确性；** 
 
@@ -447,7 +445,7 @@ spring:
 
 官方外部配置文件说明参考文档
 
-![img](spring boot.assets/640-1596295170940.png)
+![img](spring-boot.assets/640-1596295170940.png)
 
 springboot 启动会扫描以下位置的application.properties或者application.yml文件作为Spring boot的默认配置文件：
 
@@ -719,7 +717,7 @@ SpringBoot到底帮我们配置了什么？我们能不能进行修改？能修�
 * Subject 用户
 * SecurityManager 管理用户
 * Realm 连接数据
-  ![在这里插入图片描述](spring boot.assets/20200716234128649-1596294832994.png)
+  ![在这里插入图片描述](spring-boot.assets/20200716234128649-1596294832994.png)
   **简单实验：**
 
 1. 导入依赖
@@ -890,7 +888,7 @@ SpringBoot到底帮我们配置了什么？我们能不能进行修改？能修�
    * 编写实体类
    * 编写mapper接口、mapper.xml、application.yml配置mybatis（别名，mapper.xml文件位置)
    * 编写service接口，serviceImpl类
-     ![在这里插入图片描述](spring boot.assets/20200716234155680-1596294832982.png)
+     ![在这里插入图片描述](spring-boot.assets/20200716234155680-1596294832982.png)
 
 3. 编写Shiro配置类
 
@@ -1132,7 +1130,7 @@ public Docket docket(Environment environment){
 }
 ```
 
-![](spring boot.assets/20200716234231937-1596294833001.png)
+![](spring-boot.assets/20200716234231937-1596294833001.png)
 
 **配置API文档的分组**
 
@@ -1141,11 +1139,11 @@ public Docket docket(Environment environment){
 ```
 
 如何配置多个分组；多个Docket实例即可
-![在这里插入图片描述](spring boot.assets/20200716234258883-1596294832957.png)
+![在这里插入图片描述](spring-boot.assets/20200716234258883-1596294832957.png)
 
 ## 五、 接口注释
 
-![在这里插入图片描述](spring boot.assets/20200716234316562-1596294833029.png)
+![在这里插入图片描述](spring-boot.assets/20200716234316562-1596294833029.png)
 **总结：**
 
 1. 我们可以通过Swagger给一些比较难理解的属性或者接口，增加注释信息；
@@ -1370,11 +1368,11 @@ class Redis02SpringbootApplicationTests {
 	}
 }
 ```
-![1596300687683](spring boot.assets/1596300687683.png)
+![1596300687683](spring-boot.assets/1596300687683.png)
 
 #### 关于对象的保存：
 
-![1596300940216](spring boot.assets/1596300940216.png)
+![1596300940216](spring-boot.assets/1596300940216.png)
 
 我们来编写一个自己的 RedisTemplete
 
@@ -1441,7 +1439,7 @@ Dubbo：jar包
 
    * 配置注册中心的地址，以及服务发现名，和要扫描的包
 
-     ![](spring boot.assets/20200716234407338-1596294833052.png)
+     ![](spring-boot.assets/20200716234407338-1596294833052.png)
 
    * 在想要被注册的服务上面，再增加一个注解**@Service**（dubbo包下的）
 
@@ -1449,7 +1447,7 @@ Dubbo：jar包
 
    * 导入依赖
    * 配置注册中心的地址，配置自己的服务名
-     ![](spring boot.assets/20200716234420339-1596294833054.png)
+     ![](spring-boot.assets/20200716234420339-1596294833054.png)
    * 从远程注入服务 **@Reference**
 
 **微服务架构存在的问题:**
@@ -1482,7 +1480,7 @@ Dubbo：jar包
 
 图案可以到：https://www.bootschool.net/ascii 这个网站生成，然后拷贝到文件中即可！
 
-![img](spring boot.assets/640-1596301933338.jpg)
+![img](spring-boot.assets/640-1596301933338.jpg)
 
 # 狂神说Java SpringBoot
 

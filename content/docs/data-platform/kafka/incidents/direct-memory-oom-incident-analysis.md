@@ -3,9 +3,6 @@ title: Kafka Direct Memory OOM Incident Analysis
 description: Kafka broker direct buffer memory exhaustion investigation and remediation
 weight: 20
 tags: ['kafka', 'operations', 'direct-memory', 'oom']
-aliases:
-keywords:
-type: docs
 ---
 
 <!--

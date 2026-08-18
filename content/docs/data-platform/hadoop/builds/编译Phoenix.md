@@ -1,7 +1,5 @@
 ---
-title: "4.编译Phoenix"
-aliases:
-  - /study/源码编译/4.编译Phoenix
+title: "编译Phoenix"
 ---
 
 # 编译Phoenix

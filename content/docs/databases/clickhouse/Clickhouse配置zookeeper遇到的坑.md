@@ -139,17 +139,17 @@ java.lang.StringIndexOutOfBoundsException: String index out of range: 2
 
 没办法,看源码吧
 
-![image-20210127225028092](Clickhouse配置zookeeper遇到的大坑!!!.assets/image-20210127225028092.png)
+![image-20210127225028092](Clickhouse配置zookeeper遇到的坑.assets/image-20210127225028092.png)
 
 
 
 从main函数追踪下去
 
-![](Clickhouse配置zookeeper遇到的大坑!!!.assets/image-20210127225056897.png)
+![](Clickhouse配置zookeeper遇到的坑.assets/image-20210127225056897.png)
 
 最后看到这个地方
 
-![image-20210127225130697](Clickhouse配置zookeeper遇到的大坑!!!.assets/image-20210127225130697.png)
+![image-20210127225130697](Clickhouse配置zookeeper遇到的坑.assets/image-20210127225130697.png)
 
 报错就是这里,传入的配置文件不对,getPath()是个空串
 

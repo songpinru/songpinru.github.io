@@ -1,7 +1,5 @@
 ---
 title: "Hadoop 概念及安装"
-aliases:
-  - /study/Hadoop 概念及安装
 ---
 
 # 结构

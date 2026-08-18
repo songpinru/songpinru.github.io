@@ -1,7 +1,5 @@
 ---
 title: "Spark 调优总结"
-aliases:
-  - /notes/spark 调优总结
 ---
 
 # 总览

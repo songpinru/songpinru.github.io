@@ -87,12 +87,12 @@ NameNode，进行验证，如还有问题，及时通知回滚
 
 先说第一个现象的原因，java代码使用HDFS一般都是使用的hdfs-client这个包，核心的一个类是NameNodeRpcServer：
 
-![](230801-HadoopNN迁移故障.assert/image1.png)
+![](230801-HadoopNN迁移故障.assets/image1.png)
 
 其实从这里其实就可以看到为什么active
 NameNode切换后会失败了，我们先看一下InetSocketAddress的构造器：
 
-![](230801-HadoopNN迁移故障.assert/image2.png)
+![](230801-HadoopNN迁移故障.assets/image2.png)
 
 InetSocketAddress里存的是构造时NameNode的ip，所以我们迁移之后ip变化，会导致和NameNode的连接失败，所以checkpoint会在切换active
 NameNode后失败。
@@ -104,11 +104,11 @@ Master的container，但是状态一直是Accept，没有转化为Start或者Run
 
 先回顾一下yarn任务的提交流程：
 
-![](230801-HadoopNN迁移故障.assert/image3.png)
+![](230801-HadoopNN迁移故障.assets/image3.png)
 
 主要关注的是图里步骤3-9，flink这里执行到了步骤四，迟迟等不来容器分配并执行的响应，所以会报Yarn响应的错误：
 
-![](230801-HadoopNN迁移故障.assert/image4.jpeg)
+![](230801-HadoopNN迁移故障.assets/image4.jpeg)
 
 然后Yarn这边则是执行到了步骤8，对应的Container（即Application
 Master）下载不到job的配置资源，于是启动不起来Application
@@ -128,8 +128,8 @@ NodeManager下载不了job的资源其实是和上一个原因相同。
 告警群内发出数据延迟、flink任务lag数持续上升警报，观察到flink任务运行未停止；
 
 
-   ![](230801-HadoopNN迁移故障.assert/image5.png)
-   ![](230801-HadoopNN迁移故障.assert/image6.jpeg)
+   ![](230801-HadoopNN迁移故障.assets/image5.png)
+   ![](230801-HadoopNN迁移故障.assets/image6.jpeg)
 
 
 观察mysql表ads_dsp_cost_rt，发现数据更新时间延迟超过阈值，
@@ -143,7 +143,7 @@ lag持续上升，故以为是识别nn主节点失败，故重启flink的消耗�
 
 14.53 提交flink任务皆失败，进行反馈并尝试其它任务，发现flink15提交报错；
 
-![](230801-HadoopNN迁移故障.assert/image7.jpeg)
+![](230801-HadoopNN迁移故障.assets/image7.jpeg)
 
 15.05-16:30 解决故障
 
@@ -155,7 +155,7 @@ b.发现flink12提交任务阻塞
 
 16:50 flink任务重启消耗恢复正常；
 
-![](230801-HadoopNN迁移故障.assert/image8.jpeg)
+![](230801-HadoopNN迁移故障.assets/image8.jpeg)
 
 16:51 flink任务异常导致小时任务无数据，恢复后开始重跑小时任务；
 
@@ -174,7 +174,7 @@ b.发现flink12提交任务阻塞
 18:04
 report报表小时数据恢复完毕，几分钟过后报警群开始告警，告警信息为消耗数据长时间未更新
 
-![](230801-HadoopNN迁移故障.assert/image9.png)
+![](230801-HadoopNN迁移故障.assets/image9.png)
 
 18:04 观察Flink任务启动异常
 
@@ -196,7 +196,7 @@ report报表小时数据恢复完毕，几分钟过后报警群开始告警，�
 
 14:39 开始lag数持续增长 如图
 
-![](230801-HadoopNN迁移故障.assert/image10.png)
+![](230801-HadoopNN迁移故障.assets/image10.png)
 
 此时flink任务显示正常运行，但lag数持续升高，此时正在进行第二台namenode迁移，选择手动停掉任务后，进行任务重启，发现flink任务无法提交至yarn集群，提交任务卡死，导致任务无法重启。
 
@@ -210,7 +210,7 @@ report报表小时数据恢复完毕，几分钟过后报警群开始告警，�
 
 发现异常，部分flink任务无法启动，提示hdfs目录无写入权限，如图
 
-![](230801-HadoopNN迁移故障.assert/image11.png)
+![](230801-HadoopNN迁移故障.assets/image11.png)
 
 尝试修改hdfs目录权限未果，无法修改成功
 
