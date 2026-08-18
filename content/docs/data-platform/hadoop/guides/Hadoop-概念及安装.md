@@ -190,7 +190,7 @@ export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
 sudo xsync /etc/profile.d
 ```
 
-###所有配置文件都在$HADOOP_HOME/etc/hadoop
+### 所有配置文件都在 $HADOOP_HOME/etc/hadoop
 
 ### 配置Core-site.xml
 

@@ -82,7 +82,7 @@ body才是显示的内容
 图片标签
 
 ```html
-<img src="./main/resources/数据流程.png" alt="图片" title="悬停文字"width="300" height="300" border="1" >
+<img src="./main/resources/数据流程.png" alt="图片" title="悬停文字" width="300" height="300" border="1" >
 ```
 
 ## video
