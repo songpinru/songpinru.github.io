@@ -1,6 +1,6 @@
 ---
 title: "编程语言"
-description: "Java、Scala、Python、Rust、Go 与 Shell"
+description: "Java、Scala、Python、Rust、Go、Shell 与 Markdown"
 weight: 1
 ---
 

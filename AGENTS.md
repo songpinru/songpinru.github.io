@@ -10,9 +10,14 @@ content/
 │   └── *.md           # Markdown source files
 └── docs/              # Technical documentation
     ├── _index.md
-    ├── engineering/   # DevOps, languages, systems
+    ├── engineering/   # 工程基础
+    │   ├── languages/     # 编程语言 (Java, Python, Rust, Go, Shell, Markdown)
+    │   ├── systems/       # 操作系统与系统维护
+    │   ├── infrastructure/# 基础设施与工具 (容器、CI/CD、Git、监控、代理)
+    │   ├── 数据结构与算法.md
+    │   └── 源码编译通用步骤.md
     ├── databases/
-    ├── data-platform/
+    ├── data-platform/     # 数据平台 (Hadoop, Kafka, Flink, Spark, Pandas)
     └── application-development/
 layouts/               # Hugo template overrides
 public/                # Generated site (gitignored)
