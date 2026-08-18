@@ -27,7 +27,7 @@ Apache Flink是一个框架和分布式处理引擎，用于对==无界和有界
     
     
 
-<img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2017/cb5357a8.png" alt="Identity 单线程吞吐量" style="zoom:50%;" />
+![Identity 单线程吞吐量](https://awps-assets.meituan.net/mit-x/blog-images-bundle-2017/cb5357a8.png)
 
 flink吞吐量普遍在Storm的3-5倍
 

@@ -27,7 +27,7 @@ title: "HUE"
 
 ## 功能选择
 
-<img src="../HUE.assets/image-20200626110256560.png" alt="image-20200626110256560" style="zoom: 67%;" />
+![image-20200626110256560](HUE.assets/image-20200626110256560.png)
 
 ## 文件系统
 
@@ -49,7 +49,7 @@ HDFS文件系统的web界面，类似于NameNode的Browser，但是功能要多�
 
 PS：3.11版本是view more查看schema详细
 
-<img src="../HUE.assets/image-20200626112402498.png" alt="image-20200626112402498" style="zoom:67%;" />
+![image-20200626112402498](HUE.assets/image-20200626112402498.png)
 
 ![image-20200626112700968](HUE.assets/image-20200626112700968.png)
 

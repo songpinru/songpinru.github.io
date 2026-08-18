@@ -2,8 +2,6 @@
 title: "Markdown"
 ---
 
-[TOC]
-
 # Markdown 标题
 
 ```md
@@ -287,7 +285,7 @@ Typora 现在支持 YAML Front Matter 。 在文章顶部输入 --- 然后按 En
 
 ### 目录 (TOC)
 输入 [toc] 然后按 Return 键将创建一个“目录”部分，自动从文档内容中提取所有标题，其内容会自动更新。
-[TOC]
+`[TOC]`
 
 ### 公式
 
