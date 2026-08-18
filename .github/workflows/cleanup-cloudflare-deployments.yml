@@ -1,0 +1,45 @@
+name: Cleanup Cloudflare Pages deployments
+
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+    inputs:
+      keep:
+        description: "保留的部署数量"
+        default: "3"
+        required: false
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete old deployments
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_PAGES_PROJECT: ${{ secrets.CF_PAGES_PROJECT }}
+        run: |
+          KEEP="${{ github.event.inputs.keep || '3' }}"
+          echo "Keeping latest $KEEP production deployments"
+
+          deployments=$(curl -s -H "Authorization: Bearer $CF_API_TOKEN" \
+            "https://api.cloudflare.com/client/v4/accounts/$CF_ACCOUNT_ID/pages/projects/$CF_PAGES_PROJECT/deployments")
+
+          count=$(echo "$deployments" | jq '.result | length')
+          echo "Total deployments: $count"
+
+          echo "$deployments" | jq -c '.result[] | select(.environment == "production") | {id, created_on}' \
+            | sort -t: -k2 -r \
+            | tail -n +$((KEEP + 1)) \
+            | while read -r deployment; do
+                id=$(echo "$deployment" | jq -r '.id')
+                created_on=$(echo "$deployment" | jq -r '.created_on')
+                echo "Deleting $id (created: $created_on)"
+                curl -s -X DELETE \
+                  -H "Authorization: Bearer $CF_API_TOKEN" \
+                  "https://api.cloudflare.com/client/v4/accounts/$CF_ACCOUNT_ID/pages/projects/$CF_PAGES_PROJECT/deployments/$id" \
+                  | jq -r '.success'
+              done
+
+          echo "Cleanup done"
