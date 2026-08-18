@@ -79,6 +79,7 @@ params:
 
   footer:
     enable: true
+    displayPoweredBy: false
 
   displayUpdatedDate: false
   displayUpdatedAuthor: false
