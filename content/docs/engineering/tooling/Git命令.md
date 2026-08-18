@@ -5,7 +5,7 @@ description: "Git 常用命令、分支工作流与 SSH 配置速查。"
 
 # GIT
 
-![git&github](Git命令.assets/Git&GitHub.bmp)
+![git&github](Git命令.assets/Git&GitHub.jpg)
 
 # Git指令
 
