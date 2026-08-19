@@ -153,7 +153,7 @@ Docker：打包镜像发布测试一键运行。
 
 Docker是内核级别的虚拟化，可以在一个物理机上可以运行很多的容器实例！服务器的性能可以被压榨到极致。
 
-### Docker安装
+## Docker安装
 
 ### Docker的基本组成
 
@@ -323,7 +323,7 @@ Docker-Server接收到Docker-Client的指令，就会执行这个命令！
 
 因此,当新建一个 容器时,docker不需要和虚拟机一样重新加载一个操作系统内核。仍而避免引导、加载操作系统内核返个比较费时费资源的过程,当新建一个虚拟机时,虚拟机软件需要加载GuestOS,返个新建过程是**分钟级别**的。而docker由于直接利用宿主机的操作系统,则省略了这个复杂的过程,因此新建一个docker容器只需要**几秒钟**。
 
-### Docker的常用命令
+## Docker的常用命令
 
 ### 帮助命令
 
@@ -1088,7 +1088,7 @@ docker run -d -p 8080:9000 \
 
 ![image-20200515155113693](docker.assets/aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2NoZW5nY29kZXgvY2xvdWRpbWcvbWFzdGVyL2ltZy9pbWFnZS0yMDIwMDUxNTE1NTExMzY5My5wbmc.jpg) 
 
-### Docker镜像讲解
+## Docker镜像讲解
 
 ### **镜像是什么**
 
@@ -1322,7 +1322,7 @@ docker commit -a="kuangshen" -m="add webapps app" 容器id tomcat02:1.0
 
 
 
-### 容器数据卷
+## 容器数据卷
 
 ### 什么是容器数据卷
 
@@ -1538,7 +1538,7 @@ docker inspect 容器id
 
 但是一旦你持久化到了本地，这个时候，本地的数据是不会删除的！
 
-### DockerFile
+## DockerFile
 
 ### DockerFile介绍
 
@@ -1829,7 +1829,7 @@ $ sudo docker push registry.cn-shenzhen.aliyuncs.com/dsadxzc/cheng:[镜像版本
 
 ![image-20200516171155667](docker.assets/aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2NoZW5nY29kZXgvY2xvdWRpbWcvbWFzdGVyL2ltZy9pbWFnZS0yMDIwMDUxNjE3MTE1NTY2Ny5wbmc.jpg) 
 
-### Docker 网络
+## Docker 网络
 
 ### 理解Docker 0
 
@@ -2115,7 +2115,7 @@ docker搭建redis集群完成！
 
 我们使用docker之后，所有的技术都会慢慢变得简单起来！
 
-### SpringBoot微服务打包Docker镜像
+## SpringBoot微服务打包Docker镜像
 
 1、构建SpringBoot项目
 
@@ -2146,4 +2146,3 @@ $ docker build -t xxxxx:xx  .
 5、发布运行
 
 以后我们使用了Docker之后，给别人交付就是一个镜像即可！
-
