@@ -20,7 +20,7 @@ ZAB算法更严谨，实现难度更高，同时也意味着效率更低，为�
 
 raft算法出现比较晚，协议相对比较保守，速度更快
 
-### 架构
+## 架构
 
 ![img](Kafka.assets/7a21564f85793c13ff0f75733a1d5dec.png)
 
@@ -300,7 +300,7 @@ At Least Once + 幂等性+事务 = Exactly Once(即数据不丢不重)
 
 
 
-### Kafka安装部署
+## 安装部署
 
 * 解压并创建日志文件夹
 
@@ -340,7 +340,7 @@ zookeeper.connect=hadoop102:2181,hadoop103:2181,hadoop104:2181
 * 配置环境变量  **/etc/profile.d/**
 * 分发并修改**broker.id**
 
-### Kafaka操作命令
+## 操作命令
 
 ```shell
 # 单点启动
@@ -402,7 +402,8 @@ case $1 in
 esac
 ```
 
-### Kaka API
+## 客户端开发
+### Admin API
 
 导入依赖：
 
@@ -720,9 +721,9 @@ for (int i = 0; i < 10; i++) {
 producer.close();
 ```
 
-### flume和Kafka对接
+## Flume 对接
 
-### Kafaka Source
+### Kafka Source
 
 ```properties
 # source类型
@@ -827,7 +828,7 @@ a1.sinks.k1.kafka.producer.linger.ms = 1
 | *more producer security props*   |                     | 如果使用 SASL_PLAINTEXT, SASL_SSL or SSL 请参考 [Kafka security](http://kafka.apache.org/documentation.html#security) .                                  |
 | Other Kafka Producer Properties  | –                   | 这些属性用于配置Kafka Producer。 可以使用Kafka支持的任何生产者属性。 唯一的要求是在属性名称前添加前缀kafka.producer。 例如：`kafka.producer.linger.ms`                                        |
 
-### Kafka监控
+## Kafka 监控
 
 ### Kafka Monitor
 
@@ -887,7 +888,7 @@ bin/kafka-manager
 
 5. 登录hadoop102:9000页面查看详细信息(和hadoop冲突，修改)
 
-### 附录
+## 附录
 
 ### Kafka Producer压力测试
 
