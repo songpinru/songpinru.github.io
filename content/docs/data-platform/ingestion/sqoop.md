@@ -8,9 +8,9 @@ title: "Sqoop"
 2. 配置环境变量
 3. 拷贝JDBC驱动到lib目录下
 
-## Sqoop参数
+### Sqoop参数
 
-## 导入到HDFS
+### 导入到HDFS
 
 查询导入：
 
@@ -56,7 +56,7 @@ $ bin/sqoop import \
 --where "id=1"
 ```
 
-## 导入到Hive
+### 导入到Hive
 
 ```bash
 $ bin/sqoop import \
@@ -71,7 +71,7 @@ $ bin/sqoop import \
 --hive-table staff_hive
 ```
 
-## 导入到Hbase
+### 导入到Hbase
 
 ```bash
 $ bin/sqoop import \
@@ -88,7 +88,7 @@ $ bin/sqoop import \
 --split-by id
 ```
 
-## 导出到MySQL
+### 导出到MySQL
 
 ```bash
 $ bin/sqoop export \
@@ -101,7 +101,7 @@ $ bin/sqoop export \
 --input-fields-terminated-by "\t"
 ```
 
-## import参数
+### import参数
 
 |      | **参数**                        | **说明**                                                     |
 | ---- | ------------------------------- | ------------------------------------------------------------ |
@@ -140,7 +140,7 @@ $ bin/sqoop export \
 | 22   | --incremental   `<mode>`            | mode：append或lastmodified                                   |
 | 23   | --last-value   `<value>`            | 指定某一个值，用于标记增量导入的位置                         |
 
-## export参数
+### export参数
 
 | **序号** | **参数**                              | **说明**                                   |
 | -------- | ------------------------------------- | ------------------------------------------ |
@@ -163,7 +163,7 @@ $ bin/sqoop export \
 | 9    | --staging-table   `<staging-table-name>`  | 创建一张临时表，用于存放所有事务的结果，然后将所有事务结果一次性导入到目标表中，防止错误。 |
 | 10   | --clear-staging-table                   | 如果第9个参数非空，则可以在导出操作执行前，清空临时事务结果表 |
 
-## Hive参数
+### Hive参数
 
 | **序号** | **参数**                        | **说明**                                                  |
 | -------- | ------------------------------- | --------------------------------------------------------- |
@@ -179,15 +179,15 @@ $ bin/sqoop export \
 | 10       | --hive-table                    | 后面接要创建的hive表,默认使用MySQL的表名                  |
 | 11       | --table                         | 指定关系数据库的表名                                      |
 
-## 经验
+### 经验
 
-###  Sqoop导入导出Null存储一致性问题
+####  Sqoop导入导出Null存储一致性问题
 
 Hive中的Null在底层是以“\N”来存储，而MySQL中的Null在底层就是Null，为了保证数据两端的一致性。在导出数据时采用`--input-null-string`和`--input-null-non-string`两个参数。导入数据时采用`--null-string`和`--null-non-string`。
 
 PS:`--null-non-string`为非string为空时的null值。
 
-### Sqoop数据导出一致性问题
+#### Sqoop数据导出一致性问题
 
 1）场景1：如Sqoop在导出到Mysql时，使用4个Map任务，过程中有2个任务失败，那此时MySQL中存储了另外两个Map任务导入的数据，此时老板正好看到了这个报表数据。而开发工程师发现任务失败后，会调试问题并最终将全部数据正确的导入MySQL，那后面老板再次看报表数据，发现本次看到的数据与之前的不一致，这在生产环境是不允许的。
 
@@ -217,15 +217,15 @@ sqoop export \
 
 多个Map任务时，采用-`–staging-table`方式，仍然可以解决数据一致性问题。
 
-### Sqoop底层运行的任务是什么
+#### Sqoop底层运行的任务是什么
 
 只有Map阶段，没有Reduce阶段的任务。
 
-### Sqoop数据导出的时候一次执行多长时间
+#### Sqoop数据导出的时候一次执行多长时间
 
 Sqoop任务5分钟-2个小时的都有。取决于数据量。
 
-## 脚本
+### 脚本
 
 ```bash
 #! /bin/bash
