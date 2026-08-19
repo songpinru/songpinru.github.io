@@ -2,7 +2,6 @@
 title: "MirrorMaker2 On Connect Distributed 部署运维手册"
 ---
 
-## MirrorMaker 2 on Kafka Connect Distributed 部署运维手册
 
 > 文档版本：v3.0
 >
@@ -14,7 +13,7 @@ title: "MirrorMaker2 On Connect Distributed 部署运维手册"
 >
 > v3.0 变更：重组章节结构，Connector 配置改为“公共片段 + 专属字段”分层提交，消除重复的集群地址与凭据。
 
-### 1. 架构总览
+## 1. 架构总览
 
 将原 `connect-mirror-maker.sh` 专用模式转换为普通 Kafka Connect Distributed 部署，转换后具备：
 
@@ -62,11 +61,11 @@ title: "MirrorMaker2 On Connect Distributed 部署运维手册"
 | `heartbeats` | wbads 和 wbbz | 链路心跳 |
 | Connect config/offset/status topic | wbbz | Connect 集群管理和 Source Task 进度 |
 
-### 2. 关键语义
+## 2. 关键语义
 
 本节集中说明配置的实际行为，后续章节不再重复解释。
 
-#### 2.1 复制语义
+### 2.1 复制语义
 
 - `topics=.*`、`groups=.*`：复制所有未被默认排除规则排除的 topic 和 group。默认排除：
 
@@ -83,19 +82,19 @@ title: "MirrorMaker2 On Connect Distributed 部署运维手册"
 - `offset-syncs.topic.location` 未设置，使用默认值 `source`，offset-sync topic 位于 wbads。如需改到 wbbz，必须同时在 Source 和 Checkpoint Connector 设置 `"offset-syncs.topic.location": "target"`；这属于行为变更，不是原配置的等价转换。
 - `sync.group.offsets.enabled=true` 会将翻译后的 offset 写入 wbbz 的 `__consumer_offsets`。MM2 只同步当前在 wbbz 没有活跃成员的 consumer group；灾备切换前必须确保同一 group 不会同时在 wbads 和 wbbz 消费，避免两个站点分别推进 offset。
 
-#### 2.2 反向心跳不能遗漏
+### 2.2 反向心跳不能遗漏
 
 专用模式中即使 `wbbz->wbads.enabled=false`，只要全局心跳开启，`MirrorMakerConfig.clusterPairs()` 仍会创建 `wbbz -> wbads` herder：反向心跳先写入 wbads，再由正向 Source Connector 复制到 wbbz，用于观察完整复制路径。普通 Connect 模式不会自动完成这一步，因此本文显式部署 `mm2-wbbz-to-wbads-heartbeat`。
 
-#### 2.3 常见误解
+### 2.3 常见误解
 
 - `group.id` 是 Connect Worker 集群的组，不是 MM2 在 wbads 上消费数据的 consumer group。MirrorSourceTask 使用手工 partition assignment，不能用 `kafka-consumer-groups --group <Connect group.id>` 监控复制 lag；lag 的监控方式见第 8 节。
 - 删除 Connector 不会自动删除其 Source offset，不要把“删除 Connector”等同于“清空 offset”，重跑的正确姿势见 7.3。
 - Connect 管理 Kafka 不强制等于下游 Kafka，可以使用独立管理集群（见 9.1），但必须用 `producer.override.*` 指定 SourceRecord 的目标集群。
 
-### 3. 上线前检查
+## 3. 上线前检查
 
-#### 3.1 IdentityReplicationPolicy 冲突
+### 3.1 IdentityReplicationPolicy 冲突
 
 普通业务 topic 在 wbads 和 wbbz 上同名，上线前必须确认：
 
@@ -104,7 +103,7 @@ title: "MirrorMaker2 On Connect Distributed 部署运维手册"
 - 目标同名 topic 的 partition 数不大于源 topic；Kafka 不支持缩减 partition。
 - 下游应用能够接受镜像数据直接进入现有同名 topic。
 
-#### 3.2 消息大小
+### 3.2 消息大小
 
 当前参数：wbads 源端 consumer `max.partition.fetch.bytes=8388608`，wbbz 端 Connect producer `max.request.size=11457280`。还应确认：
 
@@ -114,7 +113,7 @@ title: "MirrorMaker2 On Connect Distributed 部署运维手册"
 
 否则 Task 可能持续重试或失败。
 
-#### 3.3 权限
+### 3.3 权限
 
 当前账号为 admin，通常具备完整权限。如果后续改为最小权限账号，至少需要：
 
@@ -125,13 +124,13 @@ title: "MirrorMaker2 On Connect Distributed 部署运维手册"
 
 `sync.topic.configs.enabled=false` 和 `sync.topic.acls.enabled=false` 降低了 topic 配置及 ACL 管理权限需求。
 
-#### 3.4 REST 安全
+### 3.4 REST 安全
 
 Broker 的 SASL 配置不会保护 Connect REST API。当前使用明文 HTTP（`listeners=http://10.52.139.55:18088`），必须通过防火墙、反向代理或专用管理网络限制访问。任何能访问 REST API 的主体都可能修改、停止或删除 Connector。
 
-### 4. 部署 Connect Worker
+## 4. 部署 Connect Worker
 
-#### 4.1 地址与凭据约定
+### 4.1 地址与凭据约定
 
 全文统一使用以下取值：
 
@@ -156,7 +155,7 @@ sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule require
 
 下文所有 properties 和 JSON 中的集群地址、SASL 配置均按此填写，不再重复说明。生产环境建议使用 `FileConfigProvider` 或其他 Secret 管理方式，避免凭据长期明文存放。
 
-#### 4.2 文件规划
+### 4.2 文件规划
 
 ```text
 /opt/kafka/config/
@@ -175,11 +174,11 @@ sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule require
     └── apply.sh                   # jq 合并片段后提交，依赖 jq
 ```
 
-#### 4.3 Kafka 客户端配置
+### 4.3 Kafka 客户端配置
 
 `wbads-client.properties` 与 `wbbz-client.properties` 内容相同（同一 admin 账号），即 4.1 中的 SASL 三行，分别保存为两个文件即可。
 
-#### 4.4 创建 Connect 内部 topic
+### 4.4 创建 Connect 内部 topic
 
 Connect 管理 Kafka 使用 wbbz，以下三个 topic 位于 wbbz：
 
@@ -216,7 +215,7 @@ kafka-topics.sh --bootstrap-server "$WBBZ_BS" \
 
 MM2 自己的 `mm2-offset-syncs.wbbz.internal`、`wbads.checkpoints.internal` 和 `heartbeats` 由 Connector 自动创建，副本数由 Connector 配置控制。
 
-#### 4.5 Worker 配置
+### 4.5 Worker 配置
 
 `/opt/kafka/config/mm2-connect-wbbz.properties`（地址与凭据即 4.1 约定值）：
 
@@ -289,7 +288,7 @@ exactly.once.source.support=disabled
 - 原配置中被注释的 `producer.acks=1` 不生效。建议保持 Connect 默认的可靠性设置，不要改成 `acks=1`。
 - 不需要配置 `internal.key.converter` 和 `internal.value.converter`。
 
-#### 4.6 启动 Worker
+### 4.6 启动 Worker
 
 建议至少部署三个 Worker。每台机器：
 
@@ -318,11 +317,11 @@ org.apache.kafka.connect.mirror.MirrorCheckpointConnector
 org.apache.kafka.connect.mirror.MirrorHeartbeatConnector
 ```
 
-### 5. Connector 配置
+## 5. Connector 配置
 
 采用“公共片段 + 专属字段”分层，apply.sh 提交时用 jq 合并，合并结果与完整单文件配置完全等价，但集群地址和凭据只需维护一份。
 
-#### 5.1 公共片段
+### 5.1 公共片段
 
 `common.json`：
 
@@ -371,7 +370,7 @@ org.apache.kafka.connect.mirror.MirrorHeartbeatConnector
 }
 ```
 
-#### 5.2 source.json
+### 5.2 source.json
 
 合并顺序：common + cluster-wbads-source + cluster-wbbz-target + source.json。
 
@@ -399,7 +398,7 @@ org.apache.kafka.connect.mirror.MirrorHeartbeatConnector
 
 `tasks.max=200` 只是上限，实际 Task 数不会超过匹配到的源 topic partition 数。
 
-#### 5.3 checkpoint.json
+### 5.3 checkpoint.json
 
 合并顺序与 source 相同。
 
@@ -427,7 +426,7 @@ org.apache.kafka.connect.mirror.MirrorHeartbeatConnector
 
 `sync.group.offsets.enabled=true` 写 wbbz `__consumer_offsets` 的风险和前提见 2.1。
 
-#### 5.4 heartbeat-forward.json
+### 5.4 heartbeat-forward.json
 
 合并顺序：common + cluster-wbbz-target + heartbeat-forward.json。心跳只写目标集群，无需 `source.cluster.*`。
 
@@ -442,7 +441,7 @@ org.apache.kafka.connect.mirror.MirrorHeartbeatConnector
 }
 ```
 
-#### 5.5 heartbeat-reverse.json
+### 5.5 heartbeat-reverse.json
 
 合并顺序：common + cluster-wbads-target + heartbeat-reverse.json。通过 `producer.override.*` 把 SourceTask producer 指向 wbads，依赖 Worker 的 `connector.client.config.override.policy=All`。
 
@@ -462,7 +461,7 @@ org.apache.kafka.connect.mirror.MirrorHeartbeatConnector
 }
 ```
 
-#### 5.6 提交与校验
+### 5.6 提交与校验
 
 `/opt/kafka/config/mm2/apply.sh`：
 
@@ -516,9 +515,9 @@ jq -s 'reduce .[] as $f ({}; . * $f)' \
   jq '.error_count, [.configs[] | select(.value.errors | length > 0)]'
 ```
 
-### 6. 上线验收
+## 6. 上线验收
 
-#### 6.1 Connector 和 Task 状态
+### 6.1 Connector 和 Task 状态
 
 ```bash
 curl -fsS "$CONNECT/connectors?expand=status" |
@@ -528,7 +527,7 @@ curl -fsS "$CONNECT/connectors?expand=status" |
 
 所有 Connector 和预期 Task 应为 `RUNNING`。Checkpoint 在尚未发现符合条件的 consumer group 时可能暂时没有 Task，这不等同于 Connector 失败。
 
-#### 6.2 内部 topic
+### 6.2 内部 topic
 
 ```bash
 kafka-topics.sh --bootstrap-server "$WBADS_BS" \
@@ -540,7 +539,7 @@ kafka-topics.sh --bootstrap-server "$WBBZ_BS" \
   --list | grep -E 'wbads\.checkpoints\.internal|heartbeats|connect-mm2'
 ```
 
-#### 6.3 业务 topic
+### 6.3 业务 topic
 
 目标 topic 与源 topic 同名：
 
@@ -556,7 +555,7 @@ kafka-topics.sh --bootstrap-server "$WBBZ_BS" \
 
 目标 topic 由 MM2 自动创建，并随源 topic 扩分区，与 `sync.topic.configs.enabled` 无关（见 2.1）。
 
-#### 6.4 checkpoint 和 group offset
+### 6.4 checkpoint 和 group offset
 
 ```bash
 kafka-console-consumer.sh \
@@ -573,9 +572,9 @@ kafka-consumer-groups.sh \
 
 注意用业务 consumer group 查询，不要用 Connect Worker 的 `group.id`（见 2.3）。
 
-### 7. 日常运维
+## 7. 日常运维
 
-#### 7.1 修改同步 topic
+### 7.1 修改同步 topic
 
 当前 `"topics": ".*"` 会自动发现所有非默认排除 topic，新增普通业务 topic 后最长约 60 秒进入复制。如改为白名单，编辑 source.json：
 
@@ -585,7 +584,7 @@ kafka-consumer-groups.sh \
 
 然后重新执行 apply.sh。`topics` 中每一项都是 Java 正则并使用整串匹配：`order` 只匹配 topic `order`；`order-.*` 匹配 `order-a`、`order-2026`；JSON 中匹配字面量点号需写成 `\\.`。显式配置 `topics.exclude` 时必须保留默认排除项（见 2.1）。
 
-#### 7.2 修改同步 group
+### 7.2 修改同步 group
 
 编辑 checkpoint.json 的 `groups` 后重新执行 apply.sh：
 
@@ -593,7 +592,7 @@ kafka-consumer-groups.sh \
 "groups": "group-a,group-b,order-service-.*"
 ```
 
-#### 7.3 常用 REST 操作
+### 7.3 常用 REST 操作
 
 ```bash
 NAME=mm2-wbads-to-wbbz-source
@@ -613,7 +612,7 @@ curl -fsS "$CONNECT/connectors/$NAME/offsets" | jq
 
 删除 Connector 不等于清除 Source offset。需要重跑时：先停止 Connector，再用 offset REST API 删除或修改 offset，最后恢复 Connector。执行 offset 删除会导致重新复制，必须先评估下游重复数据。
 
-#### 7.4 扩缩 Worker
+### 7.4 扩缩 Worker
 
 扩容：
 
@@ -628,7 +627,7 @@ curl -fsS "$CONNECT/connectors/$NAME/offsets" | jq
 - 等待 rebalance 完成并确认 Task 全部恢复 RUNNING。
 - 再停止下一台。
 
-### 8. 监控
+## 8. 监控
 
 | 对象 | 指标或检查 |
 |---|---|
@@ -643,9 +642,9 @@ curl -fsS "$CONNECT/connectors/$NAME/offsets" | jq
 
 复制 lag 应按业务 topic partition 比较 wbads end offset 与 wbbz end offset，或使用 MM2 自身指标；Connect Worker 的 `group.id` 不是源端消费组（见 2.3）。
 
-### 9. 变体
+## 9. 变体
 
-#### 9.1 独立 Connect 管理集群
+### 9.1 独立 Connect 管理集群
 
 Connect 管理 Kafka 可以使用第三个独立集群 M，不要求必须是 wbbz。Worker 配置差异：
 
@@ -662,7 +661,7 @@ status.storage.topic=<M上的status topic>
 
 普通 at-least-once 模式下，Connector 的 Source offset 可以继续存放在 M 的 Worker 全局 offset topic。M 不可用时，Connect 无法完成配置管理、offset 提交和任务恢复，因此 M 仍是关键依赖。
 
-#### 9.2 Exactly-once
+### 9.2 Exactly-once
 
 原配置没有真正开启 exactly-once，注释中的 `wbbz.exactly.once.wbads.support` 不是有效参数。如需开启，至少需要：
 
@@ -692,15 +691,15 @@ Source Connector：
 
 现网集群从 disabled 升级 exactly-once 时，应先将所有 Worker 配为 `preparing` 并滚动重启，再改为 `enabled` 进行第二轮滚动重启。不要直接在部分 Worker 上启用。
 
-### 10. 从专用模式迁移
+## 10. 从专用模式迁移
 
-#### 10.1 风险
+### 10.1 风险
 
 如果直接创建新的 Connect group、内部 topic 和 Connector 名称，普通 Connect 看不到专用模式原来的 Source offset。由于 MirrorSourceTask 默认从 earliest 开始，没有迁移 offset 时可能全量重复复制。
 
 切换前必须停止所有 `connect-mirror-maker.sh` 进程，禁止专用模式和新 Connect Connector 同时向相同目标 topic 写数据。
 
-#### 10.2 推荐方案：复用专用模式状态
+### 10.2 推荐方案：复用专用模式状态
 
 专用模式本身使用 `DistributedHerder` 和 Kafka config/offset/status topic。其默认内部 topic 名包含 source alias 而不是 target alias。对于 `wbads -> wbbz`，默认值为：
 
@@ -734,13 +733,13 @@ mm2-status.wbbz.internal
 
 其中通常只有反向 Heartbeat 有活动 Task。可以在 wbads 侧启动第二套普通 Connect Worker 复用这些状态，或者不复用反向 herder、改为本文的 heartbeat-reverse.json。两种方式只能选一种，不能同时运行。
 
-#### 10.3 新建 Connect 集群
+### 10.3 新建 Connect 集群
 
 如果选择第 4 节的新 group 和新内部 topic，必须接受从 earliest 重新复制，或者在停机窗口使用 Connect offset API 设置每个源 topic partition 的起始 offset。
 
 在没有完成 offset 验证前，不要删除旧专用模式内部 topic。
 
-### 11. 故障速查
+## 11. 故障速查
 
 | 现象 | 可能原因 | 处理 |
 |---|---|---|
@@ -756,7 +755,7 @@ mm2-status.wbbz.internal
 | 反向心跳写到 wbbz 而不是 wbads | 缺少 `producer.override.bootstrap.servers` | 修正 reverse heartbeat 配置 |
 | Connect 内部 topic 不可用 | wbbz 故障或 Worker 安全配置错误 | 检查 Worker 顶层及 producer/consumer/admin 配置 |
 
-### 12. 上线检查清单
+## 12. 上线检查清单
 
 - [ ] 所有 Worker 使用相同 `group.id` 和内部 topic。
 - [ ] 每台 Worker 使用自己的可路由 REST advertised 地址。
