@@ -1,17 +1,19 @@
 ---
 title: "Hadoop 概念及安装"
 ---
+# Hadoop 概念及安装
 
-# 结构
+
+## 结构
 
 * hdfs
 * yarn
 * mapreducer
 * common
 
-# 安装
+## 安装
 
-## 虚拟机准备
+### 虚拟机准备
 
 内存2G，硬盘50G
 
@@ -165,7 +167,7 @@ exit
 # 4. 把/home/user/.ssh 文件夹发送到集群所有服务器
 xsync /home/user/.ssh
 ```
-## hadoop安装
+### hadoop安装
 
 1. 在一台机器上安装Java和Hadoop，并配置环境变量，并分发到集群其他机器
           1. 拷贝文件到/opt/software，两个tar包
@@ -190,9 +192,9 @@ export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
 sudo xsync /etc/profile.d
 ```
 
-### 所有配置文件都在 $HADOOP_HOME/etc/hadoop
+#### 所有配置文件都在 $HADOOP_HOME/etc/hadoop
 
-### 配置Core-site.xml
+#### 配置Core-site.xml
 
 ```xml
  <!-- 指定HDFS中NameNode的地址 -->
@@ -210,7 +212,7 @@ sudo xsync /etc/profile.d
 
 
 
-### 配置hdfs-site.xml
+#### 配置hdfs-site.xml
 ```xml
 <!-- 数据的副本数量 -->
 <property>
@@ -223,7 +225,7 @@ sudo xsync /etc/profile.d
       <value>hadoop104:50090</value>
 </property>
 ```
-### 配置yarn-site.xml
+#### 配置yarn-site.xml
 ```xml
 <!-- Site specific YARN configuration properties -->
 <!-- Reducer获取数据的方式 -->
@@ -250,7 +252,7 @@ sudo xsync /etc/profile.d
     <value>604800</value>
 </property>
 ```
-### 配置mapred-site.xml
+#### 配置mapred-site.xml
 ```xml
 <property>
     <name>mapreduce.framework.name</name>
@@ -267,13 +269,13 @@ sudo xsync /etc/profile.d
     <value>hadoop104:19888</value>
 </property>
 ```
-### 配置Slaves
+#### 配置Slaves
 ```
 hadoop102
 hadoop103
 hadoop104
 ```
-### 分发、格式化
+#### 分发、格式化
 
 ```bash
 # 分发配置文件
@@ -283,7 +285,7 @@ xsync /opt/module/hadoop-2.7.2/etc
 hdfs namenode -format
 ```
 
-# 命令
+## 命令
 
 ```bash
 # 群起群开
@@ -309,9 +311,9 @@ rm -rf data logs
 #然后重新格式化
 ```
 
-# 其他配置
+## 其他配置
 
-## 时间同步（必须root用户）
+### 时间同步（必须root用户）
 
 （1）检查ntp是否安装
 
@@ -373,7 +375,7 @@ crontab -e
 */10 **** /usr/sbin/ntpdate hadoop102
 ```
 
-## 黑白名单
+### 黑白名单
 
 黑名单退役：
 
@@ -383,7 +385,7 @@ dfs.hosts.exclude
 
 dfs.hosts
 
-## datanode多目录
+### datanode多目录
 
 hdfs-site.xml 添加：
 
@@ -407,7 +409,7 @@ hdfs-site.xml 添加：
 </property>
 ```
 
-## CheckPoint时间
+### CheckPoint时间
 
 hdfs-site.xml 添加：
 
@@ -431,7 +433,7 @@ hdfs-site.xml 添加：
 </property >
 ```
 
-## DataNode掉线时间
+### DataNode掉线时间
 
 hdfs-site.xml 添加：
 
@@ -552,7 +554,7 @@ bin/hdfs namenode -bootstrapStandby
 sbin/hadoop-daemon.sh start namenode
 ```
 
-## ResourceManager高可用
+### ResourceManager高可用
 
 ```xml
 <configuration>
@@ -637,7 +639,7 @@ sbin/hadoop-daemon.sh start namenode
 sbin/yarn-daemon.sh start resourcemanager
 ```
 
-## HDFS-HA 自动故障转移
+### HDFS-HA 自动故障转移
 
 ```xml
 <!--（1）在hdfs-site.xml中增加-->
@@ -653,7 +655,7 @@ sbin/yarn-daemon.sh start resourcemanager
 </property>
 ```
 
-## capacity多队列设置
+### capacity多队列设置
 
 capacity-scheduler.xml
 
@@ -705,7 +707,7 @@ capacity-scheduler.xml
 
 <https://www.cnblogs.com/yanghaolie/p/6274098.html>
 
-## 压缩设置
+### 压缩设置
 
 ```bash
 # 查看支持的压缩格式
@@ -746,9 +748,9 @@ yum install openssl-devel
 | lzo          | 20.5%  | 135 MB/s | 410 MB/s |
 | snappy       | 22.2%  | 172 MB/s | 409 MB/s |
 
-# HDFS
+## HDFS
 
-## 命令：
+### 命令：
 
 ```bash
 bin/hadoop fs
@@ -784,7 +786,7 @@ hadoop fs -lsr /user/atguigu/output/input.har
 hadoop fs -cp har:/// user/atguigu/output/input.har/*    /user/atguigu
 ```
 
-## POM：
+### POM：
 
 ```xml
 <dependencies>
@@ -823,7 +825,7 @@ hadoop fs -cp har:/// user/atguigu/output/input.har/*    /user/atguigu
 </dependencies>
 ```
 
-## client API
+### client API
 
 ```java
 // 1 获取文件系统
@@ -838,9 +840,9 @@ fs.copyToLocalFile(false, new Path("/banzhang.txt"), new Path("e:/banhua.txt"), 
 fs.close();
 ```
 
-## HDFS 读写流程
+### HDFS 读写流程
 
-### 读数据
+#### 读数据
 
 - client向namenode请求下载数据
 - namenode返回文件元数据
@@ -859,7 +861,7 @@ client->datanode3: 读取数据块
 datanode3-->>client: 传输数据块or失败
 ```
 
-### 写数据
+#### 写数据
 
 - clien->namenode:请求写数据
 - namenode-> client :返回响应
@@ -892,7 +894,7 @@ nn->2nn:滚动日志（改名），把日志和镜像传给2nn
 
 
 
-# Yarn
+## Yarn
 
 工作机制
 
@@ -918,7 +920,7 @@ Note right of nm3:执行reducetask
 nm3-->nm1:maptask结束
 nm1->rm:任务结束，注销app
 ```
-## InputFormat
+### InputFormat
 | inputformat      | 切片规则       | RecordReader             |
 | ---------------- | -------------- | ------------------------ |
 | InputFormat      | 1. 切片        | 2.把切片打散成KV         |
@@ -928,7 +930,7 @@ nm1->rm:任务结束，注销app
 | KeyValueIF       | FIF的          | KeyValueLineRecordReader |
 | NLineInputFormat | 重写：按行切   | LineRecordReader         |
 | 自定义           | FIF的          | 自定义RR                 |
-## yarn调度器
+### yarn调度器
 
 FIFO
 
@@ -936,9 +938,9 @@ Capacity（容量调度器）：多队列，每个队列可以并行执行（如
 
 fair（公平调度器）：多队列，所有任务并行执行，但是队列变成池（pool），抢占式，新任务等一会没资源就会kill池内其他task（kill的task有优先级，老task会优先被kill）
 
-# 源码编译
+## 源码编译
 
-## jar包准备
+### jar包准备
 
 **hadoop源码、JDK8、maven、ant 、protobuf**
 
@@ -952,7 +954,7 @@ fair（公平调度器）：多队列，所有任务并行执行，但是队列�
 
 （5）protobuf-2.5.0.tar.gz（序列化的框架）
 
-## jar包安装
+### jar包安装
 
 * hadoop-src
   * 解压
@@ -989,7 +991,7 @@ yum install openssl-devel
 yum install ncurses-devel
 ```
 
-## 编译源码
+### 编译源码
 
 ```bash
 cd /opt/module/hadoop-2.7.2-src
@@ -1003,7 +1005,7 @@ mvn package -Pdist,native -DskipTests -Dtar
 
 
 
-## Hadoop支持LZO
+### Hadoop支持LZO
 
 ```
 0. 环境准备

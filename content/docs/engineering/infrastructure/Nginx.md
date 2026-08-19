@@ -1,8 +1,10 @@
 ---
 title: "Nginx"
 ---
+# Nginx
 
-# 安装
+
+## 安装
 
 1） yum安装依赖包
 ```bash
@@ -34,7 +36,7 @@ ln -s /usr/local/lib/libpcre.so.1 /lib64
 
 /opt/module/nginx/conf/nginx.conf
 
-# Nginx 服务的基本配置
+## Nginx 服务的基本配置
 
 Nginx在运行时候，至少要加载几个核心模块和一个事件类模块。这些模块运行时所支持的配置项称为基本配置——所有其他模块执行时都依赖的配置项。
 
@@ -256,7 +258,7 @@ location /img/ {
 
 
 
-### location的使用实例 —— 以root方式设置资源路径
+#### location的使用实例 —— 以root方式设置资源路径
 
 ```
 location /download/ {
@@ -265,7 +267,7 @@ root    /opt/wab/html/;
 
 }          [[[意思是有一个请求的URL是 /download/index/test.html， 那么Web服务器就会返回服务器上 /opt/wab/html/download/index/test.html 文件的内容]]]
 ```
-### location的使用实例 —— 以alias方式设置资源路径
+#### location的使用实例 —— 以alias方式设置资源路径
 alias也是用来设置文件资源路径的，它与root不同点主要在于如何解读紧跟location后面的uri参数，这将会致使alias与root以不同的方式将用户请求映射到真正的磁盘文件上。
 
 例如：如果有一个请求的URI是/conf/nginx.conf，而用户实际想访问的是 /usr/local/nginx/conf/nginx.conf，则两种方式如下：
@@ -281,7 +283,7 @@ root:
 ```
 使用alias时，在URI向实际文件路径的映射过程中，已经把location后配置的 /conf这部分字符串丢弃掉了，因此若path中不加/conf这部分，直接映射回的地址是/usr/local/nginx/nginx.conf 与用户实际想访问的路径不符。root可以放置在http、server、location或if块中，而alias只能放置在location块中。
 
-### location的使用实例 —— 以index方式访问首页
+#### location的使用实例 —— 以index方式访问首页
 有时，访问站点时的URI是/ ，这时返回网站的首页，而这与root和alias都不同。这里用ngx_http_index_module模块提供的index配置实现。index后可以跟多个文件参数，Nginx将会按照顺序来访问这些文件。
 
 ```

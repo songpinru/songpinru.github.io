@@ -170,7 +170,7 @@ assembly:directory-inline
 
 
 
-# 自定义xml
+## 自定义xml
 
 ## assembly
 
@@ -509,7 +509,7 @@ moduleSet表示项目的pom.xml中存在的一个或多个项目`<module>`。这
 </assembly>
 ```
 
-# xml模板
+## xml模板
 
 ```xml
 <assembly xmlns="http://maven.apache.org/ASSEMBLY/2.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -1310,7 +1310,7 @@ moduleSet表示项目的pom.xml中存在的一个或多个项目`<module>`。这
 </assembly>
 ```
 
-# Maven内置变量
+## Maven内置变量
 
 * ${basedir} 项目根目录
 
@@ -1324,7 +1324,7 @@ moduleSet表示项目的pom.xml中存在的一个或多个项目`<module>`。这
 
 * ${project.xxx} 当前pom文件的任意节点的内容
 
-# 依赖项的作用域
+## 依赖项的作用域
 
   在定义项目的依赖项的时候，我们可以通过scope来指定该依赖项的作用范围。scope的取值有compile、runtime、test、provided、system和import。
 
@@ -1335,7 +1335,7 @@ moduleSet表示项目的pom.xml中存在的一个或多个项目`<module>`。这
 * **system**：当scope为system时，表示该依赖项是我们自己提供的，不需要Maven到仓库里面去找。指定scope为system需要与另一个属性元素systemPath一起使用，它表示该依赖项在当前系统的位置，使用的是绝对路径。
 
 
-# containerDescriptorHandler详解
+## containerDescriptorHandler详解
 
 Assembly插件支持常用的文件合并功能，特别是META-INF下的services文件或spirng文件(spring.handlers和spring.schemas)。
 

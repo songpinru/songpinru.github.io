@@ -1,6 +1,8 @@
 ---
 title: "ElasticSearch"
 ---
+# ElasticSearch
+
 
 概念：
 
@@ -20,14 +22,14 @@ node ：节点
 
 ./bin/elasticsearch -d -p ./pid
 
-# 操作
+## 操作
 
 ```
 Kibana写法：
 REST /INDEX/TYPE/<ID>
 ```
 
-## PUT
+### PUT
 
 INDEX：
 
@@ -44,7 +46,7 @@ curl -X PUT "localhost:9200/customer/_doc/1?pretty" -H 'Content-Type: applicatio
 
 PUT数据到index，只能新增或覆盖（整体性），不可以部分更改
 
-## POST
+### POST
 
 DOCUMENT：
 
@@ -64,7 +66,7 @@ curl -X POST "localhost:9200/customer/_doc/1/_update?pretty" -H 'Content-Type: a
 # ctx._source引用的是当前源文档
 ```
 
-## DELETE
+### DELETE
 
 INDEX：
 
@@ -79,7 +81,7 @@ DOCUMENT：
 curl -X DELETE "localhost:9200/customer/_doc/2?pretty"
 ```
 
-## GET
+### GET
 
 INDEX:
 
@@ -112,7 +114,7 @@ curl -X GET "localhost:9200/customer/_mapping?pretty
 # PS：？pretty的意思是响应，以JSON格式返回
 ```
 
-## 批处理
+### 批处理
 
 除了能够索引、更新和删除单个文档之外，Elasticsearch还可以使用**_bulk** API批量执行上述任何操作。
 
@@ -132,7 +134,7 @@ curl -X POST "localhost:9200/customer/_doc/_bulk?pretty" -H 'Content-Type: appli
 '
 ```
 
-## mapping
+### mapping
 
 ```sh
 GET movie_index/_mapping/movie
@@ -169,7 +171,7 @@ PUT movie_chn
 
 ```
 
-## aliases
+### aliases
 
 ```bash
 GET  _cat/aliases?v
@@ -230,7 +232,7 @@ POST /_aliases
 
 ```
 
-## template
+### template
 
 ```sh
 GET  _cat/templates
@@ -268,7 +270,7 @@ PUT _template/template_movie2020
 
 
 
-## 查询
+### 查询
 
 ```sh
 curl -X GET "localhost:9200/bank/_search" -H 'Content-Type: application/json' -d'

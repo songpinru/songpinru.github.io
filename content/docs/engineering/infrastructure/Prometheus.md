@@ -1,12 +1,14 @@
 ---
 title: "Prometheus"
 ---
+# Prometheus
 
-# 架构图
+
+## 架构图
 
 ![img](Prometheus.assets/662544-20190308115806797-1750460125.png)
 
-# 特点
+## 特点
 
 * 一个多维[数据模型，](https://prometheus.io/docs/concepts/data_model/)其中包含通过度量标准名称和键/值对标识的时间序列数据
 * PromQL，一种[灵活的查询语言](https://prometheus.io/docs/prometheus/latest/querying/basics/) ，可利用此维度
@@ -16,7 +18,7 @@ title: "Prometheus"
 * 通过服务发现或静态配置发现目标
 * 多种图形和仪表板支持模式
 
-# 组件
+## 组件
 
 Prometheus生态系统由多个组件组成，其中许多是可选的：
 
@@ -27,23 +29,23 @@ Prometheus生态系统由多个组件组成，其中许多是可选的：
 * alertmanager：一个处理警报的工具
 * 其他工具
 
-# 配置
+## 配置
 
-## Server
+### Server
 
 [配置文件](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#labelname)
 
-## PushGateway
+### PushGateway
 
 [pushgateway](https://github.com/prometheus/pushgateway)
 
-## Altermanager
+### Altermanager
 
 [配置文件](https://prometheus.io/docs/alerting/latest/configuration/)
 
-# 存储
+## 存储
 
-## 本地文件
+### 本地文件
 
 拉取的数据按两小时分组。每个两个小时的时间段包含一个目录，该目录包含一个或多个块文件，该文件包含该时间窗口的所有时间序列样本，以及元数据文件和索引文件（该索引文件将度量标准名称和标签索引到块文件中的时间序列） ）。通过API删除系列时，删除记录存储在单独的逻辑删除文件中（而不是立即从块文件中删除数据）。
 
@@ -77,13 +79,13 @@ Prometheus服务器的数据目录如下所示：
         └── 00000000
 ```
 
-## 合并
+### 合并
 
 最初的两个小时的块最终会在后台合并为更长的块。
 
 压缩将创建更大的块，其中包含的数据最多占保留时间的10％或31天（以较小者为准）。
 
-## 优化
+### 优化
 
 Prometheus具有几个用于配置本地存储的标志。最重要的是：
 
@@ -99,9 +101,9 @@ Prometheus每个样本平均只存储1-2个字节。因此，要计划Prometheus
 needed_disk_space = retention_time_seconds * ingested_samples_per_second * bytes_per_sample
 ```
 
-# PQL
+## PQL
 
-## Metric类型
+### Metric类型
 
 在上一小节中我们带领读者了解了Prometheus的底层数据模型，在Prometheus的存储实现上所有的监控样本都是以time-series的形式保存在Prometheus内存的TSDB（时序数据库）中，而time-series所对应的监控指标(metric)也是通过labelset进行唯一命名的。
 
@@ -117,7 +119,7 @@ needed_disk_space = retention_time_seconds * ingested_samples_per_second * bytes
 node_cpu{cpu="cpu0",mode="idle"} 362812.7890625
 ```
 
-### Counter：只增不减的计数器
+#### Counter：只增不减的计数器
 
 Counter类型的指标其工作方式和计数器一样，只增不减（除非系统发生重置）。常见的监控指标，如http_requests_total，node_cpu都是Counter类型的监控指标。 一般在定义Counter类型指标的名称时推荐使用_total作为后缀。
 
@@ -135,7 +137,7 @@ rate(http_requests_total[5m])
 topk(10, http_requests_total)
 ```
 
-### Gauge：可增可减的仪表盘
+#### Gauge：可增可减的仪表盘
 
 与Counter不同，Gauge类型的指标侧重于反应系统的当前状态。因此这类指标的样本数据可增可减。常见指标如：node_memory_MemFree（主机当前空闲的内容大小）、node_memory_MemAvailable（可用内存大小）都是Gauge类型的监控指标。
 
@@ -157,7 +159,7 @@ delta(cpu_temp_celsius{host="zeus"}[2h])
 predict_linear(node_filesystem_free{job="node"}[1h], 4 * 3600)
 ```
 
-### 使用Histogram和Summary分析数据分布情况
+#### 使用Histogram和Summary分析数据分布情况
 
 除了Counter和Gauge类型的监控指标以外，Prometheus还定义了Histogram和Summary的指标类型。Histogram和Summary主用用于统计和分析样本的分布情况。
 
@@ -203,9 +205,9 @@ prometheus_tsdb_compaction_chunk_range_count 780
 
 同时对于Histogram的指标，我们还可以通过histogram_quantile()函数计算出其值的分位数。不同在于Histogram通过histogram_quantile函数是在服务器端计算的分位数。 而Sumamry的分位数则是直接在客户端计算完成。因此对于分位数的计算而言，Summary在通过PromQL进行查询时有更好的性能表现，而Histogram则会消耗更多的资源。反之对于客户端而言Histogram消耗的资源更少。在选择这两种方式时用户应该按照自己的实际场景进行选择。
 
-## 查询
+### 查询
 
-### 基础
+#### 基础
 
 ```
 http_request_total
@@ -274,7 +276,7 @@ http_requests_total > bool 1000
 5. `and, unless`
 6. `or`
 
-### 标签匹配：
+#### 标签匹配：
 
 `on`：只匹配这些标签相同的
 
@@ -290,7 +292,7 @@ method_code:http_errors:rate5m{code="500"} / ignoring(code) method:http_requests
 
 
 
-### 聚合
+#### 聚合
 
 `by`:按照后面字段聚合
 
@@ -335,7 +337,7 @@ quantile用于计算当前样本数据值的分布情况quantile(φ, express)其
 quantile(0.5, http_requests_total)
 ```
 
-### 内置函数
+#### 内置函数
 
 * [`abs()`](https://prometheus.io/docs/prometheus/latest/querying/functions/#abs)
 * [`absent()`](https://prometheus.io/docs/prometheus/latest/querying/functions/#absent)
@@ -380,9 +382,9 @@ quantile(0.5, http_requests_total)
 * [`year()`](https://prometheus.io/docs/prometheus/latest/querying/functions/#year)
 * [`_over_time()`](https://prometheus.io/docs/prometheus/latest/querying/functions/#aggregation_over_time)
 
-## HTTP API
+### HTTP API
 
-### 瞬时查询
+#### 瞬时查询
 
 ```
 GET /api/v1/query
@@ -394,7 +396,7 @@ URL请求参数：
 * time=：用于指定用于计算PromQL的时间戳。可选参数，默认情况下使用当前系统时间。
 * timeout=：超时设置。可选参数，默认情况下使用-query,timeout的全局设置。
 
-### 区间查询
+#### 区间查询
 
 ```
 GET /api/v1/query_range
@@ -409,11 +411,11 @@ URL请求参数：
 * step=: 查询步长。
 * timeout=: 超时设置。可选参数，默认情况下使用-query,timeout的全局设置。
 
-# 管理API
+## 管理API
 
 Prometheus提供了一组管理API，以促进自动化和集成。
 
-### 健康检查
+#### 健康检查
 
 ```
 GET /-/healthy
@@ -421,7 +423,7 @@ GET /-/healthy
 
 该端点始终返回200，应用于检查Prometheus的运行状况。
 
-### 准备检查
+#### 准备检查
 
 ```
 GET /-/ready
@@ -429,7 +431,7 @@ GET /-/ready
 
 当Prometheus准备服务流量（即响应查询）时，此端点返回200。
 
-### 重装
+#### 重装
 
 ```
 PUT  /-/reload
@@ -440,7 +442,7 @@ POST /-/reload
 
 或者，可以通过向`SIGHUP`Prometheus进程发送a来触发配置重载。
 
-### 放弃
+#### 放弃
 
 ```
 PUT  /-/quit

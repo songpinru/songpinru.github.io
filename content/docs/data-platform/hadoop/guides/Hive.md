@@ -2,10 +2,12 @@
 title: "Hive"
 description: "Hive 架构、安装配置、数据类型、DDL、DML 与常用函数笔记。"
 ---
+# Hive
 
-# 概念
 
-## 架构
+## 概念
+
+### 架构
 
 * Client（客户端）
   * 解析器
@@ -16,7 +18,7 @@ description: "Hive 架构、安装配置、数据类型、DDL、DML 与常用函
 * HDFS（数据存储）
 * MapReduce（计算引擎）
 
-## 数据类型
+### 数据类型
 
 | Hive数据类型 | Java数据类型 | 长度                                                 | 例子                                 |
 | ------------ | ------------ | ---------------------------------------------------- | ------------------------------------ |
@@ -31,7 +33,7 @@ description: "Hive 架构、安装配置、数据类型、DDL、DML 与常用函
 | TIMESTAMP    |              | 时间类型                                             |                                      |
 | BINARY       |              | 字节数组                                             |                                      |
 
-## 集合类型
+### 集合类型
 
 | 数据类型 | 描述                                  | 语法示例                                            |
 | -------- | ------------------------------------- | --------------------------------------------------- |
@@ -39,7 +41,7 @@ description: "Hive 架构、安装配置、数据类型、DDL、DML 与常用函
 | MAP      | K-V键值对，那么可以通过字段名获取元素 | `map()`   例如 `map<string, int>`                     |
 | ARRAY    | 通过数组下标获取元素                  | `Array()`   例如 `array<string>`                      |
 
-# 安装
+## 安装
 
 ```
 1.安装hive
@@ -78,9 +80,9 @@ description: "Hive 架构、安装配置、数据类型、DDL、DML 与常用函
 
 
 
-#  DDL
+## DDL
 
-## 创建数据库
+### 创建数据库
 
 ```sql
 CREATE DATABASE [IF NOT EXISTS] database_name
@@ -110,7 +112,7 @@ drop database db_hive2;
 drop database db_hive cascade;
 ```
 
-## 创建表
+### 创建表
 
 ```sql
 CREATE [EXTERNAL] TABLE [IF NOT EXISTS] table_name 
@@ -171,7 +173,7 @@ DELIMITED [FIELDS TERMINATED BY char]
 
 （11）LIKE允许用户复制现有的表结构，但是不复制数据。
 
-## 修改表
+### 修改表
 
 ```sql
 --查询表结构
@@ -190,7 +192,7 @@ ALTER TABLE table_name ADD|REPLACE COLUMNS (col_name data_type [COMMENT col_comm
 drop table dept_partition;
 ```
 
-## 数据装载
+### 数据装载
 
 ```sql
 load data [local] inpath '/opt/module/datas/student.txt' [overwrite] into table student [partition (partcol1=val1,…)];
@@ -210,7 +212,7 @@ load data [local] inpath '/opt/module/datas/student.txt' [overwrite] into table 
 
 （7）partition:表示上传到指定分区
 
-## 数据导出
+### 数据导出
 
 ```sql
 insert overwrite directory '/user/atguigu/student2'
@@ -221,7 +223,7 @@ insert overwrite directory '/user/atguigu/student2'
  '/user/hive/warehouse/export/student';
 ```
 
-# 查询
+## 查询
 
 ```sql
 SELECT [ALL | DISTINCT] select_expr, select_expr, ...
@@ -234,13 +236,13 @@ FROM table_reference
   [LIMIT number]
 ```
 
-# 常用函数
+## 常用函数
 
-## NVL
+### NVL
 
 NVL：给值为NULL的数据赋值，它的格式是NVL( value，default_value)
 
-## CASE WHEN
+### CASE WHEN
 
 ```sql
 CASE WHEN condition THEN result
@@ -249,7 +251,7 @@ CASE WHEN condition THEN result
 END
 ```
 
-## 行转列
+### 行转列
 
 ONCAT(string A/col, string B/col…)：返回输入字符串连接后的结果，支持任意个输入字符串;
 
@@ -264,7 +266,7 @@ COLLECT_LIST(col)：不去重
 concat_ws('|', collect_set(t1.name)) name
 ```
 
-## 列转行
+### 列转行
 
 EXPLODE(col)：将hive一列中复杂的array或者map结构拆分成多行。
 
@@ -283,7 +285,7 @@ from
     lateral view explode(category) table_tmp as category_name;
 ```
 
-## 开窗函数
+### 开窗函数
 
 OVER()：指定分析函数工作的数据窗口大小，这个数据窗口大小可能会随着行的变而变化。
 
@@ -326,7 +328,7 @@ ntile(5) over(order by orderdate) sorted --把第5行分发到所有行
 from business;
 ```
 
-## RANK
+### RANK
 
 RANK() 排序相同时会重复，总数不会变
 
@@ -345,7 +347,7 @@ row_number() over(partition by subject order by score desc) rmp
 from score;
 ```
 
-# 自定义函数
+## 自定义函数
 
 ```sql
 show functions;--查看所有函数
@@ -380,7 +382,7 @@ desc function extended upper;--查看函数详细
 
 UDF必须要有返回类型，可以返回null，但是返回类型不能为void；
 
-# 动态分区
+## 动态分区
 
 > 不指定分区字段的值，但是必须放在查询的最后一个字段
 
@@ -408,7 +410,7 @@ hive.exec.max.created.files=100000
 
 hive.error.on.empty.partition=false
 
-# hive支持中文
+## hive支持中文
 
 1.	修改hive-site.xml中的参数
 

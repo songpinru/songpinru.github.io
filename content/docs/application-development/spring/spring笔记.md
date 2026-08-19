@@ -1,10 +1,12 @@
 ---
 title: "Spring笔记"
 ---
+# Spring笔记
 
-# 1、Spring
 
-## 1.1 简介
+## 1、Spring
+
+### 1.1 简介
 
 * 春天 —>给软件行业带来了春天
 * 2002年，Rod Jahnson首次推出了Spring框架雏形interface21框架。
@@ -29,7 +31,7 @@ title: "Spring笔记"
 </dependency>
 ```
 
-## 1.2 优点
+### 1.2 优点
 
 * Spring是一个开源免费的框架 (容器)！
 * Spring是一个轻量级的框架 , 非侵入式的
@@ -38,7 +40,7 @@ title: "Spring笔记"
 
 **Spring是一个轻量级的控制反转(IoC)和面向切面(AOP)的容器（框架）。**
 
-## 1.3 组成
+### 1.3 组成
 
 Spring 框架是一个分层架构，由 7 个定义良好的模块组成。Spring 模块构建在核心容器之上，核心容器定义了创建、配置和管理 bean 的方式 .
 
@@ -53,7 +55,7 @@ Spring 框架是一个分层架构，由 7 个定义良好的模块组成。Spri
 * **Spring Web 模块**：Web 上下文模块建立在应用程序上下文模块之上，为基于 Web 的应用程序提供了上下文。所以，Spring 框架支持与 Jakarta Struts 的集成。Web 模块还简化了处理多部分请求以及将请求参数绑定到域对象的工作。
 * **Spring MVC 框架**：MVC 框架是一个全功能的构建 Web 应用程序的 MVC 实现。通过策略接口，MVC 框架变成为高度可配置的，MVC 容纳了大量视图技术，其中包括 JSP、Velocity、Tiles、iText 和 POI。
 
-## 1.4 拓展
+### 1.4 拓展
 
 ![img](spring笔记.assets/20200628180035980.png)
 
@@ -63,7 +65,7 @@ Spring 框架是一个分层架构，由 7 个定义良好的模块组成。Spri
 * Spring Cloud
   * Spring Cloud是基于SpringBoot实现的
 
-# 2、IOC理论推导
+## 2、IOC理论推导
 
 1. UserDao 接口
 
@@ -164,7 +166,7 @@ public class UserServiceImpl implements UserService {
 
 这种思想，从本质上解决了问题，我们程序员不用再去管对象的创建了。系统的耦合性大大降低，可以专注在业务的实现上！这是IOC的原型！
 
-### IOC本质
+#### IOC本质
 
 **控制反转IoC(Inversion of Control)，是一种设计思想，DI(依赖注入)是实现IoC的一种方法**，也有人认为DI只是IoC的另一种说法。没有IoC的程序中 , 我们使用面向对象编程 , 对象的创建与对象间的依赖关系完全硬编码在程序中，对象的创建由程序自己控制，控制反转后将对象的创建转移给第三方，个人认为所谓控制反转就是：获得依赖对象的方式反转了。
 
@@ -174,9 +176,9 @@ public class UserServiceImpl implements UserService {
 
 **控制反转是一种通过描述（XML或注解）并通过第三方去生产或获取特定对象的方式。在Spring中实现控制反转的是IoC容器，其实现方法是依赖注入（Dependency Injection,DI）。**
 
-# 3、HelloSpring
+## 3、HelloSpring
 
-# 4、IOC创建对象的方式
+## 4、IOC创建对象的方式
 
 1. 使用无参构造创建对象，默认！
 
@@ -211,9 +213,9 @@ public class UserServiceImpl implements UserService {
 
 总结：在配置文件加载的时候，容器中管理的对象就已经初始化了
 
-# 5、Spring配置
+## 5、Spring配置
 
-## 5.1 别名
+### 5.1 别名
 
 ```xml
 <!--设置别名：在获取Bean的时候可以使用别名获取-->
@@ -221,7 +223,7 @@ public class UserServiceImpl implements UserService {
 
 ```
 
-## 5.2 Bean的配置
+### 5.2 Bean的配置
 
 ```xml
 <!--bean就是java对象,由Spring创建和管理-->
@@ -239,7 +241,7 @@ public class UserServiceImpl implements UserService {
 </bean>
 ```
 
-## 5.2 import
+### 5.2 import
 
 这个import,一般用于团队开发使用，他可以将多个配置文件，导入合并为一个；
 
@@ -249,13 +251,13 @@ public class UserServiceImpl implements UserService {
 <import resource="{path}/beans.xml"/>
 ```
 
-# 6、依赖注入
+## 6、依赖注入
 
-## 6.1 构造器注入
+### 6.1 构造器注入
 
 前面已经说过了
 
-## 6.2 Set方式注入 【重点】
+### 6.2 Set方式注入 【重点】
 
 * 依赖注入：Set注入
   * 依赖：bean对象的创建依赖于容器
@@ -370,7 +372,7 @@ public class MyTest {
 }
 ```
 
-## 6.3 拓展方式注入
+### 6.3 拓展方式注入
 
 我们可以使用p命名空间和c命名空间进行注入
 
@@ -403,7 +405,7 @@ xmlns:p="http://www.springframework.org/schema/p"
 xmlns:c="http://www.springframework.org/schema/c"
 ```
 
-## 6.4 Bean的作用域
+### 6.4 Bean的作用域
 
 ![在这里插入图片描述](spring笔记.assets/20200628180128654.png)
 
@@ -421,7 +423,7 @@ xmlns:c="http://www.springframework.org/schema/c"
 
 3. 其余的request、session、application这些只能在web开发中使用到
 
-# 7、Bean的自动装配
+## 7、Bean的自动装配
 
 * 自动装配是Spring满足bean依赖的一种方式
 * Spring会在上下文中自动寻找，并自动给bean装配属性
@@ -432,11 +434,11 @@ xmlns:c="http://www.springframework.org/schema/c"
 2. 在java中显示的配置
 3. 隐式的自动装配bean 【重要】
 
-## 7.1 测试
+### 7.1 测试
 
 环境搭建：一个人有两个宠物
 
-## 7.2 byName自定装配
+### 7.2 byName自定装配
 
 ```xml
 <bean id="cat" class="com.kuang.pojo.Cat"/>
@@ -450,7 +452,7 @@ xmlns:c="http://www.springframework.org/schema/c"
 </bean>
 ```
 
-## 7.3 byTpye自动装配
+### 7.3 byTpye自动装配
 
 ```xml
 	<!--
@@ -467,7 +469,7 @@ xmlns:c="http://www.springframework.org/schema/c"
 > * byName的时候，需要保证所有bean的id唯一，并且这个bean需要和自动注入的属性的set方法的值一致
 > * byType的时候，需要保证所有bean的class唯一，并且这个bean需要和自动注入的属性的类型一致
 
-## 7.4 使用注解实现自动装配
+### 7.4 使用注解实现自动装配
 
 jdk1.5支持的注解，Spring2.5就支持注解了！
 
@@ -491,7 +493,7 @@ jdk1.5支持的注解，Spring2.5就支持注解了！
 </beans>
 ```
 
-### @Autowired
+#### @Autowired
 
 直接在属性上使用即可，也可以在set方法上使用
 
@@ -534,7 +536,7 @@ public class People {
 }
 ```
 
-### @Resource
+#### @Resource
 
 ```java
 public class People {
@@ -558,7 +560,7 @@ public class People {
 
 
 
-# 8. 使用注解开发
+## 8. 使用注解开发
 
 在spring4之后，必须要保证aop的包导入
 
@@ -659,7 +661,7 @@ xml与注解
 </beans>
 ```
 
-# 9. 使用java方式配置spring
+## 9. 使用java方式配置spring
 
 JavaConfig
 
@@ -704,7 +706,7 @@ public class User {
 
 在springboot中，随处可见
 
-# 10. 动态代理
+## 10. 动态代理
 
 动态代理和静态代理
 
@@ -785,7 +787,7 @@ public class Client {
 }
 ```
 
-# 11.AOP
+## 11.AOP
 
 ```xml
 <dependencies>
@@ -963,7 +965,7 @@ public class Annotation {
 }
 ```
 
-# 12. 整合mybatis
+## 12. 整合mybatis
 
 文档： <https://mybatis.org/spring/zh/>
 
@@ -1253,7 +1255,7 @@ public class UserMapperIml2 extends SqlSessionDaoSupport implements UserMapper {
 }
 ```
 
-# 13. 声明式事务
+## 13. 声明式事务
 
 * 要么都成功，要么都失败
 * 十分重要，涉及到数据一致性
@@ -1410,7 +1412,7 @@ public class UserMapperIml2 extends SqlSessionDaoSupport implements UserMapper {
 
 
 
-# @注解
+## @注解
 
 | 注解                            | 解释                                                         |
 | ------------------------------- | ------------------------------------------------------------ |

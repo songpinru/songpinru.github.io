@@ -4,7 +4,7 @@ title: "HUE"
 
 # HUE
 
-# 什么是HUE？
+## 什么是HUE？
 
 ![image-20200626094805815](HUE.assets/image-20200626094805815.png)
 
@@ -19,7 +19,7 @@ title: "HUE"
 * Spark和Hadoop笔记本
 * 通过Oozie编辑器和仪表板安排作业和工作流程
 
-# 使用
+## 使用
 
 ## 布局
 
@@ -100,7 +100,7 @@ HUE的工作流调度基于Oozie，最新版Oozie支持多流并行执行。
 
 ![image-20200626111113322](HUE.assets/image-20200626111113322.png)
 
-# 链接
+## 链接
 
 [官网][web]
 

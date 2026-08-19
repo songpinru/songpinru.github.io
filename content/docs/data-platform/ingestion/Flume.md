@@ -1,8 +1,10 @@
 ---
 title: "Flume"
 ---
+# Flume
 
-# 安装部署
+
+## 安装部署
 
 1） Flume官网地址
 
@@ -36,7 +38,7 @@ JAVA_OPTS="
 
 默认
 
-# 概念
+## 概念
 
 * agent：进程
   * source
@@ -46,12 +48,12 @@ JAVA_OPTS="
   * head：k=v
   * body：byte[]
 
-## 事务
+### 事务
 
 * put事务，source端
 * take事务，sink端
 
-## ChannelSelector
+### ChannelSelector
 
 在source配置，配合拦截器使用
 
@@ -67,7 +69,7 @@ tier1.sources.source1.selector.mapping.app1=channel1
 tier1.sources.source1.selector.mapping.app2=channel2
 ```
 
-## SinkProcessor
+### SinkProcessor
 
 在sink配置
 
@@ -75,7 +77,7 @@ tier1.sources.source1.selector.mapping.app2=channel2
 * LoadBalancingSinkProcessor：负载均衡，对应sinkgroups
 * FailoverSinkProcessor：容灾，对应sinkgroups
 
-# 自定义Iterceptor
+## 自定义Iterceptor
 
 POM：
 
@@ -94,7 +96,7 @@ POM：
   * build方法返回自定义拦截器类
 * 打包上传至flume的lib目录下，使用时要用全类名
 
-# 自定义Source
+## 自定义Source
 
 继承**AbstractSource**类并实现**Configurable**和**PollableSource ** 接口
 
@@ -105,7 +107,7 @@ POM：
 
 打包上传至flume的lib目录下，使用时要用全类名
 
-# 自定义Sink
+## 自定义Sink
 
 继承**AbstractSink**类并实现**Configurable**接口
 
@@ -116,7 +118,7 @@ POM：
 
 打包上传至flume的lib目录下，使用时要用全类名
 
-# 监控
+## 监控
 
 ```bash
 # 安装http和php

@@ -1,8 +1,10 @@
 ---
 title: "Hbase"
 ---
+# Hbase
 
-# **架构角色：**
+
+## **架构角色：**
 
 1. Region Server
 
@@ -30,7 +32,7 @@ HDFS为HBase提供最终的底层数据存储服务，同时为HBase提供高可
 
 
 
-# 架构原理
+## 架构原理
 
 1. StoreFile
 
@@ -48,7 +50,7 @@ Hfile是和列族绑定的,一个Hfile只有一个列族,因此需要修改的�
 
 由于数据要经MemStore排序后才能刷写到HFile，但把数据保存在内存中会有很高的概率导致数据丢失，为了解决这个问题，数据会先写在一个叫做Write-Ahead logfile的文件中，然后再写入MemStore中。所以在系统出现故障的时候，数据可以通过这个日志文件重建。
 
-## 数据模型
+### 数据模型
 
 
 
@@ -82,7 +84,7 @@ HBase中的每个列都由Column Family(列族)和Column Qualifier（列限定�
 
 由{rowkey, column Family：column Qualifier, time Stamp} 唯一确定的单元。cell中的数据是没有类型的，全部是字节码形式存贮。
 
-##  写流程
+### 写流程
 
 写流程：
 
@@ -100,7 +102,7 @@ HBase中的每个列都由Column Family(列族)和Column Qualifier（列限定�
 
 7）等达到MemStore的刷写时机后，将数据刷写到HFile。
 
-## MemStore Flush
+### MemStore Flush
 
 **MemStore刷写时机**
 
@@ -132,7 +134,7 @@ region会按照其所有memstore的大小顺序（由大到小）依次进行刷
 
 4.当WAL文件的数量超过**hbase.regionserver.max.logs**，region会按照时间顺序依次进行刷写，直到WAL文件数量减小到**hbase.regionserver.max.log**以下（该属性名已经废弃，现无需手动设置，最大值为32）。
 
-## 读流程
+### 读流程
 
  
 
@@ -150,7 +152,7 @@ region会按照其所有memstore的大小顺序（由大到小）依次进行刷
 
 6）将合并后的最终结果返回给客户端。
 
-## StoreFile Compaction
+### StoreFile Compaction
 
 由于memstore每次刷写都会生成一个新的HFile，且同一个字段的不同版本（timestamp）和不同类型（Put/Delete）有可能会分布在不同的HFile中，因此查询时需要遍历所有的HFile。为了减少HFile的个数，以及清理掉过期和删除的数据，会进行StoreFile Compaction。
 
@@ -158,7 +160,7 @@ Compaction分为两种，分别是Minor Compaction和Major Compaction。Minor Co
 
  
 
-##  Region Split
+### Region Split
 
 默认情况下，每个Table起初只有一个Region，随着数据的不断写入，Region会自动进行拆分。刚拆分时，两个子Region都位于当前的Region Server，但处于负载均衡的考虑，HMaster有可能会将某个Region转移给其他的Region Server。
 
@@ -170,7 +172,7 @@ Region Split时机：
 
 
 
-#  基本操作
+## 基本操作
 
 1. 进入HBase客户端命令行
 
@@ -184,7 +186,7 @@ hbase(main):001:0> help
 
 hbase(main):002:0> list
 
-## 表的操作
+### 表的操作
 
 1. **创建表**
 
@@ -268,7 +270,7 @@ hbase(main):022:0> get 'student','1001',{COLUMN=>'info:name',VERSIONS=>3}
 
 
 
-#  HBaseAPI
+## HBaseAPI
 
 ```xml
 <dependency>
@@ -283,7 +285,7 @@ hbase(main):022:0> get 'student','1001',{COLUMN=>'info:name',VERSIONS=>3}
 3. 获取Admin或HTable
 4. 操作
 
-### 获取Configuration对象
+#### 获取Configuration对象
 
 
 ```java
@@ -295,7 +297,7 @@ static{
     conf.set("hbase.zookeeper.property.clientPort",  "2181");
 }  
 ```
-### 判断表是否存在
+#### 判断表是否存在
 
 ```java
 public static boolean  isTableExist(String tableName) throws MasterNotRunningException,   ZooKeeperConnectionException, IOException{    
@@ -307,7 +309,7 @@ public static boolean  isTableExist(String tableName) throws MasterNotRunningExc
 } 
 ```
 
-### 创建表
+#### 创建表
 
 ```java
 public static void  createTable(String tableName, String... columnFamily) throws MasterNotRunningException,  ZooKeeperConnectionException, IOException{    
@@ -330,7 +332,7 @@ public static void  createTable(String tableName, String... columnFamily) throws
 }  
 ```
 
-### 删除表
+#### 删除表
 
 ```java
  public static void  dropTable(String tableName) throws MasterNotRunningException,   ZooKeeperConnectionException, IOException{    
@@ -345,7 +347,7 @@ public static void  createTable(String tableName, String... columnFamily) throws
  }  
 ```
 
-###  向表中插入数据
+#### 向表中插入数据
 
 ```java
 public static void  addRowData(String tableName, String rowKey, String columnFamily, String   column, String value) throws IOException{    
@@ -362,7 +364,7 @@ public static void  addRowData(String tableName, String rowKey, String columnFam
 }  
 ```
 
-### 删除多行数据
+#### 删除多行数据
 
 ```java
  public static void  deleteMultiRow(String tableName, String... rows) throws IOException{   
@@ -378,7 +380,7 @@ public static void  addRowData(String tableName, String rowKey, String columnFam
  }  
 ```
 
-###  获取所有数据
+#### 获取所有数据
 
 ```java
 public static void  getAllRows(String tableName) throws IOException{    
@@ -402,7 +404,7 @@ public static void  getAllRows(String tableName) throws IOException{
 }                                                                   
 ```
 
-###  获取某一行数据
+#### 获取某一行数据
 
 ```java
 public static void  getRow(String tableName, String rowKey) throws IOException{    
@@ -421,7 +423,7 @@ public static void  getRow(String tableName, String rowKey) throws IOException{
 }  
 ```
 
-###  获取某一行指定“列族:列”的数据
+#### 获取某一行指定“列族:列”的数据
 
 ```java
 public static void  getRowQualifier(String tableName, String rowKey, String family, String   qualifier) throws IOException{    
@@ -439,7 +441,7 @@ public static void  getRowQualifier(String tableName, String rowKey, String fami
 }  
 ```
 
-# 基础优化
+## 基础优化
 
 1．允许在HDFS的文件中追加内容
 

@@ -1,6 +1,8 @@
 ---
 title: "Sqoop"
 ---
+# Sqoop
+
 
 #  安装
 
@@ -8,7 +10,7 @@ title: "Sqoop"
 2. 配置环境变量
 3. 拷贝JDBC驱动到lib目录下
 
-# Sqoop参数
+## Sqoop参数
 
 ## 导入到HDFS
 
@@ -179,7 +181,7 @@ $ bin/sqoop export \
 | 10       | --hive-table                    | 后面接要创建的hive表,默认使用MySQL的表名                  |
 | 11       | --table                         | 指定关系数据库的表名                                      |
 
-# 经验
+## 经验
 
 ###  Sqoop导入导出Null存储一致性问题
 

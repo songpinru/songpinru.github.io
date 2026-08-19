@@ -1,6 +1,8 @@
 ---
 title: "Docker"
 ---
+# Docker
+
 
 <<三体>>： 弱小和无知不是生存的障碍，傲慢才是。
 
@@ -23,9 +25,9 @@ title: "Docker"
 * Docker Swarm
 * CI\CD Jenkins
 
-# Docker概述
+## Docker概述
 
-## Docker为什么出现？
+### Docker为什么出现？
 
 一款产品： 开发–上线 两套环境！应用环境，应用配置！
 
@@ -60,7 +62,7 @@ Docker通过隔离机制，可以将服务器利用到极致！
 
 本质：所有的技术都是因为出现了一些问题，我们需要去解决，才去学习！
 
-## Docker历史
+### Docker历史
 
 2010年，几个的年轻人，就在美国成立了一家公司 `dotcloud`
 
@@ -105,7 +107,7 @@ docker官网：https://www.docker.com/
 
 仓库：https://hub.docker.com/
 
-## Docker能干嘛
+### Docker能干嘛
 
 > 之前的虚拟机技术！
 
@@ -153,9 +155,9 @@ Docker：打包镜像发布测试一键运行。
 
 Docker是内核级别的虚拟化，可以在一个物理机上可以运行很多的容器实例！服务器的性能可以被压榨到极致。
 
-# Docker安装
+### Docker安装
 
-## Docker的基本组成
+### Docker的基本组成
 
 
 
@@ -178,7 +180,7 @@ Docker利用容器技术，独立运行一个或者一组应用，通过镜像�
 Docker Hub是国外的。
 阿里云…都有容器服务器(配置镜像加速!)
 
-## 安装Docker
+### 安装Docker
 
 > 环境准备
 
@@ -275,7 +277,7 @@ rm -rf /var/lib/docker
 # /var/lib/docker 是docker的默认工作路径！
 ```
 
-## 阿里云镜像加速
+### 阿里云镜像加速
 
 1、登录阿里云找到容器服务
 
@@ -291,7 +293,7 @@ rm -rf /var/lib/docker
 
 ![image-20200515102216898](docker.assets/aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2NoZW5nY29kZXgvY2xvdWRpbWcvbWFzdGVyL2ltZy9pbWFnZS0yMDIwMDUxNTEwMjIxNjg5OC5wbmc.jpg)  
 
-## 回顾HelloWorld流程
+### 回顾HelloWorld流程
 
 ![image-20200515102503722](docker.assets/aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2NoZW5nY29kZXgvY2xvdWRpbWcvbWFzdGVyL2ltZy9pbWFnZS0yMDIwMDUxNTEwMjUwMzcyMi5wbmc.jpg) 
 
@@ -299,7 +301,7 @@ rm -rf /var/lib/docker
 
 ![image-20200515102637246](docker.assets/aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2NoZW5nY29kZXgvY2xvdWRpbWcvbWFzdGVyL2ltZy9pbWFnZS0yMDIwMDUxNTEwMjYzNzI0Ni5wbmc.jpg) 
 
-## 底层原理
+### 底层原理
 
 Docker**是怎么工作的**？
 
@@ -323,9 +325,9 @@ Docker-Server接收到Docker-Client的指令，就会执行这个命令！
 
 因此,当新建一个 容器时,docker不需要和虚拟机一样重新加载一个操作系统内核。仍而避免引导、加载操作系统内核返个比较费时费资源的过程,当新建一个虚拟机时,虚拟机软件需要加载GuestOS,返个新建过程是**分钟级别**的。而docker由于直接利用宿主机的操作系统,则省略了这个复杂的过程,因此新建一个docker容器只需要**几秒钟**。
 
-# Docker的常用命令
+### Docker的常用命令
 
-## 帮助命令
+### 帮助命令
 
 ```shell
 docker version    #显示docker的版本信息。
@@ -335,7 +337,7 @@ docker 命令 --help #帮助命令
 
 帮助文档的地址：https://docs.docker.com/engine/reference/commandline/build/
 
-## 镜像命令
+### 镜像命令
 
 > docker images #查看所有本地主机上的镜像 可以使用docker image ls代替
 >
@@ -427,7 +429,7 @@ docker pull docker.io/library/tomcat:8
 ➜  ~ docker rmi -f $(docker images -aq) #删除全部的镜像
 ```
 
-## 容器命令
+### 容器命令
 
 > docker run 镜像id 新建容器并启动
 >
@@ -565,7 +567,7 @@ docker stop 容器id	#停止当前正在运行的容器
 docker kill 容器id	#强制停止当前容器
 ```
 
-## 常用其他命令
+### 常用其他命令
 
 **后台启动命令**
 
@@ -940,7 +942,7 @@ etc   java.java       media       root  swapfile  var
   wait        Block until one or more containers stop, then print their exit codes
 ```
 
-## 作业练习
+### 作业练习
 
 > Docker 安装Nginx
 
@@ -1058,7 +1060,7 @@ docker run -d --name elasticsearch -p 9200:9200 -p 9300:9300 -e "discovery.type=
 
 ![image-20200515153725991](docker.assets/aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2NoZW5nY29kZXgvY2xvdWRpbWcvbWFzdGVyL2ltZy9pbWFnZS0yMDIwMDUxNTE1MzcyNTk5MS5wbmc.jpg) 
 
-## 可视化
+### 可视化
 
 * portainer(先用这个)
 
@@ -1088,13 +1090,13 @@ docker run -d -p 8080:9000 \
 
 ![image-20200515155113693](docker.assets/aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2NoZW5nY29kZXgvY2xvdWRpbWcvbWFzdGVyL2ltZy9pbWFnZS0yMDIwMDUxNTE1NTExMzY5My5wbmc.jpg) 
 
-# Docker镜像讲解
+### Docker镜像讲解
 
-## **镜像是什么**
+### **镜像是什么**
 
 镜像是一种轻量级、可执行的独立软件保，用来打包软件运行环境和基于运行环境开发的软件，他包含运行某个软件所需的所有内容，包括代码、运行时库、环境变量和配置文件
 
-## **Docker镜像加载原理**
+### **Docker镜像加载原理**
 
 > UnionFs （联合文件系统）
 
@@ -1117,7 +1119,7 @@ rootfs（root file system),在 bootfs之上。包含的就是典型 Linux系统�
 
 虚拟机是分钟级别，容器是秒级！
 
-## 分层理解
+### 分层理解
 
 > 分层的镜像
 
@@ -1322,9 +1324,9 @@ docker commit -a="kuangshen" -m="add webapps app" 容器id tomcat02:1.0
 
 
 
-# 容器数据卷
+### 容器数据卷
 
-## 什么是容器数据卷
+### 什么是容器数据卷
 
 **docker的理念回顾**
 
@@ -1342,7 +1344,7 @@ MySQL，容器删除了，删库跑路！需求：MySQL数据可以存储在本�
 
 **总结一句话：容器的持久化和同步操作！容器间也是可以数据共享的！**
 
-## 使用数据卷
+### 使用数据卷
 
 > 方式一 ：直接使用命令挂载 -v
 
@@ -1374,7 +1376,7 @@ docker run -it -v 主机目录:容器内目录  -p 主机端口:容器内端口
 
 好处：我们以后修改只需要在本地修改即可，容器内会自动同步！
 
-## 实战：安装MySQL
+### 实战：安装MySQL
 
 思考：MySQL的数据持久化的问题
 
@@ -1405,7 +1407,7 @@ docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag
 
 发现，我们挂载到本地的数据卷依旧没有丢失，这就实现了容器数据持久化功能。
 
-## 具名和匿名挂载
+### 具名和匿名挂载
 
 ```shell
 # 匿名挂载
@@ -1455,7 +1457,7 @@ docker run -d -P --name nginx05 -v juming:/etc/nginx:rw nginx
 # ro 只要看到ro就说明这个路径只能通过宿主机来操作，容器内部是无法操作！
 ```
 
-## 初始Dockerfile
+### 初始Dockerfile
 
 Dockerfile 就是用来构建docker镜像的构建文件！命令脚本！先体验一下！
 
@@ -1500,7 +1502,7 @@ docker inspect 容器id
 
 假设构建镜像时候没有挂载卷，要手动镜像挂载 -v 卷名：容器内路径！
 
-## 数据卷容器
+### 数据卷容器
 
 多个MySQL同步数据！
 
@@ -1538,9 +1540,9 @@ docker inspect 容器id
 
 但是一旦你持久化到了本地，这个时候，本地的数据是不会删除的！
 
-# DockerFile
+### DockerFile
 
-## DockerFile介绍
+### DockerFile介绍
 
 `dockerfile`是用来构建docker镜像的文件！命令参数脚本！
 
@@ -1564,7 +1566,7 @@ docker inspect 容器id
 
 官方既然可以制作镜像，那我们也可以！
 
-## DockerFile构建过程
+### DockerFile构建过程
 
 **基础知识：**
 
@@ -1588,7 +1590,7 @@ DockerImages：通过DockerFile构建生成的镜像，最终发布和运行产�
 
 Docker容器：容器就是镜像运行起来提供服务。
 
-## DockerFile的指令
+### DockerFile的指令
 
 ```shell
 FROM				# 基础镜像，一切从这里开始构建
@@ -1613,7 +1615,7 @@ ARG					# build的时候使用的参数，可以被--build-arg覆盖
 CMD [ "sh", "-c", "echo $HOME" ]
 ```
 
-## 实战测试
+### 实战测试
 
 > 创建一个自己的centos
 
@@ -1721,7 +1723,7 @@ lrwxrwxrwx   1 root root    9 May 11  2019 lib64 -> usr/lib64 ....
 
 Dockerfile中很多命令都十分的相似，我们需要了解它们的区别，我们最好的学习就是对比他们然后测试效果！
 
-## 实战：Tomcat镜像
+### 实战：Tomcat镜像
 
 1、准备镜像文件
 
@@ -1771,7 +1773,7 @@ $ docker run -d -p 8080:8080 --name tomcat01 -v /home/kuangshen/build/tomcat/tes
 
 我们以后开发的步骤：需要掌握Dockerfile的编写！我们之后的一切都是使用docker镜像来发布运行！
 
-## 发布自己的镜像
+### 发布自己的镜像
 
 > Dockerhub
 
@@ -1825,13 +1827,13 @@ $ sudo docker push registry.cn-shenzhen.aliyuncs.com/dsadxzc/cheng:[镜像版本
 
 ![image-20200516171012186](docker.assets/aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2NoZW5nY29kZXgvY2xvdWRpbWcvbWFzdGVyL2ltZy9pbWFnZS0yMDIwMDUxNjE3MTAxMjE4Ni5wbmc.jpg) 
 
-## 小结
+### 小结
 
 ![image-20200516171155667](docker.assets/aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2NoZW5nY29kZXgvY2xvdWRpbWcvbWFzdGVyL2ltZy9pbWFnZS0yMDIwMDUxNjE3MTE1NTY2Ny5wbmc.jpg) 
 
-# Docker 网络
+### Docker 网络
 
-## 理解Docker 0
+### 理解Docker 0
 
 清空所有网络
 
@@ -1934,7 +1936,7 @@ Docker中所有网络接口都是虚拟的，虚拟的转发效率高（内网�
 
 > 思考一个场景：我们编写了一个微服务，database url=ip: 项目不重启，数据ip换了，我们希望可以处理这个问题，可以通过名字来进行访问容器？
 
-## –link
+### –link
 
 ```shell
 $ docker exec -it tomcat02 ping tomca01   # ping不通
@@ -1973,7 +1975,7 @@ docker inspect tomcat03
 
 docker0问题：不支持容器名连接访问！
 
-## 自定义网络
+### 自定义网络
 
 ```shell
 docker network
@@ -2041,7 +2043,7 @@ mysql-不同的集群使用不同的网络，保证集群是安全和健康的
 
 ![image-20200516192504367](docker.assets/aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2NoZW5nY29kZXgvY2xvdWRpbWcvbWFzdGVyL2ltZy9pbWFnZS0yMDIwMDUxNjE5MjUwNDM2Ny5wbmc.jpg) 
 
-## 网络连通
+### 网络连通
 
 ![image-20200516193243146](docker.assets/aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2NoZW5nY29kZXgvY2xvdWRpbWcvbWFzdGVyL2ltZy9pbWFnZS0yMDIwMDUxNjE5MzI0MzE0Ni5wbmc.jpg) 
 
@@ -2070,7 +2072,7 @@ $ docker run -d -P --name tomcat02 tomcat
 
 结论：假设要跨网络操作别人，就需要使用docker network connect 连通！
 
-## 实战：部署Redis集群
+### 实战：部署Redis集群
 
 ![image-20200516194419471](docker.assets/aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2NoZW5nY29kZXgvY2xvdWRpbWcvbWFzdGVyL2ltZy9pbWFnZS0yMDIwMDUxNjE5NDQxOTQ3MS5wbmc.jpg) 
 
@@ -2115,7 +2117,7 @@ docker搭建redis集群完成！
 
 我们使用docker之后，所有的技术都会慢慢变得简单起来！
 
-# SpringBoot微服务打包Docker镜像
+### SpringBoot微服务打包Docker镜像
 
 1、构建SpringBoot项目
 

@@ -49,6 +49,7 @@ The site uses [Hugo](https://gohugo.io) with the [Hextra](https://github.com/imf
 - File names use Chinese characters where appropriate; keep them descriptive.
 - Use `![alt](path.assets/image.png)` for co-located images.
 - KaTeX math is supported via `$$` block delimiters.
+- **Heading structure**: Each document must have exactly one `h1` (`#`) that matches the frontmatter `title`. Use `h2` (`##`) and below for section headings within the document. This ensures the Hextra theme's table of contents renders correctly — `h1` serves as the document title and is not displayed in the TOC; `h2+` chapters appear in the TOC sidebar.
 
 ## Commit Style
 

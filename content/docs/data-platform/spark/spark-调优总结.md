@@ -1,8 +1,10 @@
 ---
 title: "Spark 调优总结"
 ---
+# Spark 调优总结
 
-# 总览
+
+## 总览
 
 ```shell
 spark.shuffle.io.preferDirectBufs #shuffle的堆外内存(netty数据传输),默认的堆外内存就是这个+spark固定的部分(vm,一部分对象创建)
@@ -27,7 +29,7 @@ streaming：
 * 批处理间隔（分区数）
 * 其他
 
-# submit
+## submit
 
 1. 离线任务
 
@@ -86,7 +88,7 @@ streaming：
 
    spark.streaming.blockInterval=200ms    ==Partition个数 = BatchInterval / blockInterval==（并行度）（核心数2-5倍）
 
-# 代码中
+## 代码中
 
 1. rdd.cache
 2. sc.broadcast
@@ -101,7 +103,7 @@ val conf = new SparkConf()
 SET spark.sql.thriftserver.scheduler.pool=accounting;//变成数据库长联的时候使用，hiveserver2
 ```
 
-## 算子调优：
+### 算子调优：
 
 1. mapPartition代替map
 2. foreachPartition优化数据库连接
@@ -109,7 +111,7 @@ SET spark.sql.thriftserver.scheduler.pool=accounting;//变成数据库长联的�
 4. sql之后使用repartition
 5. 多用reduceByKey
 
-## ==Shuffle调优==：
+### ==Shuffle调优==：
 
 1. map端缓冲区大小，默认32k
 
@@ -153,7 +155,7 @@ val conf = new SparkConf()
   .set("spark.shuffle.sort.bypassMergeThreshold", "400")
 ```
 
-## ==环境设置==：
+### ==环境设置==：
 
 1. 动态分区，非严格模式
 

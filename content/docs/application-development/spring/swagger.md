@@ -1,8 +1,10 @@
 ---
 title: "Swagger"
 ---
+# Swagger
 
-# 项目集成Swagger
+
+## 项目集成Swagger
 
 
 
@@ -13,7 +15,7 @@ title: "Swagger"
 * 了解Swagger的概念及作用
 * 掌握在项目中集成Swagger自动生成API文档
 
-# Swagger简介
+## Swagger简介
 
 **前后端分离**
 
@@ -40,7 +42,7 @@ title: "Swagger"
 
 
 
-# SpringBoot集成Swagger
+## SpringBoot集成Swagger
 
 **SpringBoot集成Swagger** => **springfox**，两个jar包
 
@@ -87,7 +89,7 @@ public class SwaggerConfig {
 
 ![img](swagger.assets/640.webp)
 
-# 配置Swagger
+## 配置Swagger
 
 1、Swagger实例Bean是Docket，所以通过配置Docket实例来配置Swaggger。
 
@@ -134,7 +136,7 @@ public Docket docket() {
 
 
 
-# 配置扫描接口
+## 配置扫描接口
 
 1、构建Docket时通过select()方法配置怎么扫描接口。
 
@@ -189,9 +191,9 @@ ant(final String antPattern) // 通过ant()控制
 
 ![img](swagger.assets/640-1596301355104.webp)
 
-###  
+#### 
 
-# 配置Swagger开关
+## 配置Swagger开关
 
 1、通过enable()方法配置是否启用swagger，如果是false，swagger将不能在浏览器中访问了
 
@@ -237,7 +239,7 @@ public Docket docket(Environment environment) {
 
 
 
-# 配置API分组
+## 配置API分组
 
 ![img](swagger.assets/640-1596301355118.webp)
 
@@ -275,7 +277,7 @@ public Docket docket3(){
 
 
 
-# 实体配置
+## 实体配置
 
 1、新建一个实体类
 
@@ -310,7 +312,7 @@ public User getUser(){
 
 
 
-# 常用注解
+## 常用注解
 
 Swagger的所有注解定义在io.swagger.annotations包下
 
@@ -343,7 +345,7 @@ Swagger是个优秀的工具，现在国内已经有很多的中小型互联网�
 
 
 
-# 拓展：其他皮肤
+## 拓展：其他皮肤
 
 我们可以导入不同的包实现不同的皮肤定义：
 

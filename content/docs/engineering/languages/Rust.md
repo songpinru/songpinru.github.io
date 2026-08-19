@@ -1,10 +1,12 @@
 ---
 title: "Rust"
 ---
+# Rust
+
 
 RUST
 
-# 注释
+## 注释
 
 - **普通注释**，其内容将被编译器忽略掉：
 
@@ -37,7 +39,7 @@ RUST
 内部文档注释是对它之后的项做注释，与使用 #[doc="..."] 是等价的。
 外部文档注释是对它所在的项做注释，与使用 #![doc="..."] 是等价的。
 
-# Formatted Print
+## Formatted Print
 
 使用方式：
 
@@ -129,9 +131,9 @@ println!("Hello {:width$}!", "x", width = 5);
 0 - 这用于指示整数格式的填充width既应使用0字符完成，又应具有符号意识。类似的格式{:08}会产生00000001整数1，而相同的格式会产生-0000001整数-1。请注意，负版本比正版本少一个零。请注意，填充零始终位于符号（如果有）之后和数字之前。当与#标志一起使用时，适用类似的规则：在前缀之后但在数字之前插入填充零。前缀包含在总宽度中。
 ```
 
-# 数据类型
+## 数据类型
 
-## 标量类型
+### 标量类型
 
 * 有符号整数：`i8`，`i16`，`i32`，`i64`，`i128`和`isize`（32/64，依赖架构）
 * 无符号整数：`u8`，`u16`，`u32`，`u64`，`u128`和`usize`（32/64，依赖架构）
@@ -144,7 +146,7 @@ println!("Hello {:width$}!", "x", width = 5);
 
 可以在数字文字中插入下划线以提高可读性，例如 `1_000`与 相同`1000`，并且`0.000_001`与 相同`0.000001`。
 
-## 复合类型
+### 复合类型
 
 * 元组 `(1, true)`，签名：(T1, T2, ...)，类型不需要一致
   * 空元组和unit不一样，不是所有空元组都是unit
@@ -153,7 +155,7 @@ println!("Hello {:width$}!", "x", width = 5);
 * 数组 `[1, 2, 3] `,签名：[T; length]，类型必须一致
 * 切片slice：类似于软拷贝，不保存值，只保存地址和长度，签名：&[T] ，如：&s[0..9]
 
-## 自定义类型
+### 自定义类型
 
 Rust 自定义数据类型主要通过两个关键字形成：
 
@@ -216,9 +218,9 @@ enum Logger{
 //使用指定的isize方法 self as usize 
 ```
 
-## 内存布局
+### 内存布局
 
-### struct&tuple
+#### struct&tuple
 
 struct和tuple不保证字段顺序，这样可以对齐时补充的最少，struct和tuple必须和操作系统内存对齐。
 
@@ -239,7 +241,7 @@ struct Foo{
 
 ```
 
-### enum
+#### enum
 
 ```rust
 enum Foo {
@@ -274,19 +276,19 @@ fn main() {
 
 ```
 
-### Vec
+#### Vec
 
 栈上占用3个usize的字节（64位，3个u64），第一个是堆上的指针，中间是cap（申请的堆内存可以存放多少值，初始时和len一致，扩容时x2），后一个是len（这个vec有多少个值）
 
 vec是动态数组，也就是说每次扩容，会在堆上新创建一个数组，然后改变指针，他不是链表，不能使用零散的内存
 
-### String
+#### String
 
 类似于Vec，也是3个usize，第一个是指向堆上的u8数组的指针，中间是cap（申请的堆内存可以存放多少值），后一个是len（这个string有几个u8）
 
 同vec，也是动态的
 
-## 常量
+### 常量
 
 Rust 有两种不同类型的常量，它们可以在任何范围内声明，包括全局。
 
@@ -302,9 +304,9 @@ const tt: i32 =12;
 > 
 > 有内部可变性的类型，使用static（因为const内联，导致常量实际并不是同一个）
 
-# 变量绑定
+## 变量绑定
 
-## let&mut
+### let&mut
 
 ```rust
 //不可改变量
@@ -317,7 +319,7 @@ let unit=();
 let mut c=12;
 ```
 
-## shadowing
+### shadowing
 
 可改不可改指的是赋值，如果不是赋值，而是重新绑定，不会报错，这个叫 **shadowing**
 
@@ -327,7 +329,7 @@ let x = x + 1;
 let x = x * 2;
 ```
 
-## 先声明
+### 先声明
 
 ```rust
 let a_binding;
@@ -341,7 +343,7 @@ println!("a binding: {}", a_binding);
 
 这样是没问题的，没有违反不可变变量的规则，因为没有绑定值（类似于java的默认值null），但是此时rust是没法推断类型的，使用会报错
 
-## 变量冻结
+### 变量冻结
 
 ```rust
 let mut _mutable_integer = 7i32;
@@ -361,9 +363,9 @@ let mut _mutable_integer = 7i32;
 _mutable_integer = 3;
 ```
 
-# 类型转换
+## 类型转换
 
-## as
+### as
 
 Rust 不提供原始类型之间的隐式类型转换（强制）。但是，可以使用`as`关键字执行显式类型转换（强制转换）。
 
@@ -379,7 +381,7 @@ let integer = decimal as u8;
 let character = integer as char;
 ```
 
-## type
+### type
 
 该`type`语句可用于为现有类型赋予新名称。类型必须有`UpperCamelCase`名称(大坨峰命名)，否则编译器会发出警告。唯一例外的规则是基本类型：`usize`，`f32`，等。
 
@@ -408,9 +410,9 @@ fn main() {
 
 ```
 
-## 自定义类型转换
+### 自定义类型转换
 
-### From 和 Into
+#### From 和 Into
 
 From函数是结构体关联函数之一，类似于构造器
 
@@ -441,7 +443,7 @@ fn main() {
 
 ```
 
-### TryFrom 和 TryInto
+#### TryFrom 和 TryInto
 
 类似于`From`and`Into`,`TryFrom`并且`TryInto`是用于在类型之间转换的通用Trait。与`From`/不同`Into`， `TryFrom`/`TryInto`用于易出错的转换，因此返回`Results`。
 
@@ -479,7 +481,7 @@ fn main() {
 }
 ```
 
-### 字符串转化
+#### 字符串转化
 
 将任何类型转换为 `String`需要实现[`ToString`](https://doc.rust-lang.org/std/string/trait.ToString.html) Trait
 
@@ -516,13 +518,13 @@ fn main() {
 }
 ```
 
-# 流程控制
+## 流程控制
 
 与大多数语言类似。
 
 rust中条件表达式不需要用括号括起来。
 
-## if/else
+### if/else
 
 用`if`-分支`else`类似于其他语言。
 
@@ -559,7 +561,7 @@ println!("{} -> {}", n, big_n);
 
 ```
 
-## loop
+### loop
 
 Rust 提供了一个`loop`关键字来表示无限循环。
 
@@ -618,7 +620,7 @@ loop {
 println!("Exited the outer loop");
 ```
 
-## while
+### while
 
 ```rust
 // A counter variable
@@ -641,7 +643,7 @@ while n < 101 {
 }
 ```
 
-## for
+### for
 
 语法：
 
@@ -742,7 +744,7 @@ fn main() {
 
 在上面的片段中注意`match`分支的类型，这是迭代类型的主要区别。类型的差异当然意味着可以执行的不同操作。
 
-## match
+### match
 
 语法：
 
@@ -821,7 +823,7 @@ fn main() {
 }
 ```
 
-## if let
+### if let
 
 语法：
 
@@ -869,7 +871,7 @@ fn main() {
 }
 ```
 
-## while let
+### while let
 
 语法：
 
@@ -913,9 +915,9 @@ fn main() {
 }
 ```
 
-# Function
+## Function
 
-## 签名
+### 签名
 
 fn func_name(var1:type,var2:type) -> type{
 
@@ -941,7 +943,7 @@ fn some_fn() {
 
 ()和！是不同的，！不转移所有权，也不影响同级别的返回类型（主要在循环和模式匹配里用到这个特性，无感知）
 
-## 闭包函数
+### 闭包函数
 
 签名：
 
@@ -957,7 +959,7 @@ FnMut和Fn都是借用，一个可变，一个不可变，FnOnce是move，因此
 
 但是函数不能使用非自己定义域内的变量，闭包可以（使用定义闭包的定义域的变量）
 
-### 闭包
+#### 闭包
 
 闭包是可以捕获封闭环境的函数。例如，一个捕获 x 变量的闭包：
 
@@ -1003,7 +1005,7 @@ fn main() {
 }
 ```
 
-### 使用闭包函数做参数
+#### 使用闭包函数做参数
 
 虽然 Rust 选择如何在没有类型注释的情况下动态捕获变量，但在编写函数时不允许这种歧义。当将闭包作为输入参数时，闭包的完整类型必须使用以下`traits`. 按照限制递减的顺序，它们是：
 
@@ -1021,7 +1023,7 @@ fn apply<F>(f: F) where
 }
 ```
 
-### 使用闭包函数做返回值
+#### 使用闭包函数做返回值
 
 根据定义，匿名闭包类型是未知的，因此我们必须使用它 `impl Trait`来返回它们。
 
@@ -1070,7 +1072,7 @@ fn main() {
 }
 ```
 
-### 闭包的本质
+#### 闭包的本质
 
 闭包本质上是编辑器帮你写了代码
 
@@ -1092,7 +1094,7 @@ impl FnOnce<i32> for closure1 {
 
 ```
 
-## 高阶函数
+### 高阶函数
 
 函数也是一等公民，可以在函数内定义，或者做表达式，也可以作为返回值或者参数。
 
@@ -1107,7 +1109,7 @@ fn create_fn() -> fn()->() {}
 
 fn 实现了所有三个闭包 trait（`Fn`、`FnMut` 和 `FnOnce`），所以总是可以在调用期望闭包的函数时传递函数指针作为参数。
 
-# Method
+## Method
 
 方法其实也是函数，但是被绑定到了struct或者enum
 
@@ -1134,7 +1136,7 @@ impl Rectangle {
 }
 ```
 
-# 模式匹配
+## 模式匹配
 
 模式匹配的核心是解构（Pattern），结构可以用在一下地方：
 
@@ -1145,7 +1147,7 @@ impl Rectangle {
 * for
 * 函数参数
 
-### 原始匹配
+#### 原始匹配
 
 `match` 语句中可以直接匹配字面常量，下划线`_`匹配任意情形。
 
@@ -1164,7 +1166,7 @@ match x {
 
 以上代码会打印出`one`。
 
-### `_`和`..`
+#### `_`和`..`
 
 `_`可以在模式匹配或者函数签名中使用，可以忽略某个值（注意是某个，单个值）
 
@@ -1172,7 +1174,7 @@ match x {
 
 `..`在模式匹配中表示省略剩余的部分（多个值）
 
-### 匹配值的范围 `..=`、`x..`
+#### 匹配值的范围 `..=`、`x..`
 
 该`..=`、`x..`语法允许我们以匹配值的包含范围。
 
@@ -1188,7 +1190,7 @@ ps:`x..x` 、`..x`和`..`都不能在这里使用，因为`..x`可能包含非�
     }
 ```
 
-### 结构匹配
+#### 结构匹配
 
 `match` 用于匹配一个表达式的值，寻找满足条件的子分支(`arm`)并执行。每个子分支包含三部分：一系列模式、可选的守卫条件以及主体代码块。
 
@@ -1213,7 +1215,7 @@ fn main() {
 
 ps：这里指定了值的内部元素是无法在后续使用的，如果要使用，必须用@绑定后使用
 
-### 多个模式
+#### 多个模式
 
 每个子分支可以是多个模式，通过 `|` 符号分割：
 
@@ -1229,7 +1231,7 @@ match x {
 
 以上代码打印出`one or two`。
 
-### 条件守卫
+#### 条件守卫
 
 通过`if`引入子分支的条件守卫：
 
@@ -1248,7 +1250,7 @@ match x {
 }
 ```
 
-### @绑定
+#### @绑定
 
 使用@绑定可以将匹配结果绑定到变量上
 
@@ -1285,9 +1287,9 @@ match a {
 
 ps：结构体或枚举里面的元素需要明确元素名，后面再跟 变量名@值
 
-# 泛型
+## 泛型
 
-## 语法
+### 语法
 
 泛型使用 `<T，U>` 表示，只支持==大坨峰命名法==，且必须出现在函数名或结构体明后面
 
@@ -1300,7 +1302,7 @@ fn reg_fn<S>(_s: S) {}
 impl<T> GenericVal<T> {}
 ```
 
-## 关联类型
+### 关联类型
 
 Trait里可以使用type关键字在内部定义泛型，具体实现可以交给关联函数，而不是一定要给结构体实现
 
@@ -1314,7 +1316,7 @@ trait 中的泛型与关联类型，有如下区别：
 
 
 
-## 附录
+### 附录
 
 | 符号                            | 解释                                                   |
 | ----------------------------- | ---------------------------------------------------- |
@@ -1336,7 +1338,7 @@ trait 中的泛型与关联类型，有如下区别：
 | `for<...> type`                | 高级生命周期限制                                                      |
 | `type<ident=type>`             | 泛型，其一个或多个泛型必须被指定为特定类型（如 `Iterator<Item=T>`），即默认类型             |
 
-# Trait
+## Trait
 
 ```rust
 pub trait Summary {
@@ -1353,7 +1355,7 @@ impl dyn Summary{
 }//这里用来实现trait的固有方法，只能使用Summary::trait_object()调用
 ```
 
-## trait bound
+### trait bound
 
 可以使用 `<T:Trait1+Trait2>` 来指定多个特质，或者是使用where字句
 
@@ -1368,7 +1370,7 @@ where
 }
 ```
 
-## 静态分发&动态分发
+### 静态分发&动态分发
 
 使用指针（dyn）则是动态分发，直接使用变量（impl）则是静态分发
 
@@ -1376,7 +1378,7 @@ where
 
 动态分发则使用指针，内存大小确定，编译期只生成一个函数，性能略差，但是二进制体积小
 
-## 用dyn的地方
+### 用dyn的地方
 
 dyn为动态分发，使用在指针处(&,box..)
 
@@ -1402,7 +1404,7 @@ fn animal_speak2<T:Animal>(animal: &T) {
 }
 ```
 
-## 派生
+### 派生
 
 通过 `#[derive]` [属性](https://rustwiki.org/zh-CN/rust-by-example/attribute.html)，编译器能够提供某些 trait 的基本实现。如果 需要更复杂的行为，这些 trait 也可以手动实现。
 
@@ -1415,7 +1417,7 @@ fn animal_speak2<T:Animal>(animal: &T) {
 - [`Default`](https://doc.rust-lang.org/std/default/trait.Default.html), 创建数据类型的一个空实例。
 - [`Debug`](https://doc.rust-lang.org/std/fmt/trait.Debug.html)，使用 `{:?}` formatter 来格式化一个值。
 
-## Sized, Unsize和 ?Sized的关系
+### Sized, Unsize和 ?Sized的关系
 
 - Sized 标记的是在编译期可确定大小的类型
 
@@ -1426,15 +1428,15 @@ fn animal_speak2<T:Animal>(animal: &T) {
 - ?Sized 标记的类型包含了 Sized 和 Unsized 所标识的两种类型。
   所以泛型结构体 `struct Bar<T: ?Sized>(T);` 支持编译期可确定大小类型和动态大小类型两种类型。
 
-### 动态大小类型的限制规则
+#### 动态大小类型的限制规则
 
 - 只可以通过胖指针来操作 Unsize 类型，如 `&[T]` 或者 `&trait`
 - 变量，参数和枚举变量不能使用动态大小类型
 - 结构体中只有最有一个字段可以使用动态大小类型，其他字段不可以使用
 
-# 指针
+## 指针
 
-## 引用
+### 引用
 
 &和ref是借用（也叫引用），是rust提供的指针，它们允许你使用值但不获取其所有权
 
@@ -1448,7 +1450,7 @@ fn animal_speak2<T:Animal>(animal: &T) {
 
 - 引用必须总是有效的。
 
-## 胖指针
+### 胖指针
 
 指向**动态sized类型**值的**胖指针**：使用的内存空间是**常规指针**所使用的内存空间的两倍，切片(`& [i32]`)这种指针是胖指针(fat pointer)；**trait对象和切片变量的类型其实是胖指针类型！**
 
@@ -1464,7 +1466,7 @@ Rust中有一个重要的 trait `Sized`，可以用于区分一个类型是不�
 > 2. T:!Sized 代表类型必须是编译期不确定大小的，
 > 3. T:?Sized 代表以上两种情况都可以。
 
-## 裸指针
+### 裸指针
 
 ```rust
 //*const type 不可变指针
@@ -1478,9 +1480,9 @@ let r2 = &mut num as *mut i32;
 
 解引用指针必须要在unsafe块内
 
-## 智能指针
+### 智能指针
 
-### Box
+#### Box
 
 分配在堆上，内部只保存了一个指针（占用usize的大小）
 
@@ -1490,7 +1492,7 @@ let r2 = &mut num as *mut i32;
 * 当需要传递大量数据的所有权，但又不希望产生大量数据的复制行为时。
 * 当希望拥有一个实现了指定trait的类型值，但又不关心具体的类型时。
 
-### Rc & Weak
+#### Rc & Weak
 
 Rc使用但处理多所有权的情况，比如图结构里，可能有多个节点指向一个节点
 
@@ -1552,7 +1554,7 @@ let weak_foo = Rc::downgrade(&foo);
 let other_weak_foo = Weak::clone(&weak_foo);
 ```
 
-### Arc & Weak
+#### Arc & Weak
 
 `Arc`是一个原子引用计数（Atomically Reference Counted）类型，其特点是：原子性类型工作起来类似原始类型，不过可以安全的在线程间共享。因为线程安全带有性能惩罚，所以并没有默认为所有类型实现原子性，由使用者自由决定。`Arc<T>`拥有与`Rc<T>`相同的API，所有Rc版本的程序，只需要将Rc修改为Arc即可编译和运行
 
@@ -1582,7 +1584,7 @@ let other_weak_foo = Weak::clone(&weak_foo);
  }
 ```
 
-### Cell & RefCell & UnsafeCell
+#### Cell & RefCell & UnsafeCell
 
 如果一个类型可以通过共享引用 `&T` 来改变其内部数据，则该类型具有内部可变性。这个明显违反了Rust的借用规则：共享引用不能改变的。`UnsafeCell<T>`是Rust中唯一允许的可跳过这个规则的类型。即使`UnsafeCell<T>`是不可变的，依然可以安全的对其内部数据进行修改。对于`UnsafeCell<T>`，创建多个 `&mut UnsafeCell<T>` 是Undefined Behavior的。
 
@@ -1611,7 +1613,7 @@ let other_weak_foo = Weak::clone(&weak_foo);
 2. 它们都是建立在`UnsafeCell`上。`UnsafeCell` Rust 是Rust类型系统的“后门”，可以实现将共享引用转换成可变引用。实现的技巧是按顺序转换类型:` &T->*const T-*mut T-> mut T-> &mut T`。
 3. 他们都是非Sync的，所以不能在多线程间共享
 
-### Cow
+#### Cow
 
 在 Rust 中，缩写 "Cow "代表 "Clone on Write "。它是一个枚举，包含两种状态： 借用(Borrow)和拥有(Owned)。这意味着您可以用它来抽象出您是拥有数据还是只是拥有数据的引用。
 
@@ -1619,7 +1621,7 @@ let other_weak_foo = Weak::clone(&weak_foo);
 
 
 
-# 所有权和生命周期
+## 所有权和生命周期
 
 每个变量只能有一个owner
 
@@ -1631,7 +1633,7 @@ let other_weak_foo = Weak::clone(&weak_foo);
 
 >  只有显式的let才能转移所有权，否则在函数块结束时会被清除
 
-## 生命周期
+### 生命周期
 
 ```rust
 &i32        // 常规引用
@@ -1652,7 +1654,7 @@ where for<'a> F: Fn(&'a (u8, u16)) -> &'a u8,
 <'a:'b,'b>  强制转换，'a比'b长
 ```
 
-## 省略总结
+### 省略总结
 
 * 如果是参数只有1个，可以省略
 * 没有返回值，可以省略
@@ -1660,11 +1662,11 @@ where for<'a> F: Fn(&'a (u8, u16)) -> &'a u8,
 * 只需要标注和返回值相关的生命周期
 * 建议：如果返回值确定是static，加上static（测试的时候方便）
 
-# Option&Result
+## Option&Result
 
 Option和Result是rust用来处理空值和错误的一种方式，他们的实现思路是一致的，可以说Option是Result的一种特例
 
-## panic
+### panic
 
 panic是不可恢复的错误，panic会导致程序退出，类似于Java里面的Error，属于程序运行中不可预计（不太可能出现）的错误。
 
@@ -1682,7 +1684,7 @@ panic = 'abort'
 
 ```
 
-## Result
+### Result
 
 rust使用Result来处理错误，在返回值外面包一层Result来表示程序有可能有错误（异常），如果程序有异常，比如文件不存在，应该返回Err，正常则返回Ok
 
@@ -1697,7 +1699,7 @@ Result的两个泛型分别代表正常类型（T）和错误的类型（E）
 
 ps：慎用unwrap和expect，这两个参数会在返回Err时直接panic，写库的话最好不要出现unwrap（写bin可以使用）
 
-## Option
+### Option
 
 Option和Result一样，也是在返回值外包层Option来表示返回值可能是null，如果返回值是null，应该返回None，正常返回Some
 
@@ -1720,7 +1722,7 @@ enum Option<T> {
 }
 ```
 
-## ?传播
+### ?传播
 
 Result 和Option都可以使用?进行返回值传播
 
@@ -1741,7 +1743,7 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-# 集合
+## 集合
 
 **线性序列：向量 `vec<T>`**
 
@@ -1834,7 +1836,7 @@ use std::collections::BinaryHeap;
 
 用 push 方法添加元素，用 peek 方法取出堆中最大值。
 
-# 属性
+## 属性
 
 当属性应用于整个 crate 时，它们的语法是`#![crate_attribute]`，当它们应用于模块或项目时，语法是`#[item_attribute]` （注意缺少的 !`）。
 
@@ -1870,13 +1872,13 @@ fn are_you_on_linux() {
 }
 ```
 
-# 模块
+## 模块
 
 rust使用模块来做区分，类似于java的package
 
 rust的结构为crate（类似于根目录的概念）-》item-》module-》结构体、函数
 
-## 可见性
+### 可见性
 
 默认是私有的，如果想从其他模块访问，需要加pub关键字
 
@@ -2010,7 +2012,7 @@ fn main() {
 
 ```
 
-## 文件层次
+### 文件层次
 
 上面的示例使用单文件嵌套定义，阅读性很差，所以一般使用文件层次来区分
 
@@ -2098,7 +2100,7 @@ pub fn public_function() {
 }
 ```
 
-## 嵌套歧义
+### 嵌套歧义
 
 super 和 self，用在模块嵌套中，区分是哪个的属性/方法
 
@@ -2106,7 +2108,7 @@ supper::function();
 
 self::function();
 
-## 导包
+### 导包
 
 使用 use 关键字，用法
 
@@ -2119,7 +2121,7 @@ use crate::deeply::nested::{
 use deeply::nested::function as other_function;//起别名
 ```
 
-## lib
+### lib
 
 库以“lib”为前缀，默认情况下它们以其 crate 文件命名，但可以通过将`--crate-name`选项传递给`rustc`或使用[`crate_name` 属性](https://doc.rust-lang.org/stable/rust-by-example/attribute/crate.html)来覆盖此默认名称。
 
@@ -2130,11 +2132,11 @@ use deeply::nested::function as other_function;//起别名
 #![crate_name = "rary"]
 ```
 
-# 测试
+## 测试
 
-## 测试分类
+### 测试分类
 
-### 单元测试
+#### 单元测试
 
 单元测试是在每个模块内包含的一个测试模块(子模块)，用来测试本模块的方法
 
@@ -2188,7 +2190,7 @@ Pick three.";
 }
 ```
 
-### 集成测试
+#### 集成测试
 
 集成测试是用来测试整个crate对外暴露的方法的，即和src并列的tests文件夹
 
@@ -2201,7 +2203,7 @@ fn whole(){
 }
 ```
 
-### 文档测试
+#### 文档测试
 
 文档测试是用来测试文档注释里的example的，用来保证更新之后样例代码能正常使用
 
@@ -2266,9 +2268,9 @@ pub fn div(a: i32, b: i32) -> i32 {
 /// # }
 ```
 
-## 测试方法
+### 测试方法
 
-### assert
+#### assert
 
 * assert 
 * assert_eq
@@ -2290,7 +2292,7 @@ Pick three.";
     }
 ```
 
-### should_panic
+#### should_panic
 
 ```rust
 #[cfg(test)]
@@ -2311,7 +2313,7 @@ mod tests {
 }
 ```
 
-### Result
+#### Result
 
 ```rust
 #[cfg(test)]
@@ -2327,9 +2329,9 @@ mod tests {
 }
 ```
 
-# Cargo
+## Cargo
 
-## lib&bin
+### lib&bin
 
 一个项目里只能包含一个lib，但可以包含多个bin
 
@@ -2365,7 +2367,7 @@ mod tests {
         └── test_module.rs
 ```
 
-## 开发依赖
+### 开发依赖
 
 有时仅在测试中才需要一些依赖（比如基准测试相关的）。这种依赖要写在 `Cargo.toml` 的 `[dev-dependencies]` 部分。这些依赖不会传播给其他依赖于这个包的包。
 
@@ -2402,14 +2404,14 @@ mod tests {
 }
 ```
 
-# unsafe
+## unsafe
 
 - 解引用裸指针
 - 通过 FFI 调用函数（这已经在[之前的章节](https://rustwiki.org/zh-CN/rust-by-example/std_misc/ffi.html)介绍过了）
 - 调用不安全的函数
 - 内联汇编（inline assembly）
 
-# 宏！
+## 宏！
 
 
 
@@ -2421,7 +2423,7 @@ mod tests {
 * 类属性宏(Attribute-like macro)，用于为目标添加自定义的属性
 * 类函数宏(Function-like macro)，看上去就像是函数调用
 
-## 声明式宏
+### 声明式宏
 
 [声明式宏 `macro_rules!`](https://course.rs/advance/macro.html#%E5%A3%B0%E6%98%8E%E5%BC%8F%E5%AE%8F-macro_rules)
 
@@ -2441,11 +2443,11 @@ match target {
 }
 ```
 
-## 过程宏
+### 过程宏
 
 
 
-## 作用域
+### 作用域
 
 宏是有顺序的，调用宏的代码必须在宏定义之后，但是宏与宏之间没有顺序要求。
 
@@ -2453,9 +2455,9 @@ match target {
 
 
 
-# 标准库
+## 标准库
 
-## thread
+### thread
 
 Rust 通过 `spawn` 函数提供了创建本地操作系统（native OS）线程的机制，该函数的参数是一个通过值捕获变量的闭包（moving closure）。
 
@@ -2484,7 +2486,7 @@ fn main() {
 
 ```
 
-## channel
+### channel
 
 `mpsc` 是 **多个生产者，单个消费者**（*multiple producer, single consumer*）的缩写。简而言之，Rust 标准库实现通道的方式意味着一个通道可以有多个产生值的 **发送**（*sending*）端，但只能有一个消费这些值的 **接收**（*receiving*）端
 
@@ -2530,7 +2532,7 @@ fn main() {
 
 ```
 
-## path
+### path
 
 `Path` 结构体代表了底层文件系统的文件路径。`Path` 分为两种：`posix::Path`，针对 类 UNIX 系统；以及 `windows::Path`，针对 Windows。prelude 会选择并输出符合平台类型 的 `Path` 种类。
 
@@ -2561,7 +2563,7 @@ fn main() {
 }
 ```
 
-## file
+### file
 
 ```
 fs::File::open()
@@ -2571,7 +2573,7 @@ fs::File::create()
 fs::OpenOptions::new().append(true).open("");
 ```
 
-## process
+### process
 
 `process::Output` 结构体表示已结束的子进程（child process）的输出，而 `process::Command` 结构体是一个进程创建者（process builder）。
 
@@ -2656,7 +2658,7 @@ fn main() {
 }
 ```
 
-## filesystem
+### filesystem
 
 `std::io::fs` 模块包含几个处理文件系统的函数。
 
@@ -2779,7 +2781,7 @@ $ rustc fs.rs && ./fs
 `rmdir a/c/d`
 ```
 
-## env
+### env
 
 ```rust
 use std::{env, process};
@@ -2812,11 +2814,11 @@ fn parse_config(mut args: Args) -> Result<Config, &'static str> {
 }
 ```
 
-## ffi
+### ffi
 
-# 并发
+## 并发
 
-## Send&Sync
+### Send&Sync
 
 - 如果将一个类型发送(move)到另一个线程是安全的，那么它就是`Send`
 - 如果一个类型可以安全地在线程间共享，那么它就是`Sync`的（当且仅当`&T`是`Send`时，`T`是`Sync`的）
@@ -2838,13 +2840,13 @@ Send 和 Sync 也是自动派生的 Trait。这意味着，你不需要去实现
 > impl<'b, T> !Send for RefMut<'b, T>
 > ```
 
-## 并发包
+### 并发包
 
-### Arc
+#### Arc
 
 见上文智能指针Arc
 
-### Mutex&RwLock
+#### Mutex&RwLock
 
 互斥器即互斥锁，每次drop时都会自动释放锁，所以不需要我们unlock
 
@@ -2882,7 +2884,7 @@ Mutex实质上也实现了内部可变性，所以不需要RefCell和Cell
 
 [ Rust学习笔记 (skyao.io)](https://skyao.io/learning-rust/std/)
 
-### atomic
+#### atomic
 
 原子类型，类似锁机制，固定搭配Arc
 
@@ -2938,11 +2940,11 @@ fn main() {
 
 [Rust标准库中的原子类型 | Rust学习笔记 (skyao.io)](https://skyao.io/learning-rust/std/sync/atomic-type.html)
 
-### mpsc
+#### mpsc
 
 见上文channel
 
-### Barrier
+#### Barrier
 
 让多个线程等待，直到数据全部达到再计算，固定搭配Arc
 
@@ -2976,7 +2978,7 @@ Barrier在所有线程会合后可以重复使用，并且可以连续使用。
 
 单个（任意）线程在从这个函数返回时，会收到一个 is_leader返回 true 的 BarrierWaitResult，其他所有线程都会收到is_leader返回false的结果。
 
-### Condvar
+#### Condvar
 
 阻止当前线程，直到这个条件变量收到通知，wait时会让出执行权，直到被唤醒
 
@@ -3014,7 +3016,7 @@ let _guard = cvar.wait_while(lock.lock().unwrap(), |pending| { *pending }).unwra
 
 [Rust标准库中的条件变量(Condvar) | Rust学习笔记 (skyao.io)](https://skyao.io/learning-rust/std/sync/condvar.html)
 
-### Once
+#### Once
 
 全局只执行一次的操作
 
@@ -3039,7 +3041,7 @@ fn expensive_computation() -> usize {
 }
 ```
 
-## 异步
+### 异步
 
 异步是无栈协程，需要runtime，由库提供，运行时底层是线程池，库会对IO等做封装。
 
@@ -3069,7 +3071,7 @@ fn expensive_computation() -> usize {
 
 async会让函数或代码块返回future，await会触发异步任务的执行（）
 
-## Pin
+### Pin
 
 Pin是个对指针的封装，表示他里面的指针如果不是Unpin的就不能改变（获得mut），如果是Unpin的，则无任何影响
 

@@ -1,14 +1,16 @@
 ---
 title: "Flink概念"
 ---
+# Flink概念
+
 
 Flink概念
 
 ![640?wx_fmt=png](Flink概念.assets/sssss.jpg)
 
-# Task和slot
+## Task和slot
 
-## task和算子链
+### task和算子链
 
 ==算子==即流中的方法,概念同spark
 
@@ -55,7 +57,7 @@ flink这里的shuffle当前数据随机发送到另一个编号的分区里,实�
 >
 > 后续算子不一定进行分区操作,但是Transformation会嵌套之前所有的Transformation
 
-## slot和资源组
+### slot和资源组
 
 slot其实就是资源,用来运行一个task的资源
 
@@ -101,7 +103,7 @@ slot默认是可以共享的
 
 ![image-20210302131511928](Flink概念.assets/image-20210302131511928.png)
 
-### ==资源组==
+#### ==资源组==
 
 可以设置资源组来减少数据交换
 
@@ -114,9 +116,9 @@ someStream.filter(...).slotSharingGroup("name")
 
 
 
-# 分区和Keyby
+## 分区和Keyby
 
-## 分区
+### 分区
 
 分区类似于spark的分区概念,相同分区的数据会在同一个taskmanager中执行
 
@@ -144,7 +146,7 @@ someStream.filter(...).slotSharingGroup("name")
 >
 > 而Flink的一个执行进程(taskmanager),同时处理n(slot数)个分区的数据
 
-## 分区策略
+### 分区策略
 
 分区策略是指数据从当前taskmanager到另外一个taskmanager的过程(数据)
 
@@ -161,7 +163,7 @@ Flink提供了8钟分区策略:
 * KeyGroupStreamPartitioner(HASH,keyby使用的方式)
 * CustomPartitionerWrapper(自定义)
 
-## keyby
+### keyby
 
 keyby作用等同于spark的groupby,但是实现不太一样
 
@@ -189,7 +191,7 @@ partition=keyGroupId * parallelism / maxParallelism
 >
 > 除非让source端分区算法和keyby的分区算法一致,需要source端来做匹配(kafka可以自定义分区算法)
 
-# 时间语义（过期）
+## 时间语义（过期）
 
 ==1.12标记过期了时间语义，现在默认就是事件时间==
 
@@ -206,7 +208,7 @@ val env: StreamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnv
     env.getConfig.setAutoWatermarkInterval(5000)
 ```
 
-## 机器时间
+### 机器时间
 
 指执行相应操作的机器的系统时间。分布式系统之间可能会有不同的时间
 
@@ -218,11 +220,11 @@ val env: StreamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnv
 
 消息进入source的时间
 
-## 事件时间
+### 事件时间
 
 消息本身所带的时间信息
 
-# 水位线
+## 水位线
 
 ![image-20210301103821174](Flink概念.assets/image-20210301103821174.png)
 
@@ -240,13 +242,13 @@ val env: StreamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnv
 
 > 水位线上是和算子绑定的,但是开启了插槽共享之后,水位线实际是和taskmanager相关,一个taskmanager的一个算子,所有key的水位线一致
 
-## 并行流中的水位线
+### 并行流中的水位线
 
 任务中间出现shuffle(数据下游多个算子)时,水位线取两个流中最小值
 
 时间语义和interval是一致的,所以两个流的时间线更新都是同时触发
 
-# 开窗
+## 开窗
 
 数据需要聚合时,需要在流里指定一定范围的数据做聚合,这个数据范围就是数据窗口
 
@@ -262,7 +264,7 @@ PS:全局窗口也是一样得逻辑,窗口的聚合操作只有一个并行度(
 
 ![image-20210301104859137](Flink概念.assets/image-20210301104859137.png)
 
-## 分类
+### 分类
 
 主要有几个分类规则
 
@@ -320,7 +322,7 @@ val sessionWindows = sensorData
 > * GlobalWindows没有窗口闭合概念,想要触发计算需要触发器来实现
 > * WindowFunction是窗口闭合才会触发,GlobalWindows无法触发
 
-## 聚合
+### 聚合
 
 * reduce
 
@@ -381,7 +383,7 @@ class MyProcess extends ProcessWindowFunction[(String,Double),(String,Double,Dou
     }
 ```
 
-## 迟到
+### 迟到
 
 对于事件时间,无论水位线设置多少,都有可能有数据延迟到达的情况,这种数据默认会被抛弃
 
@@ -404,7 +406,7 @@ val lateStream = result.getSideOutput(lateOutputTag)
 
 PS:这个只在WindowedStream和AllWindowedStream中有侧输出,其他多流Stream中无意义
 
-## Trigger
+### Trigger
 
 触发器,消息到来做一定处理,预处理,每个窗口都有triggle,triggle决定了窗口闭合
 
@@ -481,7 +483,7 @@ class MyTrigger extends Trigger[SourceReading,TimeWindow] {
 
 
 
-## Evictor
+### Evictor
 
 作用范围:
 
@@ -514,9 +516,9 @@ class MyEvictor() extends Evictor[MyTime, TimeWindow] {
 }
 ```
 
-# 流的合并
+## 流的合并
 
-## connect
+### connect
 
 两个流合并,然后一起处理(参数变成两份)
 
@@ -528,7 +530,7 @@ stream1
       .map(i=>i,str=>str)
 ```
 
-## union
+### union
 
 作用同connet，只是要求两流类型一致
 
@@ -538,7 +540,7 @@ join和coGroup的底层调用其实就是union，把两个流封装成了元组�
 
 其实从coGroup的实现原理上来说，用connect更合适，但是这里选择了unoin
 
-## jion
+### jion
 
 双流join,匹配结果类似于inner join,两个流都有的才返回
 
@@ -557,21 +559,21 @@ stream1
         .apply((i1,i2)=>i1+i2.toInt)
 ```
 
-### Tumbling Window Join
+#### Tumbling Window Join
 
 ![img](Flink概念.assets/tumbling-window-join.svg)
 
-### Sliding Window Join(慎用)
+#### Sliding Window Join(慎用)
 
 > interval join代替
 
 ![img](Flink概念.assets/sliding-window-join.svg)
 
-### Session Window Join
+#### Session Window Join
 
 ![img](Flink概念.assets/session-window-join.svg)
 
-### Interval Join
+#### Interval Join
 
 ==只支持事件时间==
 
@@ -596,7 +598,7 @@ orangeStream
 
 > 下限时间设置为负值
 
-## coGroup
+### coGroup
 
 join的底层实现
 
@@ -620,7 +622,7 @@ stream2
 	.flatMap()
 ```
 
-# RichFunction
+## RichFunction
 
 当我们使用富函数时，我们可以实现两个额外的方法：
 - open()方法是rich function的初始化方法，当一个算子例如map或者filter被调用之前open()会被调用。open()函数通常用来做一些只需要做一次即可的初始化工作。
@@ -657,7 +659,7 @@ class MyFlatMap extends RichFlatMapFunction[Int, (Int, Int)] {
 }
 ```
 
-##  State
+### State
 
 > 目前只有键控流的算子可以直接使用状态,其他Stream虽然实现了RichFunction,但是不支持状态
 >
@@ -698,7 +700,7 @@ object RichFlatMapStateExample {
 }
 ```
 
-## State TTL
+### State TTL
 
 state的生命周期,在描述符中定义
 
@@ -713,7 +715,7 @@ val stateDescriptor = new ValueStateDescriptor[String]("text state", classOf[Str
 stateDescriptor.enableTimeToLive(ttlConfig)
 ```
 
-## 累加器
+### 累加器
 
 累加器没有使用state,实现原理类似于spark,在每个taskmanager中启用一份累加器,最后合并到Jobmanager
 
@@ -776,7 +778,7 @@ public class CounterTest {
 
 
 
-# ProcessFunction
+## ProcessFunction
 
 ProcessFunction继承自RichFunction,同时额外扩展了一些功能
 
@@ -798,7 +800,7 @@ Flink提供了8个Process Function：
 * ProcessAllWindowFunction
   * 无定时器
 
-## 侧输出
+### 侧输出
 
 ```scala
 val env: StreamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment
@@ -823,7 +825,7 @@ class FreezingMonitor extends ProcessFunction[SourceReading,SourceReading]{
   }
 ```
 
-## 定时器
+### 定时器
 
 原理:
 
@@ -868,7 +870,7 @@ class TempIncreaseAlertFunction extends KeyedProcessFunction[String,SourceReadin
   }
 ```
 
-# 广播流
+## 广播流
 
 * 先定义一个Map状态描述符
 * 用描述符把被广播流变成BroadcastStream
@@ -966,7 +968,7 @@ new KeyedBroadcastProcessFunction<Color, Item, Rule, String>() {
 }
 ```
 
-# CheckpointedFunction
+## CheckpointedFunction
 
 CheckpointedFunction是个接口,用来做检查点的
 
@@ -1052,7 +1054,7 @@ class BufferingSink(threshold: Int = 0)
 }
 ```
 
-# 一致性保证
+## 一致性保证
 
 ![图片](Flink概念.assets/yzxbzsssdd)
 
@@ -1064,7 +1066,7 @@ class BufferingSink(threshold: Int = 0)
 
 * **Sink 端**：sink端需要支持幂等性或事务（分布式事务->二阶段提交）
 
-## 可重置的源函数
+### 可重置的源函数
 
 应用程序只有使用可以重播输出数据的数据源时，才能提供令人满意的一致性保证。如果外部系统暴露了获取和重置读偏移量的API，那么source函数就可以重播源数据。这样的例子包括一些能够提供文件流的偏移量的文件系统，或者提供seek方法用来移动到文件的特定位置的文件系统。或者Apache Kafka这种可以为每一个主题的分区提供偏移量并且可以设置分区的读位置的系统。一个反例就是source连接器连接的是socket，socket将会立即丢弃已经发送过的数据。
 
@@ -1122,7 +1124,7 @@ class ResettableCountSource
 }
 ```
 
-## 幂等sink连接器
+### 幂等sink连接器
 
 对于大多数应用，SinkFunction接口足以实现一个幂等性写入的sink连接器了。需要以下两个条件：
 
@@ -1180,7 +1182,7 @@ class DerbyUpsertSink extends RichSinkFunction[SensorReading] {
 }
 ```
 
-## 事务性sink连接器(二阶段提交)
+### 事务性sink连接器(二阶段提交)
 
 二阶段提交流程:
 
@@ -1284,9 +1286,9 @@ TwoPhaseCommitSinkFunction的构造器需要两个TypeSerializer。一个是TXN�
 
 
 
-# 状态和检查点
+## 状态和检查点
 
-## 状态
+### 状态
 
 * 键控状态
   * keyedStream的相关RichFunction
@@ -1294,7 +1296,7 @@ TwoPhaseCommitSinkFunction的构造器需要两个TypeSerializer。一个是TXN�
   * 继承CheckpointedFunction
 * 广播流状态
 
-## 状态后端
+### 状态后端
 
 检查点的持久化容器，目前有：
 
@@ -1302,7 +1304,7 @@ TwoPhaseCommitSinkFunction的构造器需要两个TypeSerializer。一个是TXN�
 * [FsStateBackend](https://ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/state_backends.html#fsstatebackend)
 * [RocksDBStateBackend](https://ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/state_backends.html#rocksdbstatebackend)
 
-## 检查点
+### 检查点
 
 检查点算法是异步快照算法，每个checkpoint是截至某一条数据完成后，这条数据流过时的所有算子的状态记录
 
@@ -1354,15 +1356,15 @@ Checkpoint *n* 将包含每个 operator 的 state，这些 state 是对应的 op
 
 Flink 的 state backends 利用写时复制（copy-on-write）机制允许当异步生成旧版本的状态快照时，能够不受影响地继续流处理。只有当快照被持久保存后，这些旧版本的状态才会被当做垃圾回收。
 
-## 保存点
+### 保存点
 
 手动执行的检查点，目前与检查点完全一致
 
-## JobManager HA
+### JobManager HA
 
 分两种情况,standalone(包括k8s)和yarn
 
-### standalone3
+#### standalone3
 
 需要配置HA策略
 
@@ -1376,7 +1378,7 @@ high-availability.zookeeper.path.root: /flink
 
 这里主要是需要借助外部存储元数据和leader选举(需要同时有多个job manager )
 
-### yarn
+#### yarn
 
 yarn-site.xml
 
@@ -1400,9 +1402,9 @@ yarn.application-attempts: 10
 
 保障了他可以在JobManager挂了之后自动重启,因此只需要一个JobManager
 
-## Task重启策略
+### Task重启策略
 
-### 固定延迟重启策略
+#### 固定延迟重启策略
 
 如果尝试超过了给定的最大次数，作业将最终失败。在连续的重新启动尝试之间，重启策略等待一段固定长度的时间。
 
@@ -1434,7 +1436,7 @@ env.setRestartStrategy(RestartStrategies.fixedDelayRestart(
 ))
 ```
 
-### 故障率重启策略
+#### 故障率重启策略
 
 故障率重启策略在故障发生后重启作业，但是当**故障率**（每个时间间隔发生故障的次数）超过设定的限制时，作业会最终失败。一段固定长度的时间。
 
@@ -1469,7 +1471,7 @@ env.setRestartStrategy(RestartStrategies.failureRateRestart(
 ))
 ```
 
-### 没有重启策略
+#### 没有重启策略
 
 作业直接失败，不尝试重启。
 
@@ -1484,7 +1486,7 @@ val env = ExecutionEnvironment.getExecutionEnvironment()
 env.setRestartStrategy(RestartStrategies.noRestart())
 ```
 
-# 异步 I/O 
+## 异步 I/O
 
 在与外部系统交互（用数据库中的数据扩充流数据）的时候，需要考虑与外部系统的通信延迟对整个流处理应用的影响。
 
@@ -1496,13 +1498,13 @@ env.setRestartStrategy(RestartStrategies.noRestart())
 
 *注意：*仅仅提高 `MapFunction` 的并行度（parallelism）在有些情况下也可以提升吞吐量，但是这样做通常会导致非常高的资源消耗：更多的并行 `MapFunction` 实例意味着更多的 Task、更多的线程、更多的 Flink 内部网络连接、 更多的与数据库的网络连接、更多的缓冲和更多程序内部协调的开销。
 
-## 先决条件
+### 先决条件
 
 如上节所述，正确地实现数据库（或键/值存储）的异步 I/O 交互需要支持异步请求的数据库客户端。许多主流数据库都提供了这样的客户端。
 
 如果没有这样的客户端，可以通过创建多个客户端并使用线程池处理同步调用的方法，将同步客户端转换为有限并发的客户端。然而，这种方法通常比正规的异步客户端效率低。
 
-## 异步 I/O API
+### 异步 I/O API
 
 Flink 的异步 I/O API 允许用户在流处理中使用异步请求客户端。API 处理与数据流的集成，同时还能处理好顺序、事件时间和容错等。
 
@@ -1555,11 +1557,11 @@ val resultStream: DataStream[(String, String)] =
 * **Timeout**： 超时参数定义了异步请求发出多久后未得到响应即被认定为失败。 它可以防止一直等待得不到响应的请求。
 * **Capacity**： 容量参数定义了可以同时进行的异步请求数。 即使异步 I/O 通常带来更高的吞吐量，执行异步 I/O 操作的算子仍然可能成为流处理的瓶颈。 限制并发请求的数量可以确保算子不会持续累积待处理的请求进而造成积压，而是在容量耗尽时触发反压。
 
-### 超时处理
+#### 超时处理
 
 当异步 I/O 请求超时的时候，默认会抛出异常并重启作业。 如果你想处理超时，可以重写 `AsyncFunction#timeout` 方法。
 
-### 结果的顺序
+#### 结果的顺序
 
 `AsyncFunction` 发出的并发请求经常以不确定的顺序完成，这取决于请求得到响应的顺序。 Flink 提供两种模式控制结果记录以何种顺序发出。
 
@@ -1568,7 +1570,7 @@ val resultStream: DataStream[(String, String)] =
 
 > PS：异步io必须位于算子链头部（task的第一个算子）
 
-# 部署
+## 部署
 
 ![img](Flink概念.assets/1735488-20191210133144817-32310340.png)
 
@@ -1593,7 +1595,7 @@ val localEnv: StreamExecutionEnvironment.createLocalEnvironment()
 val remoteEnv = StreamExecutionEnvironment.createRemoteEnvironment()
 ```
 
-## 启动yarn-session
+### 启动yarn-session
 
 ```bash
 ./yarn-session.sh   -n 2 -s 2 -jm 1024 -tm 1024 -nm test -d  
@@ -1616,7 +1618,7 @@ val remoteEnv = StreamExecutionEnvironment.createRemoteEnvironment()
 
 -d：后台执行。
 
-## 不启动yarn-session，直接执行job
+### 不启动yarn-session，直接执行job
 
 ```bash
 #application Master中执行main
@@ -1637,7 +1639,7 @@ val remoteEnv = StreamExecutionEnvironment.createRemoteEnvironment()
 
 
 
-# CEP
+## CEP
 
 POM：
 
@@ -1695,13 +1697,13 @@ complexResult.print()
 timeoutResult.print()
 ```
 
-# Metrics
+## Metrics
 
 Flink 提供的 Metrics 可以在 Flink 内部收集一些指标，通过这些指标让开发人员更好地理解作业或集群的状态。由于集群运行后很难发现内部的实际状况，跑得慢或快，是否异常等，开发人员无法实时查看所有的 Task 日志，比如作业很大或者有很多作业的情况下，该如何处理？此时 Metrics 可以很好的帮助开发人员了解作业的当前状况。
 
 可以通过web UI或者Rest API来查看Metrics
 
-## Metric Types
+### Metric Types
 
 Metrics 的类型如下：
 
@@ -1710,13 +1712,13 @@ Metrics 的类型如下：
 3. 第三，Meter，Meter 是指统计吞吐量和单位时间内发生“事件”的次数。它相当于求一种速率，即事件次数除以使用的时间。
 4. 第四，Histogram，Histogram 比较复杂，也并不常用，Histogram 用于统计一些数据的分布，比如说 Quantile、Mean、StdDev、Max、Min 等。
 
-## Metric Group
+### Metric Group
 
 Metric 在 Flink 内部有多层结构，以 Group 的方式组织，它并不是一个扁平化的结构，Metric Group + Metric Name 是 Metrics 的唯一标识。
 
 Metric Group 的层级有 TaskManagerMetricGroup 和TaskManagerJobMetricGroup，每个 Job 具体到某一个 task 的 group，task 又分为 TaskIOMetricGroup 和 OperatorMetricGroup。Operator 下面也有 IO 统计和一些 Metrics，整个层级大概如下图所示。Metrics 不会影响系统，它处在不同的组中，并且 Flink支持自己去加 Group，可以有自己的层级。
 
-## System Metrics
+### System Metrics
 
 System Metrics，将整个集群的状态已经涵盖得非常详细。具体包括以下方面：
 
@@ -1737,7 +1739,7 @@ System Metrics，将整个集群的状态已经涵盖得非常详细。具体包
 •IO
 ```
 
-# REST API
+## REST API
 
 集群模式下固定为jobmanager上的某个端口（默认8081）
 

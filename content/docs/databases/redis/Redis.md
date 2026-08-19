@@ -1,8 +1,10 @@
 ---
 title: "Redis"
 ---
+# Redis
 
-# 部署
+
+## 部署
 
 下载源码
 
@@ -43,13 +45,13 @@ sudo make install
 * Redis-cli：客户端
   * 关闭：shutdown
 
-# 操作
+## 操作
 
 * select 选择数据库
 * flushdb清空数据库
 * flushall 清空所有
 
-## KEY
+### KEY
 
 | command             | description                                                |
 | ------------------- | ---------------------------------------------------------- |
@@ -64,7 +66,7 @@ sudo make install
 | rename key newkey   | 修改 key 的名称                                            |
 | renamenx key newkey | 仅当 newkey 不存在时，将 key 改名为 newkey                 |
 
-## String
+### String
 
 | command                 | description                                   |
 | ----------------------- | --------------------------------------------- |
@@ -82,7 +84,7 @@ sudo make install
 | decrby key increment    | key的值减increment                            |
 | append key value        | key的值追加value                              |
 
-## List
+### List
 
 | command                                                      | description                  |
 | ------------------------------------------------------------ | ---------------------------- |
@@ -98,7 +100,7 @@ sudo make install
 | lrange key start end                                         | 获取列表指定范围内的元素     |
 | ltrim key start end                                          | 让列表只保留指定区间内的元素 |
 
-## Set
+### Set
 
 | command                   | description                         |
 | ------------------------- | ----------------------------------- |
@@ -112,7 +114,7 @@ sudo make install
 | sinsert key1 key2         | 交集                                |
 | sdiff key1 key2           | 差集                                |
 
-## Zset(Sorted Set)
+### Zset(Sorted Set)
 
 | command                                  | description                                            |
 | ---------------------------------------- | ------------------------------------------------------ |
@@ -125,7 +127,7 @@ sudo make install
 | zrank key member                         | 返回有序集合中指定成员的索引                           |
 | zrem key member1 member2...              | 移除有序集合中的一个或多个成员                         |
 
-## Hash
+### Hash
 
 | command                                  | description                           |
 | ---------------------------------------- | ------------------------------------- |
@@ -139,7 +141,7 @@ sudo make install
 | hexists key field                        | 查看哈希表 key 中，指定的字段是否存在 |
 | hlen key                                 | 获取哈希表中字段的数量                |
 
-## GEOSpatial 地理位置
+### GEOSpatial 地理位置
 
 官方文档：https://www.redis.net.cn/order/3685.html
 
@@ -150,7 +152,7 @@ sudo make install
 * GEORADIUSBYMEMBER key 地名 半径 单位
 * GEOHASH
 
-### GEOADD
+#### GEOADD
 
 ```bash
 # getadd 添加地理位置
@@ -171,7 +173,7 @@ sudo make install
 (integer) 2
 ```
 
-### GEOPOS
+#### GEOPOS
 
 ```bash
 127.0.0.1:6379> GEOPOS china:city beijing # 获取指定的城市的经度和纬度！
@@ -184,7 +186,7 @@ sudo make install
 2) "29.52999957900659211"
 ```
 
-### GEODIST
+#### GEODIST
 
 单位：
 
@@ -200,7 +202,7 @@ sudo make install
 "1464.0708"
 ```
 
-### GEORADIUS
+#### GEORADIUS
 
 ```bash
 127.0.0.1:6379> GEORADIUS china:city 110 30 1000 km # 以110，30 这个经纬度为中心，寻找方圆1000km内的城市
@@ -239,7 +241,7 @@ sudo make install
 2) "34.25999964418929977"
 ```
 
-### GEORADIUSBYMEMBER
+#### GEORADIUSBYMEMBER
 
 ```bash
 # 找出位于指定元素周围的其他元素！
@@ -251,7 +253,7 @@ sudo make install
 2) "shanghai"
 ```
 
-### GEOHASH
+#### GEOHASH
 
 ```bash
 #返回一个或多个位置元素的 Geohash 表示。
@@ -262,7 +264,7 @@ sudo make install
 
 ```
 
-### ZSET所有命令
+#### ZSET所有命令
 
 >  GEO 底层的实现原理其实就是 Zset！我们可以使用Zset命令来操作geo！
 
@@ -284,7 +286,7 @@ sudo make install
 5) "shanghai"
 ```
 
-## Hyperloglog 基数
+### Hyperloglog 基数
 
 * PFADD key value value...
 * PFCOUNT key
@@ -313,7 +315,7 @@ OK
 **如果允许容错，那么一定可以使用 Hyperloglog ！**
 **如果不允许容错，就使用 set 或者自己的数据类型即可！**
 
-## BITMAP 位存储(布隆过滤器)
+### BITMAP 位存储(布隆过滤器)
 
 * SETBIT key offset（类似数组下标） bit
 * GETBIT key offset
@@ -348,7 +350,7 @@ OK
 "goofevf"
 ```
 
-## 事务、乐观锁
+### 事务、乐观锁
 
 * 开启 multi
 * 入队
@@ -387,9 +389,9 @@ QUEUED
 
 PS：常使用setnx做分布式锁
 
-# API
+## API
 
-## Jedis
+### Jedis
 
 POM:
 
@@ -431,7 +433,7 @@ object RedisUtil {
 }
 ```
 
-## SpringBoot:
+### SpringBoot:
 
 ```java
 
@@ -480,7 +482,7 @@ return template;
 } 
 ```
 
-## RedisUtil
+### RedisUtil
 
 ```java
 
@@ -1055,7 +1057,7 @@ public final class RedisUtil {
 }
 ```
 
-# 发布订阅
+## 发布订阅
 
 订阅端：
 
@@ -1088,15 +1090,15 @@ Reading messages... (press Ctrl-C to quit)
 
 
 
-# 持久化
+## 持久化
 
-## RDB
+### RDB
 
 `dbfilename dump.rdb`
 
 `save <seconds> <changes>`
 
-## AOF
+### AOF
 
 ```bash
 appendonly no # 默认是不开启aof模式的，默认是使用rdb方式持久化的，在大部分所有的情况下，rdb完全够用！
@@ -1123,7 +1125,7 @@ appendfsync everysec # 每秒执行一次 sync，可能会丢失这1s的数据�
 
 2、Aof 运行效率也要比 rdb 慢，所以我们redis默认的配置就是rdb持久化！
 
-## 扩展：
+### 扩展：
 1、RDB 持久化方式能够在指定的时间间隔内对你的数据进行快照存储
 
 2、AOF 持久化方式记录每次对服务器写的操作，当服务器重启的时候会重新执行这些命令来恢复原始的数据，AOF命令以Redis 协议追加保存每次写的操作到文件末尾，Redis还能对AOF文件进行后台重写，使得AOF文件的体积不至于过大。
@@ -1141,11 +1143,11 @@ appendfsync everysec # 每秒执行一次 sync，可能会丢失这1s的数据�
 * 如果Enable AOF ，好处是在最恶劣情况下也只会丢失不超过两秒数据，启动脚本较简单只load自己的AOF文件就可以了，代价一是带来了持续的IO，二是AOF rewrite 的最后将 rewrite 过程中产生的新数据写到新文件造成的阻塞几乎是不可避免的。只要硬盘许可，应该尽量减少AOF rewrite的频率，AOF重写的基础大小默认值64M太小了，可以设到5G以上，默认超过原大小100%大小重写可以改到适当的数值。
 * 如果不Enable AOF ，仅靠 Master-Slave Repllcation 实现高可用性也可以，能省掉一大笔IO，也减少了rewrite时带来的系统波动。代价是如果Master/Slave 同时倒掉，会丢失十几分钟的数据，启动脚本也要比较两个 Master/Slave 中的 RDB文件，载入较新的那个，微博就是这种架构。
 
-# 主从复制
+## 主从复制
 
 slave of
 
-# 哨兵模式
+## 哨兵模式
 
 sentinel配置
 
@@ -1203,23 +1205,23 @@ sentinel client-reconfig-script mymaster /var/redis/reconfig.sh # 一般都是�
 
 ```
 
-# 缓存穿透和雪崩
+## 缓存穿透和雪崩
 
-## 缓存穿透
+### 缓存穿透
 
 大并发下数据**查不到**，mysql压力过大失效（没有数据）
 
 * 布隆过滤器
 * redis缓存空
 
-## 缓存击穿
+### 缓存击穿
 
 单个key没有缓存在Redis中，大量请求转移给MySQL，造成服务宕机，例如突发事件，短时间大量请求
 
 * 加互斥锁
 * key不过期
 
-## 缓存雪崩
+### 缓存雪崩
 
 redis失效或大量key没有缓存，直接访问MySQL，宕机
 
@@ -1227,7 +1229,7 @@ redis失效或大量key没有缓存，直接访问MySQL，宕机
 * 预缓存key
 * 加锁或限流
 
-# 参数说明
+## 参数说明
 
 ```bash
 # 通用 GENERAL

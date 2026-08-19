@@ -1,12 +1,14 @@
 ---
 title: "Spark 性能调优"
 ---
+# Spark 性能调优
 
-# 第一章       Spark 性能调优
 
-## 1.1      常规性能调优
+## 第一章       Spark 性能调优
 
-### 1.1.1   常规性能调优一：最优资源配置
+### 1.1      常规性能调优
+
+#### 1.1.1   常规性能调优一：最优资源配置
 
 Spark性能调优的第一步，就是为任务分配更多的资源，在一定范围内，增加资源的分配与性能的提升是成正比的，实现了最优的资源配置后，在此基础上再考虑进行后面论述的性能调优策略。
 
@@ -78,7 +80,7 @@ Spark性能调优的第一步，就是为任务分配更多的资源，在一定
 --master：实际生产环境一定使用yarn-cluster
 ```
 
-### 1.1.2   常规性能调优二：RDD优化
+#### 1.1.2   常规性能调优二：RDD优化
 
 1.2.1 RDD复用
 
@@ -108,7 +110,7 @@ Spark性能调优的第一步，就是为任务分配更多的资源，在一定
 
 获取到初始RDD后，应该考虑尽早地过滤掉不需要的数据，进而减少对内存的占用，从而提升Spark作业的运行效率。
 
-### 1.1.3   常规性能调优三：并行度调节
+#### 1.1.3   常规性能调优三：并行度调节
 
 Spark作业中的并行度指各个stage的task的数量。
 
@@ -126,7 +128,7 @@ val conf = new SparkConf()
 
   .set("spark.default.parallelism", "500")
 
-### 1.1.4   常规性能调优四：广播大变量
+#### 1.1.4   常规性能调优四：广播大变量
 
 默认情况下，task中的算子中如果使用了外部的变量，每个task都会获取一份变量的复本，这就造成了内存的极大消耗。一方面，如果后续对RDD进行持久化，可能就无法将RDD数据存入内存，只能写入磁盘，磁盘IO将会严重消耗性能；另一方面，task在创建对象的时候，也许会发现堆内存无法存放新创建的对象，这就会导致频繁的GC，GC会导致工作线程停止，进而导致Spark暂停工作一段时间，严重影响Spark性能。
 
@@ -136,7 +138,7 @@ val conf = new SparkConf()
 
 在初始阶段，广播变量只在Driver中有一份副本。task在运行的时候，想要使用广播变量中的数据，此时首先会在自己本地的Executor对应的BlockManager中尝试获取变量，如果本地没有，BlockManager就会从Driver或者其他节点的BlockManager上远程拉取变量的复本，并由本地的BlockManager进行管理；之后此Executor的所有task都会直接从本地的BlockManager中获取变量。
 
-### 1.1.5   常规性能调优五：Kryo序列化
+#### 1.1.5   常规性能调优五：Kryo序列化
 
 默认情况下，Spark使用Java的序列化机制。Java的序列化机制使用方便，不需要额外的配置，在算子中使用的变量实现Serializable接口即可，但是，Java序列化机制的效率不高，序列化速度慢并且序列化后的数据所占用的空间依然较大。
 
@@ -178,7 +180,7 @@ conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
 
 conf.set("spark.kryo.registrator", "atguigu.com.MyKryoRegistrator"); 
 
-### 1.1.6   常规性能调优六：调节本地化等待时长
+#### 1.1.6   常规性能调优六：调节本地化等待时长
 
 Spark作业运行过程中，Driver会对每一个stage的task进行分配。根据Spark的task分配算法，Spark希望task能够运行在它要计算的数据算在的节点（数据本地化思想），这样就可以避免数据的网络传输。通常来说，task可能不会被分配到它处理的数据所在的节点，因为这些节点可用的资源可能已经用尽，此时，Spark会等待一段时间，默认3s，如果等待指定时间后仍然无法在指定节点运行，那么会自动降级，尝试将task分配到比较差的本地化级别所对应的节点上，比如将task分配到离它要计算的数据比较近的一个节点，然后进行计算，如果当前级别仍然不行，那么继续降级。
 
@@ -210,9 +212,9 @@ val conf = new SparkConf()
 
   .set("spark.locality.wait", "6")
 
-## 1.2      算子调优
+### 1.2      算子调优
 
-### 1.2.1   算子调优一：mapPartitions
+#### 1.2.1   算子调优一：mapPartitions
 
 普通的map算子对RDD中的每一个元素进行操作，而mapPartitions算子对RDD中每一个分区进行操作。如果是普通的map算子，假设一个partition有1万条数据，那么map算子中的function要执行1万次，也就是对每个元素进行操作。
 
@@ -234,7 +236,7 @@ mapPartitions算子也存在一些缺点：对于普通的map操作，一次处�
 
 在项目中，应该首先估算一下RDD的数据量、每个partition的数据量，以及分配给每个Executor的内存资源，如果资源允许，可以考虑使用mapPartitions算子代替map。
 
-### 1.2.2   算子调优二：foreachPartition优化数据库操作
+#### 1.2.2   算子调优二：foreachPartition优化数据库操作
 
 在生产环境中，通常使用foreachPartition算子来完成数据库的写入，通过foreachPartition算子的特性，可以优化写数据库的性能。
 
@@ -256,7 +258,7 @@ mapPartitions算子也存在一些缺点：对于普通的map操作，一次处�
 
 在生产环境中，全部都会使用foreachPartition算子完成数据库操作。foreachPartition算子存在一个问题，与mapPartitions算子类似，如果一个分区的数据量特别大，可能会造成OOM，即内存溢出。
 
-### 1.2.3   算子调优三：filter与coalesce的配合使用
+#### 1.2.3   算子调优三：filter与coalesce的配合使用
 
 在Spark任务中我们经常会使用filter算子完成RDD中数据的过滤，在任务初始阶段，从各个分区中加载到的数据量是相近的，但是一旦进过filter过滤后，每个分区的数据量有可能会存在较大差异，如图2-6所示：
 
@@ -302,7 +304,7 @@ repartition与coalesce都可以用来进行重分区，其中repartition只是co
 
 注意：local模式是进程内模拟集群运行，已经对并行度和分区数量有了一定的内部优化，因此不用去设置并行度和分区数量。
 
-### 1.2.4   算子调优四：repartition解决SparkSQL低并行度问题
+#### 1.2.4   算子调优四：repartition解决SparkSQL低并行度问题
 
 在第一节的常规性能调优中我们讲解了并行度的调节策略，但是，并行度的设置对于Spark SQL是不生效的，用户设置的并行度只对于Spark SQL以外的所有Spark的stage生效。
 
@@ -318,7 +320,7 @@ Spark SQL的并行度不允许用户自己指定，Spark SQL自己会默认根�
 
 Spark SQL这一步的并行度和task数量肯定是没有办法去改变了，但是，对于Spark SQL查询出来的RDD，立即使用repartition算子，去重新进行分区，这样可以重新分区为多个partition，从repartition之后的RDD操作，由于不再设计Spark SQL，因此stage的并行度就会等于你手动设置的值，这样就避免了Spark SQL所在的stage只能用少量的task去处理大量数据并执行复杂的算法逻辑。使用repartition算子的前后对比如图2-7所示。
 
-### 1.2.5   算子调优五：reduceByKey本地聚合
+#### 1.2.5   算子调优五：reduceByKey本地聚合
 
 reduceByKey相较于普通的shuffle操作一个显著的特点就是会进行map端的本地聚合，map端会先对本地的数据进行combine操作，然后将数据写入给下个stage的每个task创建的文件中，也就是在map端，对每一个key对应的value，执行reduceByKey算子函数。reduceByKey算子的执行过程如图2-8所示：
 
@@ -348,9 +350,9 @@ reduceByKey相较于普通的shuffle操作一个显著的特点就是会进行ma
 
 根据上图可知，groupByKey不会进行map端的聚合，而是将所有map端的数据shuffle到reduce端，然后在reduce端进行数据的聚合操作。由于reduceByKey有map端聚合的特性，使得网络传输的数据量减小，因此效率要明显高于groupByKey。
 
-## 1.3      Shuffle调优
+### 1.3      Shuffle调优
 
-### 1.3.1   Shuffle调优一：调节map端缓冲区大小
+#### 1.3.1   Shuffle调优一：调节map端缓冲区大小
 
 在Spark任务运行过程中，如果shuffle的map端处理的数据量比较大，但是map端缓冲的大小是固定的，可能会出现map端缓冲数据频繁spill溢写到磁盘文件中的情况，使得性能非常低下，通过调节map端缓冲的大小，可以避免频繁的磁盘IO操作，进而提升Spark任务的整体性能。
 
@@ -364,7 +366,7 @@ val conf = new SparkConf()
 
   .set("spark.shuffle.file.buffer", "64")
 
-### 1.3.2   Shuffle调优二：调节reduce端拉取数据缓冲区大小
+#### 1.3.2   Shuffle调优二：调节reduce端拉取数据缓冲区大小
 
 Spark Shuffle过程中，shuffle reduce task的buffer缓冲区大小决定了reduce task每次能够缓冲的数据量，也就是每次能够拉取的数据量，如果内存资源较为充足，适当增加拉取数据缓冲区的大小，可以减少拉取数据的次数，也就可以减少网络传输的次数，进而提升性能。
 
@@ -376,7 +378,7 @@ val conf = new SparkConf()
 
   .set("spark.reducer.maxSizeInFlight", "96")
 
-### 1.3.3   Shuffle调优三：调节reduce端拉取数据重试次数
+#### 1.3.3   Shuffle调优三：调节reduce端拉取数据重试次数
 
 Spark Shuffle过程中，reduce task拉取属于自己的数据时，如果因为网络异常等原因导致失败会自动进行重试。对于那些包含了特别耗时的shuffle操作的作业，建议增加重试最大次数（比如60次），以避免由于JVM的full gc或者网络不稳定等因素导致的数据拉取失败。在实践中发现，对于针对超大数据量（数十亿~上百亿）的shuffle过程，调节该参数可以大幅度提升稳定性。
 
@@ -388,7 +390,7 @@ val conf = new SparkConf()
 
   .set("spark.shuffle.io.maxRetries", "6")
 
-### 1.3.4   Shuffle调优四：调节reduce端拉取数据等待间隔
+#### 1.3.4   Shuffle调优四：调节reduce端拉取数据等待间隔
 
 Spark Shuffle过程中，reduce task拉取属于自己的数据时，如果因为网络异常等原因导致失败会自动进行重试，在一次失败后，会等待一定的时间间隔再进行重试，可以通过加大间隔时长（比如60s），以增加shuffle操作的稳定性。
 
@@ -400,7 +402,7 @@ val conf = new SparkConf()
 
   .set("spark.shuffle.io.retryWait", "60s")
 
-### 1.3.5   Shuffle调优五：调节SortShuffle排序操作阈值
+#### 1.3.5   Shuffle调优五：调节SortShuffle排序操作阈值
 
 对于SortShuffleManager，如果shuffle reduce task的数量小于某一阈值则shuffle write过程中不会进行排序操作，而是直接按照未经优化的HashShuffleManager的方式去写数据，但是最后会将每个task产生的所有临时磁盘文件都合并成一个文件，并会创建单独的索引文件。
 
@@ -414,11 +416,11 @@ val conf = new SparkConf()
 
   .set("spark.shuffle.sort.bypassMergeThreshold", "400")
 
-## 1.4 JVM调优
+### 1.4 JVM调优
 
 对于JVM调优，首先应该明确，(major)full gc/minor gc，都会导致JVM的工作线程停止工作，即stop the world。
 
-### 1.4.1 JVM调优一：降低cache操作的内存占比
+#### 1.4.1 JVM调优一：降低cache操作的内存占比
 
 \1.   静态内存管理机制
 
@@ -440,7 +442,7 @@ val conf = new SparkConf()
 
 根据Spark统一内存管理机制，堆内存被划分为了两块，Storage和Execution。Storage主要用于缓存数据，Execution主要用于缓存在shuffle过程中产生的中间数据，两者所组成的内存部分称为统一内存，Storage和Execution各占统一内存的50%，由于动态占用机制的实现，shuffle过程需要的内存过大时，会自动占用Storage的内存区域，因此无需手动进行调节。
 
-### 1.4.2 JVM调优二：调节Executor堆外内存 
+#### 1.4.2 JVM调优二：调节Executor堆外内存
 
 Executor的堆外内存主要用于程序的共享库、Perm Space、 线程Stack和一些Memory mapping等, 或者类C方式allocate object。
 
@@ -458,7 +460,7 @@ Executor堆外内存的配置需要在spark-submit脚本里配置，如代码清
 
 以上参数配置完成后，会避免掉某些JVM OOM的异常问题，同时，可以提升整体Spark作业的性能。
 
-### 1.4.3 JVM调优三：调节连接等待时长 
+#### 1.4.3 JVM调优三：调节连接等待时长
 
 在Spark作业运行过程中，Executor优先从自己本地关联的BlockManager中获取某份数据，如果本地BlockManager没有的话，会通过TransferService远程连接其他节点上Executor的BlockManager来获取数据。
 
@@ -474,7 +476,7 @@ Executor堆外内存的配置需要在spark-submit脚本里配置，如代码清
 
 调节连接等待时长后，通常可以避免部分的XX文件拉取失败、XX文件lost等报错。
 
-# 第二章       Spark 数据倾斜
+### 第二章       Spark 数据倾斜
 
 Spark中的数据倾斜问题主要指shuffle过程中出现的数据倾斜问题，是由于不同的key对应的数据量不同导致的不同task所处理的数据量不同的问题。
 
@@ -494,7 +496,7 @@ Spark中的数据倾斜问题主要指shuffle过程中出现的数据倾斜问�
 
 \2.  查看Spark作业的log文件，log文件对于错误的记录会精确到代码的某一行，可以根据异常定位到的代码位置来明确错误发生在第几个stage，对应的shuffle算子是哪一个；
 
-## 2.1 解决方案一：聚合原数据
+### 2.1 解决方案一：聚合原数据
 
 \1.    避免shuffle过程·
 
@@ -518,11 +520,11 @@ key的数量增加，可能使数据倾斜更严重。
 
 例如，目前有10万条用户数据，当前key的粒度是（省，城市，区，日期），现在我们考虑扩大粒度，将key的粒度扩大为（省，城市，日期），这样的话，key的数量会减少，key之间的数据量差异也有可能会减少，由此可以减轻数据倾斜的现象和问题。（此方法只针对特定类型的数据有效，当应用场景不适宜时，会加重数据倾斜）
 
-## 2.2 解决方案二：过滤导致倾斜的key
+### 2.2 解决方案二：过滤导致倾斜的key
 
 如果在Spark作业中允许丢弃某些数据，那么可以考虑将可能导致数据倾斜的key进行过滤，滤除可能导致数据倾斜的key对应的数据，这样，在Spark作业中就不会发生数据倾斜了。
 
-## 2.3 解决方案三：提高shuffle操作中的reduce并行度
+### 2.3 解决方案三：提高shuffle操作中的reduce并行度
 
 当方案一和方案二对于数据倾斜的处理没有很好的效果时，可以考虑提高shuffle过程中的reduce端并行度，reduce端并行度的提高就增加了reduce端task的数量，那么每个task分配到的数据量就会相应减少，由此缓解数据倾斜问题。
 
@@ -540,7 +542,7 @@ key的数量增加，可能使数据倾斜更严重。
 
 在理想情况下，reduce端并行度提升后，会在一定程度上减轻数据倾斜的问题，甚至基本消除数据倾斜；但是，在一些情况下，只会让原来由于数据倾斜而运行缓慢的task运行速度稍有提升，或者避免了某些task的OOM问题，但是，仍然运行缓慢，此时，要及时放弃方案三，开始尝试后面的方案。
 
-## 2.4 解决方案四：使用随机key实现双重聚合
+### 2.4 解决方案四：使用随机key实现双重聚合
 
 当使用了类似于groupByKey、reduceByKey这样的算子时，可以考虑使用随机key实现双重聚合，如图3-1所示：
 
@@ -554,7 +556,7 @@ key的数量增加，可能使数据倾斜更严重。
 
 此方法也是前几种方案没有比较好的效果时要尝试的解决方案。
 
-## 2.5 解决方案五：将reduce join转换为map join
+### 2.5 解决方案五：将reduce join转换为map join
 
 正常情况下，join操作都会执行shuffle过程，并且执行的是reduce join，也就是先将所有相同的key和对应的value汇聚到一个reduce task中，然后再进行join。普通join的过程如下图所示：
 
@@ -582,7 +584,7 @@ key的数量增加，可能使数据倾斜更严重。
 
 由于Spark的广播变量是在每个Executor中保存一个副本，如果两个RDD数据量都比较大，那么如果将一个数据量比较大的  RDD做成广播变量，那么很有可能会造成内存溢出。
 
-## 2.6 解决方案六：sample采样对倾斜key单独进行join
+### 2.6 解决方案六：sample采样对倾斜key单独进行join
 
 在Spark中，如果某个RDD只有一个key，那么在shuffle过程中会默认将此key对应的数据打散，由不同的reduce端task进行处理。
 
@@ -602,7 +604,7 @@ key的数量增加，可能使数据倾斜更严重。
 
 如果一个RDD中导致数据倾斜的key很多，那么此方案不适用。
 
-## 2.7 解决方案七：使用随机数以及扩容进行join
+### 2.7 解决方案七：使用随机数以及扩容进行join
 
 如果在进行join操作时，RDD中有大量的key导致数据倾斜，那么进行分拆key也没什么意义，此时就只能使用最后一种方案来解决问题了，对于join操作，我们可以考虑对其中一个RDD数据进行扩容，另一个RDD进行稀释后再join。
 
@@ -642,9 +644,9 @@ key的数量增加，可能使数据倾斜更严重。
 
 6. 最后将两次join的结果使用union算子合并起来即可，就是最终的join结果。
 
-# 第三章       Spark Troubleshooting
+### 第三章       Spark Troubleshooting
 
-## 3.1 故障排除一：控制reduce端缓冲大小以避免OOM
+### 3.1 故障排除一：控制reduce端缓冲大小以避免OOM
 
 在Shuffle过程，reduce端task并不是等到map端task将其数据全部写入磁盘后再去拉取，而是map端写一点数据，reduce端task就会拉取一小部分数据，然后立即进行后面的聚合、算子函数的使用等操作。
 
@@ -660,7 +662,7 @@ reduce端task会一边拉取一边计算，不一定每次都会拉满48MB的数
 
 ​       注意，要保证任务能够运行，再考虑性能的优化。
 
-## 3.2 故障排除二：JVM GC导致的shuffle文件拉取失败
+### 3.2 故障排除二：JVM GC导致的shuffle文件拉取失败
 
 ​       在Spark作业中，有时会出现shuffle file not found的错误，这是非常常见的一个报错，有时出现这种错误以后，选择重新执行一遍，就不再报出这种错误。
 
@@ -678,7 +680,7 @@ val conf = new SparkConf()
 
 
 
-## 3.3 故障排除三：解决各种序列化导致的报错
+### 3.3 故障排除三：解决各种序列化导致的报错
 
 当Spark作业在运行过程中报错，而且报错信息中含有Serializable等类似词汇，那么可能是序列化问题导致的报错。
 序列化问题要注意以下三点：
@@ -687,7 +689,7 @@ val conf = new SparkConf()
 2.  算子函数里可以使用的外部的自定义变量，必须是可以序列化的；
 3.  不可以在RDD的元素类型、算子函数里使用第三方的不支持序列化的类型，例如Connection。
 
-## 3.4 故障排除四：解决算子函数返回NULL导致的问题
+### 3.4 故障排除四：解决算子函数返回NULL导致的问题
 
 在一些算子函数里，需要我们有一个返回值，但是在一些情况下我们不希望有返回值，此时我们如果直接返回NULL，会报错，例如Scala.Math(NULL)异常。
 
@@ -697,7 +699,7 @@ val conf = new SparkConf()
 2.  在通过算子获取到了一个RDD之后，可以对这个RDD执行filter操作，进行数据过滤，将数值为-1的数据给过滤掉；
 3.  在使用完filter算子后，继续调用coalesce算子进行优化。
 
-## 3.5 故障排除五：解决YARN-CLIENT模式导致的网卡流量激增问题
+### 3.5 故障排除五：解决YARN-CLIENT模式导致的网卡流量激增问题
 
 YARN-client模式的运行原理如下图所示：
 
@@ -713,7 +715,7 @@ YARN-client模式的运行原理如下图所示：
 
 在生产环境下，使用的一定是YARN-cluster模式。在YARN-cluster模式下，就不会造成本地机器网卡流量激增问题，如果YARN-cluster模式下存在网络通信的问题，需要运维团队进行解决。
 
-## 3.6 故障排除六：解决YARN-CLUSTER模式的JVM栈内存溢出无法执行问题
+### 3.6 故障排除六：解决YARN-CLUSTER模式的JVM栈内存溢出无法执行问题
 
 YARN-cluster模式的运行原理如下图所示：
 
@@ -737,7 +739,7 @@ YARN-cluster模式的运行原理如下图所示：
 
 通过上述方法就设置了Driver永久代的大小，默认为128MB，最大256MB，这样就可以避免上面所说的问题。
 
-## 3.7 故障排除七：解决SparkSQL导致的JVM栈内存溢出
+### 3.7 故障排除七：解决SparkSQL导致的JVM栈内存溢出
 
 ​      当SparkSQL的sql语句有成百上千的or关键字时，就可能会出现Driver端的JVM栈内存溢出。
 
@@ -745,7 +747,7 @@ YARN-cluster模式的运行原理如下图所示：
 
 ​      此时，建议将一条sql语句拆分为多条sql语句来执行，每条sql语句尽量保证100个以内的子句。根据实际的生产环境试验，一条sql语句的or关键字控制在100个以内，通常不会导致JVM栈内存溢出。
 
-## 3.8 故障排除八：持久化与checkpoint的使用
+### 3.8 故障排除八：持久化与checkpoint的使用
 
 Spark持久化在大部分情况下是没有问题的，但是有时数据可能会丢失，如果数据一旦丢失，就需要对丢失的数据重新进行计算，计算完后再缓存和使用，为了避免数据的丢失，可以选择对这个RDD进行checkpoint，也就是将数据持久化一份到容错的文件系统上（比如HDFS）。
 

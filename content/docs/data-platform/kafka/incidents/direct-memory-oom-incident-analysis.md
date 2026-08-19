@@ -4,6 +4,8 @@ description: Kafka broker direct buffer memory exhaustion investigation and reme
 weight: 20
 tags: ['kafka', 'operations', 'direct-memory', 'oom']
 ---
+# Kafka Direct Memory OOM Incident Analysis
+
 
 <!--
  Licensed to the Apache Software Foundation (ASF) under one or more
@@ -22,9 +24,9 @@ tags: ['kafka', 'operations', 'direct-memory', 'oom']
  limitations under the License.
 -->
 
-# Kafka Direct Memory OOM 排查报告
+## Kafka Direct Memory OOM 排查报告
 
-## 1. 文档信息
+### 1. 文档信息
 
 - 排查日期：2026-08-12
 - Kafka 版本：3.9.2 定制分支
@@ -36,7 +38,7 @@ tags: ['kafka', 'operations', 'direct-memory', 'oom']
 
 本文中的主机、IP、认证信息等已省略。
 
-## 2. 故障现象
+### 2. 故障现象
 
 Broker 网络 Processor 报错：
 
@@ -66,7 +68,7 @@ kafka.network.Processor.poll
 77,908,729 bytes = 74.30 MiB
 ```
 
-## 3. 结论摘要
+### 3. 结论摘要
 
 本次故障不是普通 Java Heap OOM，也不是少量未释放业务对象导致的传统内存泄漏。
 
@@ -81,7 +83,7 @@ kafka.network.Processor.poll
 
 最大来源是 Tiered Storage 的 200 个 `remote-log-reader` 线程，每个线程缓存约 55 MiB，合计约 10.74 GiB。
 
-## 4. 关键配置
+### 4. 关键配置
 
 与本次问题直接相关的配置：
 
@@ -116,7 +118,7 @@ remote.log.reader.threads=200
 
 Kafka 代码中的默认值为 10，线上值需要继续确认来自静态配置、配置模板还是部署平台注入。
 
-## 5. Direct Memory 上限确认
+### 5. Direct Memory 上限确认
 
 执行：
 
@@ -136,9 +138,9 @@ JDK 17 未显式配置 `MaxDirectMemorySize` 时，Direct Buffer 上限默认采
 
 `jdk.nio.maxCachedBufferSize` 未配置时，JDK NIO 临时 direct buffer 缓存上限为 `Long.MAX_VALUE`。
 
-## 6. Kafka 网络读取代码路径
+### 6. Kafka 网络读取代码路径
 
-### 6.1 Kafka 分配 heap buffer
+#### 6.1 Kafka 分配 heap buffer
 
 `NetworkReceive` 读取请求长度并申请缓冲区：
 
@@ -161,7 +163,7 @@ ByteBuffer.allocate(sizeBytes);
 - `clients/src/main/java/org/apache/kafka/common/memory/MemoryPool.java`
 - `clients/src/main/java/org/apache/kafka/common/memory/SimpleMemoryPool.java`
 
-### 6.2 JDK 申请临时 direct buffer
+#### 6.2 JDK 申请临时 direct buffer
 
 Kafka 将 heap buffer 传入：
 
@@ -179,9 +181,9 @@ ByteBuffer temporary = Util.getTemporaryDirectBuffer(remaining);
 
 本次 74.30 MiB 的 OOM 申请来自这条路径。
 
-## 7. 现场数据采集
+### 7. 现场数据采集
 
-### 7.1 JMX Direct BufferPool
+#### 7.1 JMX Direct BufferPool
 
 Prometheus/JMX 指标：
 
@@ -219,7 +221,7 @@ java.nio:type=BufferPool,name=direct
 java.nio:type=BufferPool,name=mapped
 ```
 
-### 7.2 Class Histogram
+#### 7.2 Class Histogram
 
 执行：
 
@@ -244,7 +246,7 @@ sun.nio.ch.Util$BufferCache                428
 - `DirectByteBuffer$Deallocator` 数量约 590，与 JMX Direct Buffer Count 基本一致。
 - 真实 native direct allocation 大约为 590 个。
 
-### 7.3 线程统计
+#### 7.3 线程统计
 
 线程 Dump 确认：
 
@@ -261,9 +263,9 @@ Fetcher 由以下组合唯一确定：
 (sourceBrokerId, fetcherId)
 ```
 
-## 8. Heap Dump 与 MAT 分析
+### 8. Heap Dump 与 MAT 分析
 
-### 8.1 生成 Heap Dump
+#### 8.1 生成 Heap Dump
 
 在低峰期执行：
 
@@ -278,7 +280,7 @@ jcmd $PID GC.heap_dump /independent-disk/kafka-direct-$PID.hprof
 - Dump 可能包含消息内容、认证信息等敏感数据。
 - HPROF 不保存 16 GiB native数据本身，但会保存 DirectByteBuffer wrapper、容量和 GC Root 引用。
 
-### 8.2 MAT 解析结果
+#### 8.2 MAT 解析结果
 
 MAT 识别：
 
@@ -302,7 +304,7 @@ Util.BufferCache：                     430
 
 Full GC 无法释放这些 buffer，因为它们仍然存在强引用。
 
-## 9. Direct Memory 占用明细
+### 9. Direct Memory 占用明细
 
 | 来源 | 线程数 | Buffer数 | 容量 | 占比 |
 |---|---:|---:|---:|---:|
@@ -312,7 +314,7 @@ Full GC 无法释放这些 buffer，因为它们仍然存在强引用。
 | ReplicaFetcher | 76 | 75 | 393 MiB | 2.4% |
 | 其他线程 | 少量 | 少量 | 约 12 MiB | 小于 0.1% |
 
-### 9.1 Remote Log Reader
+#### 9.1 Remote Log Reader
 
 200 个 `remote-log-reader` 线程全部持有约 55 MiB 的临时 direct buffer：
 
@@ -352,7 +354,7 @@ ByteBuffer buffer = ByteBuffer.allocate(updatedFetchSize);
 Utils.readFully(remoteSegInputStream, buffer);
 ```
 
-#### 9.1.1 为什么读取大小是 55 MiB
+##### 9.1.1 为什么读取大小是 55 MiB
 
 Broker默认：
 
@@ -382,7 +384,7 @@ ByteBuffer buffer = ByteBuffer.allocate(updatedFetchSize);
 
 这里的 `ByteBuffer.allocate` 不是direct allocation，55 MiB首先计入Java Heap。
 
-#### 9.1.2 为什么MAT中的容量略小于55 MiB
+##### 9.1.2 为什么MAT中的容量略小于55 MiB
 
 Kafka找到第一个RecordBatch后，会先把它写入目标heap buffer：
 
@@ -416,7 +418,7 @@ updatedFetchSize - firstBatchSize
 
 这也是200个缓存都非常接近55 MiB，但并不完全相等的原因。
 
-#### 9.1.3 heap buffer为什么又产生direct buffer
+##### 9.1.3 heap buffer为什么又产生direct buffer
 
 `Utils.readFully` 取出heap ByteBuffer背后的数组，并把全部剩余长度传给一次 `InputStream.read`：
 
@@ -461,7 +463,7 @@ Kafka heap byte[] / ByteBuffer，55 MiB
 
 HPROF不保存native allocation的原始调用栈，因此不能仅靠Heap Dump还原远程存储插件内部的每一层调用；但Buffer容量、所属线程和Kafka传入的剩余读取长度精确对应，可以确认该direct buffer来自这一大块heap IO的JDK临时缓冲机制。
 
-#### 9.1.4 为什么读取结束后仍不释放
+##### 9.1.4 为什么读取结束后仍不释放
 
 JDK NIO在IO结束后不会立即free临时direct buffer，而是执行：
 
@@ -484,7 +486,7 @@ remote-log-reader-N
 
 后续即使该线程只读取1 MiB，也可以复用这块55 MiB buffer；JDK不会因为请求变小而自动缩容。
 
-#### 9.1.5 为什么每个Reader线程都有一块
+##### 9.1.5 为什么每个Reader线程都有一块
 
 Remote Log Reader使用固定线程池：
 
@@ -538,7 +540,7 @@ fetch.max.bytes           = 55 MiB
 
 这是一种线程级的历史最大水位行为，而不是每次请求结束后归零。JMX通常表现为阶梯式增长：每触达一个尚未处理过大请求的Reader线程，Direct Memory就增加约55 MiB，最终达到稳定高位。
 
-#### 9.1.6 配置变化对缓存的影响
+##### 9.1.6 配置变化对缓存的影响
 
 降低 `fetch.max.bytes` 只能降低后续IO请求尺寸，不能让当前线程已经缓存的55 MiB buffer自动缩小。较小请求仍会复用较大的缓存。
 
@@ -554,7 +556,7 @@ fetch.max.bytes           = 55 MiB
 
 从机制上解决该问题，需要限制传给底层 `InputStream.read` 或NIO Channel的单次读取长度。例如按1 MiB分块后，单个Reader线程的JDK临时direct buffer高水位可以从约55 MiB降低到约1 MiB。
 
-### 9.2 SASL_PLAINTEXT 网络 Processor
+#### 9.2 SASL_PLAINTEXT 网络 Processor
 
 两个 data-plane listener各有40个 Processor，但大 buffer 几乎全部位于外部客户端 listener：
 
@@ -582,7 +584,7 @@ owner    = SASL_PLAINTEXT network Processor
 
 这直接证明 OOM 请求已经存在于网络线程缓存中。
 
-### 9.3 Kafka Request Handler
+#### 9.3 Kafka Request Handler
 
 40个 Request Handler 合计缓存约 1.77 GiB。
 
@@ -603,15 +605,15 @@ heap request buffer
 + 磁盘写入 temporary direct buffer
 ```
 
-## 10. 根因
+### 10. 根因
 
-### 10.1 第一根因：Remote Log Reader线程数过高
+#### 10.1 第一根因：Remote Log Reader线程数过高
 
 `remote.log.reader.threads` 的有效值为200，是默认值10的20倍。
 
 每个 Reader线程缓存约55 MiB，单项占用10.74 GiB，是最主要来源。
 
-### 10.2 第二根因：JDK大型临时 Buffer缓存不受限
+#### 10.2 第二根因：JDK大型临时 Buffer缓存不受限
 
 未配置：
 
@@ -621,7 +623,7 @@ heap request buffer
 
 JDK 17 会长期缓存线程处理过的最大临时 direct buffer。线程不退出，buffer通常不会释放。
 
-### 10.3 第三根因：允许约100 MiB的客户端请求
+#### 10.3 第三根因：允许约100 MiB的客户端请求
 
 ```properties
 socket.request.max.bytes=104857600
@@ -629,7 +631,7 @@ socket.request.max.bytes=104857600
 
 外部 SASL listener已处理大量50至80 MiB请求，导致网络 Processor和Request Handler分别缓存大型 direct buffer。
 
-### 10.4 放大因素：线程数量
+#### 10.4 放大因素：线程数量
 
 ```properties
 num.network.threads=40
@@ -644,9 +646,9 @@ Direct Memory风险近似为：
 长期存活IO线程数 * 每个线程处理过的最大IO尺寸
 ```
 
-## 11. 整改建议
+### 11. 整改建议
 
-### 11.1 P0：降低 Remote Log Reader线程数
+#### 11.1 P0：降低 Remote Log Reader线程数
 
 首先确认200的配置来源：
 
@@ -671,7 +673,7 @@ RemoteLogReaderFetchRateAndTimeMs
 
 不应在没有流量评估的情况下直接保留200个线程。
 
-### 11.2 P0：配置后滚动重启
+#### 11.2 P0：配置后滚动重启
 
 当前缓存被 ThreadLocal 强引用：
 
@@ -686,7 +688,7 @@ Thread
 
 完成配置修改后需要滚动重启 Broker，使旧线程退出并释放缓存。
 
-### 11.3 P1：限制JDK临时 Buffer缓存
+#### 11.3 P1：限制JDK临时 Buffer缓存
 
 可以评估加入：
 
@@ -698,7 +700,7 @@ Thread
 
 注意：超过阈值的临时buffer不再长期缓存，但大IO仍会发生瞬时direct分配。阈值过小可能导致大请求反复申请和释放direct memory，需要配合线程数调整并进行性能压测。
 
-### 11.4 P1：评估降低 `fetch.max.bytes`
+#### 11.4 P1：评估降低 `fetch.max.bytes`
 
 当前默认值：
 
@@ -710,7 +712,7 @@ fetch.max.bytes=57671680
 
 降低该值可能影响消费者单次Fetch吞吐，需要结合消息批次大小和客户端Fetch配置评估。
 
-### 11.5 P1：限制排队请求总字节数
+#### 11.5 P1：限制排队请求总字节数
 
 当前：
 
@@ -727,7 +729,7 @@ queued.max.request.bytes=<容量评估值>
 
 该值必须不小于 `socket.request.max.bytes`，用于控制 heap 请求缓冲区并提供网络反压。
 
-### 11.6 P1：重新评估网络与IO线程数
+#### 11.6 P1：重新评估网络与IO线程数
 
 根据以下指标评估：
 
@@ -740,7 +742,7 @@ RequestHandlerAvgIdlePercent
 
 当前每个data-plane listener有40个网络线程，总计80个。线程数越多，可形成的独立JDK BufferCache越多。
 
-### 11.7 P2：代码层限制单次IO窗口
+#### 11.7 P2：代码层限制单次IO窗口
 
 长期方案可以考虑限制单次heap buffer IO窗口，而不是将整个剩余容量交给JDK NIO。
 
@@ -768,7 +770,7 @@ inputStream.read(array, offset, chunkSize);
 - Remote Storage SDK行为
 - Java 17和后续JDK版本兼容性
 
-## 12. 验证方案
+### 12. 验证方案
 
 整改后持续观察：
 
@@ -798,9 +800,9 @@ direct_memory_used / direct_memory_capacity > 70%
 
 并对80%和90%设置更高等级告警。
 
-## 13. 常用排查命令
+### 13. 常用排查命令
 
-### JVM参数
+#### JVM参数
 
 ```bash
 jcmd $PID VM.command_line
@@ -808,7 +810,7 @@ jcmd $PID VM.flags | grep -E 'MaxHeapSize|MaxDirectMemorySize'
 jcmd $PID VM.system_properties | grep jdk.nio.maxCachedBufferSize
 ```
 
-### 线程
+#### 线程
 
 ```bash
 jcmd $PID Thread.print -l > /tmp/kafka-threads.txt
@@ -820,21 +822,21 @@ grep '^"ReplicaFetcherThread-' /tmp/kafka-threads.txt |
   wc -l
 ```
 
-### Direct Buffer对象
+#### Direct Buffer对象
 
 ```bash
 jcmd $PID GC.class_histogram -all |
   grep -E 'DirectByteBuffer|MappedByteBuffer|Util\$BufferCache|Deallocator'
 ```
 
-### JMX/Prometheus
+#### JMX/Prometheus
 
 ```bash
 curl -s http://127.0.0.1:<metrics-port>/metrics |
   grep -iE 'buffer.*direct|direct.*buffer'
 ```
 
-### Heap Dump
+#### Heap Dump
 
 ```bash
 jcmd $PID GC.heap_info
@@ -842,7 +844,7 @@ jcmd $PID help GC.heap_dump
 jcmd $PID GC.heap_dump /independent-disk/kafka-direct-$PID.hprof
 ```
 
-## 14. 最终结论
+### 14. 最终结论
 
 本次Direct Memory OOM由多个因素叠加：
 

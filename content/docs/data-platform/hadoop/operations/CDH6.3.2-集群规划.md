@@ -4,7 +4,7 @@ title: "CDH6.3.2 集群规划"
 
 # CDH6.3.2 集群规划
 
-# 基础
+## 基础
 
 ## 硬件信息
 
@@ -77,7 +77,7 @@ systemctl restart cloudera-scm-server
 | Apache Sqoop     | 1.4.7   |
 | Apache ZooKeeper | 3.4.5   |
 
-# 集群规划
+## 集群规划
 
 | 49        | 50       | 51            | 52       | 53        | 54        | 55        |
 | --------- | -------- | ------------- | -------- | --------- | --------- | --------- |
@@ -101,7 +101,7 @@ systemctl restart cloudera-scm-server
 | Oozie     |          |               |          |           |           |           |
 | sentry    |          |               |          |           |           |           |
 
-# 数据迁移
+## 数据迁移
 
 HDFS数据迁移:
 

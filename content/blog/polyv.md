@@ -1,30 +1,32 @@
 ---
 title: "Polyv"
 ---
+# Polyv
+
 
 Polyv集成设计文档
 
-# 背景
+## 背景
 
 Iparllay集成polyv
 
-# 需求描述
+## 需求描述
 
 https://www.tapd.cn/54503349/prong/stories/view/1154503349001007135
 
-# 功能划分
+## 功能划分
 
 ![polyv对接设计](polyv.assets/polyv%E5%AF%B9%E6%8E%A5%E8%AE%BE%E8%AE%A1.jpg)
 
-# 模块设计
+## 模块设计
 
-## workflow
+### workflow
 
 目前workflow都是以platId和openId（还有企微的unionId）为基础创建的，节点信息存储以及上下游的接口对接都是基于这两个Id来实现的，但是polyv是不属于微信生态的，我们无法直接获得platId和openId，这里我们需要变更为我们的客户中台的businessId和contactId
 
 为了兼容openId和contactId，不
 
-### 工作流创建
+#### 工作流创建
 
 集成polyv无法直接使用微信生态的openId和platId（替换为我们的contactId和BusinessId），为了区分，需要标记工作流是哪种
 
@@ -62,7 +64,7 @@ POST /workflow/manage
 }
 ```
 
-### Element存储
+#### Element存储
 
 Event新增2个Property：
 
@@ -143,7 +145,7 @@ Rule新增5个Property：
 }
 ```
 
-### 新增一个Action
+#### 新增一个Action
 
 新增一个空动作 countdown来实现倒计时功能
 
@@ -170,7 +172,7 @@ extension增加：
 * countdownValue
   * 倒计时时长，单位ms，int64
 
-### Business接口
+#### Business接口
 
 Business服务增加一个接口，用来获取channel信息，用户设置polyv事件和属性时选择使用哪个channel
 
@@ -210,7 +212,7 @@ response:
 }
 ```
 
-### 事件接口
+#### 事件接口
 
 POST  /rest/polyv/event
 

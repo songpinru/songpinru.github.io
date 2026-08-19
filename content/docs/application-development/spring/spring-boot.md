@@ -1,8 +1,10 @@
 ---
 title: "Spring Boot"
 ---
+# Spring Boot
 
-# 一、运行原理初探
+
+## 一、运行原理初探
 
 我们之前写的HelloSpringBoot，到底是怎么运行的呢，Maven项目，我们一般从pom.xml文件探究起；
 
@@ -12,7 +14,7 @@ title: "Spring Boot"
 
 
 
-## 父依赖
+### 父依赖
 
 其中它主要是依赖一个父项目，主要是管理项目的资源过滤及插件！
 
@@ -45,7 +47,7 @@ title: "Spring Boot"
 
 
 
-## 启动器 spring-boot-starter
+### 启动器 spring-boot-starter
 
 ```xml
 <dependency>
@@ -62,13 +64,13 @@ SpringBoot将所有的功能场景都抽取出来，做成一个个的starter �
 
 
 
-## 主启动类
+### 主启动类
 
 分析完了 pom.xml 来看看这个启动类
 
 
 
-### 默认的主启动类
+#### 默认的主启动类
 
 
 ```java
@@ -86,7 +88,7 @@ class SpringbootApplication {
 
 
 
-### @SpringBootApplication
+#### @SpringBootApplication
 
 作用：标注在某个类上说明这个类是SpringBoot的主配置类 ， SpringBoot就应该运行这个类的main方法来启动SpringBoot应用；
 
@@ -112,7 +114,7 @@ public @interface SpringBootApplication {
 
 
 
-### @ComponentScan
+#### @ComponentScan
 
 这个注解在Spring中很重要 ,它对应XML配置中的元素。
 
@@ -120,7 +122,7 @@ public @interface SpringBootApplication {
 
 
 
-### @SpringBootConfiguration
+#### @SpringBootConfiguration
 
 作用：SpringBoot的配置类 ，标注在某个类上 ， 表示这是一个SpringBoot的配置类；
 
@@ -144,7 +146,7 @@ public @interface Configuration {}
 
 
 
-### @EnableAutoConfiguration
+#### @EnableAutoConfiguration
 
 **@EnableAutoConfiguration ：开启自动配置功能**
 
@@ -243,7 +245,7 @@ private static Map<String, List<String>> loadSpringFactories(@Nullable ClassLoad
 
 
 
-### spring.factories
+#### spring.factories
 
 我们根据源头打开spring.factories ， 看到了很多自动配置的文件；这就是自动配置根源所在！
 
@@ -271,9 +273,9 @@ private static Map<String, List<String>> loadSpringFactories(@Nullable ClassLoad
 
 
 
-## SpringApplication
+### SpringApplication
 
-### 不简单的方法
+#### 不简单的方法
 
 我最初以为就是运行了一个main方法，没想到却开启了一个服务；
 
@@ -291,7 +293,7 @@ public class SpringbootApplication {
 
 分析该方法主要分两部分，一部分是SpringApplication的实例化，二是run方法的执行；
 
-### SpringApplication
+#### SpringApplication
 
 **这个类主要做了以下四件事情：**
 
@@ -317,16 +319,16 @@ public SpringApplication(ResourceLoader resourceLoader, Class... primarySources)
 
 
 
-### run方法流程分析
+#### run方法流程分析
 
 ![img](spring-boot.assets/640-1596297574860.jpg)
 
 跟着源码和这幅图就可以一探究竟了！
 
 
-# 二、JSR303数据校验及多环境切换
+## 二、JSR303数据校验及多环境切换
 
-##  如何使用
+### 如何使用
 
 Springboot中可以用@validated来校验数据，如果数据异常则会统一抛出异常，方便异常中心统一处理。我们这里来写个注解让我们的name只能支持Email格式；
 
@@ -347,7 +349,7 @@ public class Person {
 
 **使用数据校验，可以保证数据的正确性；** 
 
-## 常见参数
+### 常见参数
 
 ```java
 @NotNull(message="名字不能为空")
@@ -382,11 +384,11 @@ Booelan检查
 
 
 
-## 多环境切换
+### 多环境切换
 
 profile是Spring对不同环境提供不同配置功能的支持，可以通过激活不同的环境版本，实现快速切换环境；
 
-### 多配置文件
+#### 多配置文件
 
 我们在主配置文件编写的时候，文件名可以是 application-{profile}.properties/yml , 用来指定多个环境版本；
 
@@ -408,7 +410,7 @@ spring.profiles.active=dev
 
 
 
-### yaml的多文档块
+#### yaml的多文档块
 
 和properties配置文件中一样，但是使用yml去实现不需要创建多个配置文件，更加方便了 !
 
@@ -439,7 +441,7 @@ spring:
 
 
 
-### 配置文件加载位置
+#### 配置文件加载位置
 
 **外部加载配置文件的方式十分多，我们选择最常用的即可，在开发的资源文件中进行配置！**
 
@@ -469,7 +471,7 @@ server.servlet.context-path=/kuang
 
 
 
-### 拓展，运维小技巧
+#### 拓展，运维小技巧
 
 指定位置加载配置文件
 
@@ -485,7 +487,7 @@ java -jar spring-boot-config.jar --spring.config.location=F:/application.propert
 
 
 
-# 三、SpringBoot Web开发
+## 三、SpringBoot Web开发
 
 ```xml
 <!--
@@ -528,7 +530,7 @@ SpringBoot到底帮我们配置了什么？我们能不能进行修改？能修�
 
 * 国际化
 
-# 四、员工管理系统
+## 四、员工管理系统
 
 1. 首页配置
    1. 注意点，所有页面的静态资源都需要使用thymeleaf接管；（导入thymeleaf依赖）
@@ -539,7 +541,7 @@ SpringBoot到底帮我们配置了什么？我们能不能进行修改？能修�
    3. 记得将自己写的组件配置到spring容器`@Bean`
    4. \#{}
 
-# 五、整合MyBatis
+## 五、整合MyBatis
 
 **整合包**
 
@@ -650,7 +652,7 @@ SpringBoot到底帮我们配置了什么？我们能不能进行修改？能修�
    }
    ```
 
-# 六、SpringSecurity
+## 六、SpringSecurity
 
 1. 引入 Spring Security 模块
 
@@ -712,7 +714,7 @@ SpringBoot到底帮我们配置了什么？我们能不能进行修改？能修�
    }
    ```
 
-# 七、Shiro
+## 七、Shiro
 
 * Subject 用户
 * SecurityManager 管理用户
@@ -1004,7 +1006,7 @@ SpringBoot到底帮我们配置了什么？我们能不能进行修改？能修�
    }
    ```
 
-# 八、Swagger
+## 八、Swagger
 
 学习目标：
 
@@ -1012,7 +1014,7 @@ SpringBoot到底帮我们配置了什么？我们能不能进行修改？能修�
 * 了解前后端分离
 * 在SpringBoot中集成Swagger
 
-## 一、 Swagger简介
+### 一、 Swagger简介
 
 **前后端分离时代：**
 
@@ -1031,7 +1033,7 @@ SpringBoot到底帮我们配置了什么？我们能不能进行修改？能修�
 * swagger2
 * ui
 
-## 二、SpringBoot集成Swagger
+### 二、SpringBoot集成Swagger
 
 1. 新建一个SpringBoot - web 工程
 
@@ -1066,7 +1068,7 @@ SpringBoot到底帮我们配置了什么？我们能不能进行修改？能修�
 
 5. 测试运行：http://localhost:8080/swagger-ui.html
 
-## 三、 **配置Swagger**信息
+### 三、 **配置Swagger**信息
 
 ```java
 @Configuration
@@ -1093,7 +1095,7 @@ public class SwaggerConfig {
 }
 ```
 
-## 四、 Swagger配置扫描接口
+### 四、 Swagger配置扫描接口
 
 **Docket.select（）**
 
@@ -1141,7 +1143,7 @@ public Docket docket(Environment environment){
 如何配置多个分组；多个Docket实例即可
 ![在这里插入图片描述](spring-boot.assets/20200716234258883-1596294832957.png)
 
-## 五、 接口注释
+### 五、 接口注释
 
 ![在这里插入图片描述](spring-boot.assets/20200716234316562-1596294833029.png)
 **总结：**
@@ -1154,9 +1156,9 @@ Swagger是一个优秀的工具，几乎所有的大公司都有使用它
 
 【注意点】在正式发布的时候，关闭Swagger！！出于安全考虑，而且节省运行的内存。
 
-# 九、任务
+## 九、任务
 
-## 一、异步任务
+### 一、异步任务
 
 1. 给要实现异步任务加上注解 **@Async**
 
@@ -1187,7 +1189,7 @@ Swagger是一个优秀的工具，几乎所有的大公司都有使用它
    }
    ```
 
-## 二、邮件任务
+### 二、邮件任务
 
 1. 导入依赖
 
@@ -1237,7 +1239,7 @@ Swagger是一个优秀的工具，几乎所有的大公司都有使用它
        }
    ```
 
-## 三、定时任务
+### 三、定时任务
 
 > 1. TaskScheduler 任务调度者
 > 2. TaskExecutor 任务执行者
@@ -1282,9 +1284,9 @@ Swagger是一个优秀的工具，几乎所有的大公司都有使用它
    }
    ```
 
-# 十、整合Redis
+## 十、整合Redis
 
-## SpringBoot整合
+### SpringBoot整合
 
 SpringBoot 操作数据：spring-data jpa jdbc mongodb redis！
 
@@ -1322,9 +1324,9 @@ public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory redisConne
 }
 ```
 
-## 整合测试一下
+### 整合测试一下
 
-### 1 、导入依赖
+#### 1 、导入依赖
 
 ```xml
 <!-- 操作redis -->
@@ -1334,14 +1336,14 @@ public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory redisConne
 </dependency>
 ```
 
-### 2 、配置连接
+#### 2 、配置连接
 
 ```properties
 ## 配置redis
 spring.redis.host=127.0.0.1
 spring.redis.port= 6379
 ```
-### 3、测试
+#### 3、测试
 
 ```java
 @SpringBootTest
@@ -1370,7 +1372,7 @@ class Redis02SpringbootApplicationTests {
 ```
 ![1596300687683](spring-boot.assets/1596300687683.png)
 
-#### 关于对象的保存：
+##### 关于对象的保存：
 
 ![1596300940216](spring-boot.assets/1596300940216.png)
 
@@ -1421,7 +1423,7 @@ public class RedisConfig {
 }
 ```
 
-# 十一、分布式Dubbo + Zookeeper
+## 十一、分布式Dubbo + Zookeeper
 
 zookeeper ：注册中心
 
@@ -1472,7 +1474,7 @@ Dubbo：jar包
 4. 熔断机制，服务降级
 ```
 
-# 彩蛋
+## 彩蛋
 
 如何更改启动时显示的字符拼成的字母，SpringBoot呢？也就是 banner 图案；
 
@@ -1482,7 +1484,7 @@ Dubbo：jar包
 
 ![img](spring-boot.assets/640-1596301933338.jpg)
 
-# 狂神说Java SpringBoot
+## 狂神说Java SpringBoot
 
 [狂神说SpringBoot01：Hello,World！](http://mp.weixin.qq.com/s?__biz=Mzg2NTAzMTExNg%3D%3D&chksm=ce6107eff9168ef93424fc2422c74ec5ad5755e4944bbc8a07609f185ec1ad6037eb5ae0f8da&idx=1&mid=2247483724&scene=21&sn=77ce80187dbfdbaaafa0366f6a0c9151#wechat_redirect)
 
