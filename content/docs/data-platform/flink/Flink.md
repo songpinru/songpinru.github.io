@@ -3,6 +3,7 @@ title: "Flink"
 description: "Flink 项目搭建、数据源、转换算子、窗口与状态计算实践笔记。"
 ---
 
+## 项目创建
 
 1. 使用Intellij IDEA创建一个Maven新项目
 2. 勾选`Create from archetype`，然后点击`Add Archetype`按钮
@@ -25,7 +26,8 @@ val localEnv: StreamExecutionEnvironment.createLocalEnvironment()
 val remoteEnv = StreamExecutionEnvironment.createRemoteEnvironment()
 ```
 
-##  启动yarn-session
+## 运行与提交
+### 启动yarn-session
 
 ```bash
 ./yarn-session.sh   -n 2 -s 2 -jm 1024 -tm 1024 -nm test -d  
@@ -47,7 +49,7 @@ val remoteEnv = StreamExecutionEnvironment.createRemoteEnvironment()
 
 -d：后台执行。
 
-## 不启动yarn-session，直接执行job
+### 不启动yarn-session，直接执行job
 
 ```bash
 ./flink run –m yarn-cluster -c com.wc.StreamWordCount  FlinkTutorial-1.0-SNAPSHOT-jar-with-dependencies.jar --host lcoalhost –port 7777
@@ -55,7 +57,7 @@ val remoteEnv = StreamExecutionEnvironment.createRemoteEnvironment()
 
 ## Flink Source
 
-## 从内存的Source
+### 从内存的Source
 
 * 从元素中创建：env.fromElements()
 * 从集合中创建：env.fromCollection()
@@ -78,21 +80,21 @@ val stream3: DataStream[SourceReading] = env.fromCollection(
   SourceReading("source_10", 1586575388360l, 62.635008022112174)))
 ```
 
-## 从文件的Source
+### 从文件的Source
 
 ```scala
 val stream = env.readTextFile(filePath)
 ```
 
-## 流式Source
+### 流式Source
 
-### Socket
+#### Socket
 
 ```scala
 val socketStream: DataStream[String] = env.socketTextStream("hadoop102",9999,'\n')
 ```
 
-### Kafka
+#### Kafka
 
 ```xml
 <dependency>
@@ -115,7 +117,7 @@ properties.setProperty("auto.offset.reset", "latest")
 val stream3 = env.addSource(new FlinkKafkaConsumer011[String]("sensor", new SimpleStringSchema(), properties))
 ```
 
-## 自定义Source
+### 自定义Source
 
 * 继承RichParallelSourceFunction
 * 实现两个方法run和cancel
@@ -147,9 +149,9 @@ class SendSource extends RichParallelSourceFunction[SourceReading]{
 
 ## Transformation
 
-## 转换算子
+### 转换算子
 
-### 基本转换算子
+#### 基本转换算子
 
 | 算子    | extend               |
 | ------- | -------------------- |
@@ -157,7 +159,7 @@ class SendSource extends RichParallelSourceFunction[SourceReading]{
 | flatmap | FlatMapFunction[T,R] |
 | filter  | FilterFunction[T]    |
 
-### KeyBy&滚动聚合
+#### KeyBy&滚动聚合
 
 ```scala
 val keyedStream: KeyedStream[SourceReading, Tuple] = stream1.keyBy(1)
@@ -170,7 +172,7 @@ val keyedStream: KeyedStream[SourceReading, Tuple] = stream1.keyBy(1)
 - maxBy()：在输入流上针对指定字段求最大值，并返回包含当前观察到的最大值的事件。
 - reducer()：聚合操作
 
-### 多流转换
+#### 多流转换
 
 **Connect与Union区别：**
 
@@ -178,7 +180,7 @@ val keyedStream: KeyedStream[SourceReading, Tuple] = stream1.keyBy(1)
 
 2. Connect只能操作两个流，Union可以操作多个。
 
-#### Union
+##### Union
 
 ```scala
 val tokyoStream: DataStream[SensorReading] = ...
@@ -187,7 +189,7 @@ val rioStream: DataStream[SensorReading] = ...
 val allCities: DataStream[SensorRreading] = parisStream.union(tokyoStream, rioStream)
 ```
 
-#### Connect
+##### Connect
 
 ```scala
 // first stream
@@ -218,7 +220,7 @@ class MyCoFlatMap extends CoFlatMapFunction[SourceReading,SourceReading,SourceRe
 }
 ```
 
-### 分布式转换算子(shuffle)
+#### 分布式转换算子(shuffle)
 
 **Random**
 
@@ -311,7 +313,7 @@ coGroup和join类似,coGroup返回的是两个列表(相同key)
 
 相当于 join.groupby
 
-## 窗口
+### 窗口
 
 * 全窗口：ProcessWindowFunction
 * 计数窗口：countWindow
@@ -363,7 +365,7 @@ val sessionWindows = sensorData
   .process(...)
 ```
 
-## 聚合函数
+### 聚合函数
 
 增量聚合函数keyby之后使用
 
@@ -410,13 +412,13 @@ class MyProcess extends ProcessWindowFunction[(String,Double),(String,Double,Dou
     }
 ```
 
-## 其他窗口api
+### 其他窗口api
 
 - 自定义窗口分配器
 - 自定义窗口计算触发器(trigger)
 - 自定义窗口数据清理功能(evictor)
 
-### 窗口分配器
+#### 窗口分配器
 
 WindowAssigner有两个泛型参数：
 
@@ -456,7 +458,7 @@ class ThirtySecondsWindows extends WindowAssigner[Object, TimeWindow] {
 
 
 
-### 触发器（Trigger)
+#### 触发器（Trigger)
 
 ```scala
 
@@ -539,7 +541,7 @@ Flink提供了8个Process Function：(processElement,onTimer)
   * window之后使用
 * ProcessAllWindowFunction
 
-## 侧输出 SideOutput
+### 侧输出 SideOutput
 
 * `stream.getSideOutput()`
 * `ctx.output()`
@@ -566,7 +568,7 @@ class FreezingMonitor extends ProcessFunction[SourceReading,SourceReading]{
   }
 ```
 
-## KeyedProcessFunction
+### KeyedProcessFunction
 
 ```scala
 class TempIncreaseAlertFunction extends KeyedProcessFunction[String,SourceReading,String]{
@@ -597,7 +599,7 @@ class TempIncreaseAlertFunction extends KeyedProcessFunction[String,SourceReadin
 
 ## 时间语义和Watermark
 
-## Timestamps
+### Timestamps
 
 机器时间[process、source]，事件时间
 
@@ -610,7 +612,7 @@ val env: StreamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnv
     env.getConfig.setAutoWatermarkInterval(5000)
 ```
 
-## WaterMark
+### WaterMark
 
 * 一个表示窗口结束的**事件**
 * 计算方式：最大时间戳 - 最大延迟
@@ -675,7 +677,7 @@ class PunctuatedAssigner extends AssignerWithPunctuatedWatermarks[SensorReading]
 
 ## 状态和检查点
 
-## State
+### State
 
 * 富函数（`getRunTimeContext.getState()`）或者上下文环境中的特殊变量
 * valueState
@@ -707,7 +709,7 @@ object RichFlatMapStateExample {
 }
 ```
 
-## CheckPoint
+### CheckPoint
 
 ```scala
 val env = StreamExecutionEnvironment.getExecutionEnvironment()
@@ -736,7 +738,7 @@ env.getCheckpointConfig.setMaxConcurrentCheckpoints(1)
       --allowNonRestoredState ...
 ```
 
-### 相关的配置选项
+#### 相关的配置选项
 
 更多的属性与重置值能在`conf/flink-conf.yaml`中设置（完整教程请阅读[配置](https://ci.apache.org/projects/flink/flink-docs-release-1.10/zh/ops/config.html)）。
 
@@ -755,11 +757,11 @@ env.getCheckpointConfig.setMaxConcurrentCheckpoints(1)
 
 默认情况下，状态是保持在 TaskManagers 的内存中，checkpoint 保存在 JobManager 的内存中。为了合适地持久化大体量状态， Flink 支持各种各样的途径去存储 checkpoint 状态到其他的 state backends 上。通过 `StreamExecutionEnvironment.setStateBackend(…)` 来配置所选的 state backends。
 
-## 选择
+### 选择
 
 ## Sink
 
-## Kafka
+### Kafka
 
 Kafka版本为0.11
 
@@ -790,7 +792,7 @@ union.addSink(new FlinkKafkaProducer011[String]("localhost:9092", "test", new Si
 env.execute()
 ```
 
-##  Redis
+### Redis
 
 ```xml
 <dependency>
@@ -817,7 +819,7 @@ stream.addSink(new RedisSink[SourceReading](config,new MyRedisMapper()))
 env.execute()
 ```
 
-##  ElasticSearch
+### ElasticSearch
 
 在主函数中调用：
 
@@ -854,7 +856,7 @@ dataStream.addSink(esSinkBuilder.build())
 env.execute()
 ```
 
-## JDBC自定义sink
+### JDBC自定义sink
 
 ```xml
 <dependency>
@@ -910,7 +912,7 @@ env.execute()
 
 ## Table&SQL
 
-## table:
+### Table API
 
 POM:
 
@@ -993,7 +995,7 @@ val resultTable: Table = dataTable
   .select('id, 'id.count)
 ```
 
-## SQL
+### SQL
 
 | 窗口标识函数                                | 返回类型                | 描述                                                         |
 | ------------------------------------------- | ----------------------- | ------------------------------------------------------------ |
