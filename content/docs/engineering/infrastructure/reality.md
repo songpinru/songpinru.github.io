@@ -1,8 +1,6 @@
 ---
 title: "Reality"
 ---
-# Reality
-
 
 ## reality配置
 

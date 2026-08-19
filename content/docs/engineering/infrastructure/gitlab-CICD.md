@@ -1,10 +1,6 @@
 ---
 title: "Gitlab CICD"
 ---
-# Gitlab CICD
-
-
-
 
 ## 1. docker方式安装
 

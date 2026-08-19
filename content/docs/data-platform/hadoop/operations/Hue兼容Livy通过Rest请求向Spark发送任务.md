@@ -1,8 +1,6 @@
 ---
 title: "Hue兼容Livy通过Rest请求向Spark发送任务"
 ---
-# Hue兼容Livy通过Rest请求向Spark发送任务
-
 
 ## Hue兼容Livy通过Rest请求向Spark发送任务
 

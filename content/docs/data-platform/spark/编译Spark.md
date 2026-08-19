@@ -2,7 +2,6 @@
 title: "编译Spark"
 ---
 
-# 编译Spark
 
 - 去spark官网下载源码，解压到/opt/software/source
 - 进入该目录，编译

@@ -1,8 +1,6 @@
 ---
 title: "Prometheus"
 ---
-# Prometheus
-
 
 ## 架构图
 

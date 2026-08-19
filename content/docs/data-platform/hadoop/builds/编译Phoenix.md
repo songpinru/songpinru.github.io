@@ -2,7 +2,6 @@
 title: "编译Phoenix"
 ---
 
-# 编译Phoenix
 
 - 拉取源码
 

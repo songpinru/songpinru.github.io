@@ -1,8 +1,6 @@
 ---
 title: "JavaSE葵花宝典"
 ---
-# JavaSE葵花宝典
-
 
 ## 第一章 Java概述
 

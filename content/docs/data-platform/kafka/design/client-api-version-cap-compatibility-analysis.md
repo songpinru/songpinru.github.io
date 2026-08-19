@@ -1,8 +1,6 @@
 ---
 title: "Client Api Version Cap Compatibility Analysis"
 ---
-# Client Api Version Cap Compatibility Analysis
-
 
 ## 客户端 API 版本封顶兼容性问题排查
 

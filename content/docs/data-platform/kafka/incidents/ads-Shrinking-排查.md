@@ -1,8 +1,6 @@
 ---
 title: "Ads Shrinking 排查"
 ---
-# Ads Shrinking 排查
-
 
 ## Kafka ads 集群Shrinking问题排查
 

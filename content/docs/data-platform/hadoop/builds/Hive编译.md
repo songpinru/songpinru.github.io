@@ -2,7 +2,6 @@
 title: "Hive编译"
 ---
 
-# Hive编译
 
 - 拉取源码
 

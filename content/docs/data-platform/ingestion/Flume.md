@@ -1,8 +1,6 @@
 ---
 title: "Flume"
 ---
-# Flume
-
 
 ## 安装部署
 

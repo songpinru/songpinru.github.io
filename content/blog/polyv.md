@@ -1,8 +1,6 @@
 ---
 title: "Polyv"
 ---
-# Polyv
-
 
 Polyv集成设计文档
 

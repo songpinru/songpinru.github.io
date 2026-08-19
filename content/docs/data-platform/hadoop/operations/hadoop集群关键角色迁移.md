@@ -2,8 +2,6 @@
 title: "Hadoop集群关键角色迁移"
 description: "Hadoop 集群 NameNode、ResourceManager 等关键角色的迁移方案与实施记录。"
 ---
-# Hadoop集群关键角色迁移
-
 
 ## hadoop 集群关键角色迁移方案
 

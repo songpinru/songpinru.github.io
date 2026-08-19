@@ -1,8 +1,6 @@
 ---
 title: "MirrorMaker2 On Connect Distributed 部署运维手册"
 ---
-# MirrorMaker2 On Connect Distributed 部署运维手册
-
 
 ## MirrorMaker 2 on Kafka Connect Distributed 部署运维手册
 

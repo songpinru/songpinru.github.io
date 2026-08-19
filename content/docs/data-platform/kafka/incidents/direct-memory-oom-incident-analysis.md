@@ -4,8 +4,6 @@ description: Kafka broker direct buffer memory exhaustion investigation and reme
 weight: 20
 tags: ['kafka', 'operations', 'direct-memory', 'oom']
 ---
-# Kafka Direct Memory OOM Incident Analysis
-
 
 <!--
  Licensed to the Apache Software Foundation (ASF) under one or more

@@ -2,8 +2,6 @@
 title: "HTML速查列表"
 description: "HTML 文档结构、常用标签、表单、表格和媒体元素速查。"
 ---
-# HTML速查列表
-
 
 ## HTML 基本文档
 

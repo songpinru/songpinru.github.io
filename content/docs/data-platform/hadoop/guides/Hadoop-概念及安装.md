@@ -1,8 +1,6 @@
 ---
 title: "Hadoop 概念及安装"
 ---
-# Hadoop 概念及安装
-
 
 ## 结构
 

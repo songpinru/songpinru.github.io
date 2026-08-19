@@ -1,8 +1,6 @@
 ---
 title: "正确使用Channel"
 ---
-# 正确使用Channel
-
 
 ## 正确使用channel
 

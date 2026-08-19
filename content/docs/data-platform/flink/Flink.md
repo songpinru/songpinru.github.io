@@ -3,7 +3,6 @@ title: "Flink"
 description: "Flink 项目搭建、数据源、转换算子、窗口与状态计算实践笔记。"
 ---
 
-# Flink
 
 1. 使用Intellij IDEA创建一个Maven新项目
 2. 勾选`Create from archetype`，然后点击`Add Archetype`按钮

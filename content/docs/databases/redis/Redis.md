@@ -1,8 +1,6 @@
 ---
 title: "Redis"
 ---
-# Redis
-
 
 ## 部署
 
