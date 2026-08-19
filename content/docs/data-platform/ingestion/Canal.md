@@ -1,8 +1,6 @@
 ---
 title: "Canal"
 ---
-# Canal
-
 
 ## 原理
 

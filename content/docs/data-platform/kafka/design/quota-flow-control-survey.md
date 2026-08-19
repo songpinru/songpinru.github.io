@@ -1,8 +1,6 @@
 ---
 title: "Quota Flow Control Survey"
 ---
-# Quota Flow Control Survey
-
 
 ## Kafka 流控/配额方案调研报告
 

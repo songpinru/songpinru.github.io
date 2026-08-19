@@ -1,8 +1,6 @@
 ---
 title: "Rust"
 ---
-# Rust
-
 
 RUST
 

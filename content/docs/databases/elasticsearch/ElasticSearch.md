@@ -1,8 +1,6 @@
 ---
 title: "ElasticSearch"
 ---
-# ElasticSearch
-
 
 概念：
 

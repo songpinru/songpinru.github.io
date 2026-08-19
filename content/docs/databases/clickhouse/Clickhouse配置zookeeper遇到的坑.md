@@ -1,8 +1,6 @@
 ---
 title: "Clickhouse配置Zookeeper遇到的坑"
 ---
-# Clickhouse配置Zookeeper遇到的坑
-
 
 ## Clickhouse配置zookeeper遇到的坑
 

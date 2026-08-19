@@ -1,8 +1,6 @@
 ---
 title: "Zookeeper"
 ---
-# Zookeeper
-
 
 ## 安装
 

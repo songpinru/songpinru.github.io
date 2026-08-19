@@ -1,8 +1,6 @@
 ---
 title: "MySQL九阴真经"
 ---
-# MySQL九阴真经
-
 
 ## 第一章 MySQL
 

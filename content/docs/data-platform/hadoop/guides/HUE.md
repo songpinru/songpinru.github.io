@@ -2,7 +2,6 @@
 title: "HUE"
 ---
 
-# HUE
 
 ## 什么是HUE？
 

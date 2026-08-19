@@ -1,8 +1,6 @@
 ---
 title: "Swagger"
 ---
-# Swagger
-
 
 ## 项目集成Swagger
 

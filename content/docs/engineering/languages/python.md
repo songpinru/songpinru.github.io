@@ -1,8 +1,6 @@
 ---
 title: "Python"
 ---
-# Python
-
 
 ## 基础语法
 

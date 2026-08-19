@@ -1,10 +1,6 @@
 ---
 title: "ISR Shrinking问题排查"
 ---
-# ISR Shrinking问题排查
-
-
-
 
 C12集群频繁ISR shrinking
 

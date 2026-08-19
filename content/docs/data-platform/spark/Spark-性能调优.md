@@ -1,8 +1,6 @@
 ---
 title: "Spark 性能调优"
 ---
-# Spark 性能调优
-
 
 ## 第一章       Spark 性能调优
 

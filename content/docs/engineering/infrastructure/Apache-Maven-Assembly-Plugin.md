@@ -3,7 +3,6 @@ title: "Apache Maven Assembly Plugin"
 description: "Maven Assembly Plugin 打包格式、描述符和自定义程序集配置参考。"
 ---
 
-# Apache Maven Assembly Plugin
 
 ## 支持的打包格式
 

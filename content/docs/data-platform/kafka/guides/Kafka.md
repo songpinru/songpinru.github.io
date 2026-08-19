@@ -1,8 +1,6 @@
 ---
 title: "Kafka"
 ---
-# Kafka
-
 
 ## Kafka 概念
 

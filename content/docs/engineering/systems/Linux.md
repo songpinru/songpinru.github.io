@@ -1,8 +1,6 @@
 ---
 title: "Linux"
 ---
-# Linux
-
 
 ## 关机
 

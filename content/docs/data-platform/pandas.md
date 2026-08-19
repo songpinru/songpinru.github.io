@@ -3,7 +3,6 @@ title: "Pandas"
 description: "Pandas 入门指南、数据结构、基础操作与 SQL 比较"
 ---
 
-# Pandas
 
 ## 十分钟入门 Pandas
 

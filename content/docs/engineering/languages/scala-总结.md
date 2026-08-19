@@ -1,8 +1,6 @@
 ---
 title: "Scala 总结"
 ---
-# Scala 总结
-
 
 ## 入门
 

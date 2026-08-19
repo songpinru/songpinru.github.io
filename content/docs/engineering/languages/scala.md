@@ -1,8 +1,6 @@
 ---
 title: "Scala"
 ---
-# Scala
-
 
 ## 第一章 Scala入门
 
@@ -2055,7 +2053,7 @@ def foo(implicit a: Int) = {
   implicit object String extends StringOrdering
 ```
 
-# 第八章 集合
+## 第八章 集合
 
 ## 8.1 概述
 
@@ -3123,7 +3121,7 @@ sortBy	  排序。传排序的指标; 定义 Ordering 比较元素大小
 
 
 
-# 第九章 模式匹配
+## 第九章 模式匹配
 
 ## 9.1 基本介绍
 
@@ -3604,7 +3602,7 @@ object Match9 {
 
 注意：使用 map + 偏函数 与使用 collect + 偏函数 的区别：使用 map 必须一进一出，没有过滤的环节，如果匹配不上则会抛异常；使用 collect 会调用自带的 filter，如果匹配不上会自行过滤掉。
 
-# 第十章 异常
+## 第十章 异常
 
 `java`中的都是继承自`Exception`，分为以下两种：
 
@@ -3647,7 +3645,7 @@ object Match9 {
 
    注意：抛出异常后最好在调用处进行 try - catch。
 
-# 第十一章 泛型
+## 第十一章 泛型
 
 ## 11.1 简介
 
@@ -3785,7 +3783,7 @@ object ViewBound {
 
 
 
-# 第十二章 附录
+## 第十二章 附录
 
 ## 12.1 scala 中下划线的使用
 

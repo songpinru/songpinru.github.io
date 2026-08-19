@@ -1,8 +1,6 @@
 ---
 title: "Spring Boot"
 ---
-# Spring Boot
-
 
 ## 一、运行原理初探
 

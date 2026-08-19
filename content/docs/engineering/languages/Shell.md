@@ -1,8 +1,6 @@
 ---
 title: "Shell"
 ---
-# Shell
-
 
 ## Shell变量
 

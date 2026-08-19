@@ -2,8 +2,6 @@
 title: "Hive"
 description: "Hive 架构、安装配置、数据类型、DDL、DML 与常用函数笔记。"
 ---
-# Hive
-
 
 ## 概念
 

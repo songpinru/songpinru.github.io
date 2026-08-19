@@ -2,7 +2,6 @@
 title: "ClickHouse优化"
 ---
 
-# ClickHouse优化
 
 ### 一、表优化
 

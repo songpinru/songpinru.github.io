@@ -1,8 +1,6 @@
 ---
 title: "Markdown"
 ---
-# Markdown
-
 
 ## Markdown 标题
 

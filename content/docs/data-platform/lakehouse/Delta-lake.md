@@ -1,8 +1,6 @@
 ---
 title: "Delta Lake"
 ---
-# Delta Lake
-
 
 ## 数据湖是什么？
 

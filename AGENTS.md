@@ -1,14 +1,14 @@
-# Repository Guidelines
+# 仓库规范
 
-## Project Structure
+## 项目结构
 
 ```
 content/
-├── _index.md          # Homepage
-├── blog/              # Blog posts (Chinese, dated)
+├── _index.md          # 首页
+├── blog/              # 博客文章（中文，按日期归档）
 │   ├── _index.md
-│   └── *.md           # Markdown source files
-└── docs/              # Technical documentation
+│   └── *.md           # Markdown 源文件
+└── docs/              # 技术文档
     ├── _index.md
     ├── engineering/   # 工程基础
     │   ├── languages/     # 编程语言 (Java, Python, Rust, Go, Shell, Markdown)
@@ -19,55 +19,56 @@ content/
     ├── databases/
     ├── data-platform/     # 数据平台 (Hadoop, Kafka, Flink, Spark, Pandas)
     └── application-development/
-layouts/               # Hugo template overrides
-public/                # Generated site (gitignored)
-hugo.yaml              # Site configuration
-.github/workflows/     # CI/CD pipeline
+layouts/               # Hugo 模板覆盖
+public/                # 生成站点（已加入 gitignore）
+hugo.yaml              # 站点配置
+.github/workflows/     # CI/CD 流水线
 ```
 
-Assets are co-located with content under `content/blog/post-name.assets/` for images.
+图片等资源与内容一同存放，路径为 `content/blog/post-name.assets/`。
 
-## Build & Development
+## 构建与开发
 
 ```bash
-# Start local dev server with live reload
+# 启动本地开发服务器并启用热重载
 hugo server
 
-# Build for GitHub Pages
+# 为 GitHub Pages 构建
 hugo --gc --minify --baseURL "https://songpinru.github.io/"
 
-# Build for Cloudflare Pages (base URL set via env var at deploy time)
+# 为 Cloudflare Pages 构建（部署时通过环境变量设置 baseURL）
 hugo --gc --minify --baseURL "$CF_PAGES_URL"
 ```
 
-The site uses [Hugo](https://gohugo.io) with the [Hextra](https://github.com/imfing/hextra) theme. Hugo extended edition is required. KaTeX math rendering is enabled.
+本站使用 [Hugo](https://gohugo.io) 与 [Hextra](https://github.com/imfing/hextra) 主题，需要安装 Hugo 扩展版。站点已启用 KaTeX 数学公式渲染。
 
-## Content Guidelines
+## 内容规范
 
-- Write in Markdown; frontmatter requires `title` and may include `description`, `date`, `tags`.
-- Blog posts go under `content/blog/`, docs under `content/docs/` with a `_index.md` for section indexes.
-- File names use Chinese characters where appropriate; keep them descriptive.
-- Use `![alt](path.assets/image.png)` for co-located images.
-- KaTeX math is supported via `$$` block delimiters.
-- **Heading structure**: Each document must have exactly one `h1` (`#`) that matches the frontmatter `title`. Use `h2` (`##`) and below for section headings within the document. This ensures the Hextra theme's table of contents renders correctly — `h1` serves as the document title and is not displayed in the TOC; `h2+` chapters appear in the TOC sidebar.
+- 内容使用 Markdown 编写；frontmatter 必须包含 `title`，可选字段包括 `description`、`date`、`tags`。
+- 博客文章放在 `content/blog/`，文档放在 `content/docs/`，并使用 `_index.md` 作为栏目索引。
+- 文件名在合适时使用中文，并保持描述性。
+- 与内容同目录存放的图片使用 `![alt](path.assets/image.png)`。
+- KaTeX 数学公式使用 `$$` 块级分隔符。
+- **标题结构**：文档正文不要写 `h1`（`#`），页面标题由 frontmatter `title` 自动渲染。文档内章节从 `h2`（`##`）开始，以保证 Hextra 主题目录渲染正确：`h1` 作为文档标题且不显示在目录中，`h2+` 章节会显示在目录侧边栏。
 
-## Commit Style
+## 提交规范
 
-Messages follow conventional-commits style observed in history:
+提交信息遵循仓库历史中使用的 conventional commits 风格：
 
 ```
 <type>(<scope>): <description>
 ```
 
-Types: `feat`, `docs`, `chore`, `refactor`, `fix`. Use `docs` for documentation additions, `feat` for new content sections.
+类型包括 `feat`、`docs`、`chore`、`refactor`、`fix`。新增文档使用 `docs`，新增内容栏目使用 `feat`。
 
-## CI/CD & Deployment
+## CI/CD 与部署
 
-The project deploys to two platforms:
+项目部署到两个平台：
 
-- **GitHub Pages** -- via `.github/workflows/hugo.yml` (triggered on push to `main`). Uses `actions/deploy-pages@v4`.
-- **Cloudflare Pages** -- connected directly to the GitHub repo. Build command: `hugo --gc --minify --baseURL "$CF_PAGES_URL"`. No retention limit on deployments by default; old deployments must be cleaned manually or via a scheduled script.
+- **GitHub Pages** -- 通过 `.github/workflows/hugo.yml` 触发，推送到 `main` 分支时执行，并使用 `actions/deploy-pages@v4`。
+- **Cloudflare Pages** -- 直接连接 GitHub 仓库。构建命令为 `hugo --gc --minify --baseURL "$CF_PAGES_URL"`。默认不对部署数量设置保留上限，旧部署需要手动清理或通过定时脚本清理。
 
-## Agent Instructions
+## 代理规范
 
-When making edits to existing files, read the full file first. Do not modify files outside the scope of the task. Prefer existing patterns (frontmatter, directory layout, image co-location) over introducing new conventions.
+- 修改现有文件前，先完整读取文件内容。不要修改任务范围之外的文件。优先沿用现有模式，包括 frontmatter、目录结构和图片同目录存放，而不是引入新的约定。
+- 尽量不要修改 `layouts/`、CSS 等 Hugo 与主题相关文件；优先通过修改 `hugo.yaml` 参数这类官方支持的配置方案处理。确实需要特殊处理时，先征求用户同意后再修改。
