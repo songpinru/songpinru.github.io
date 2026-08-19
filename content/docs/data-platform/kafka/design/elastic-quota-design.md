@@ -1,21 +1,20 @@
 ---
-title: "Elastic Quota Design"
+title: "弹性配额（Elastic Quota）设计文档"
 description: "Kafka 弹性配额的保底、权重、上限与动态流量控制设计。"
 ---
 
-## 弹性配额（Elastic Quota）设计文档
 
 **状态**: 设计中
 **关联 Review**: （开发完成后填写）
 **调研输入**: `plans/quota-flow-control-survey.md`
 
-### 1. 概述
+## 1. 概述
 
 为应对线上热点事件（topic 流量突增数倍）和消费实例扩容（新消费者追历史数据）导致的 broker 带宽打满、集群不稳定、核心业务受损问题，在现有静态配额体系之上引入**动态流量限制**（仅治理非内部 topic 的客户端流量）：每个配额实体配置 **reservation（保底速率）/ weight（权重）/ limit（上限）**，实体的实际限速值（dynamicLimit）由 broker 上的控制环在 **[有效保底, 上限]** 区间内周期性调整（默认每秒重算）——broker 空闲时上浮（实体可使用空闲带宽），争用时下压（回收借用的带宽），但永不低于有效保底（保底以内永不限流）、永不高于上限。broker 级容量池配置定义可分配总量，防止带宽打满。生产与消费两个方向均为**双锚点**：业务身份稳定时按 client-id 配置（生产 = 业务线 client-id，消费 = group，依赖本仓库 Client ID == Group ID 一致性校验），否则配在 topic-partition 上（详见 §3.2）。控制环只对**实际正在运行**的实体做保底核算与分配（流量阈值三态判定，详见 §3.3.2 Step 0）。
 
-### 2. 背景
+## 2. 背景
 
-#### 2.1 现有架构
+### 2.1 现有架构
 
 现有配额链路（详见调研报告第 2 章）：
 
@@ -30,7 +29,7 @@ description: "Kafka 弹性配额的保底、权重、上限与动态流量控制
 3. 无 broker 总容量概念——所有配额之和可远超物理带宽，无法防止带宽打满；
 4. 限速值静态——只回答"你超没超自己的配额"，不回答"broker 还有没有空闲"。
 
-#### 2.2 需求说明
+### 2.2 需求说明
 
 **目标**：
 1. 核心业务（指定的 topic / 消费组）配置保底速率，broker 争用时优先保障，极端情况下业务不失败（减速可接受，失败不可接受）；
@@ -52,9 +51,9 @@ description: "Kafka 弹性配额的保底、权重、上限与动态流量控制
 - `request_percentage`（CPU 时间配额）不纳入动态调整，仅管带宽（Produce/Fetch 两个方向）；
 - catch-up 冷读的自动识别（按 LEO - fetchOffset 阈值分类）——Phase 2 实现，Phase 1 由运维对已知回溯类 client-id 配置低 `quota_weight` 替代。
 
-### 3. 设计方案
+## 3. 设计方案
 
-#### 3.1 概念模型：动态限速
+### 3.1 概念模型：动态限速
 
 每个配额实体三参数：
 
@@ -79,7 +78,7 @@ effRes_e  ≤  dynamicLimit_e  ≤  limit_e
 
 **"回收"的含义**：带宽无法收回已发送的字节；回收 = 调低限速值 → 该实体后续请求的节流时间变长（mute 间隔变长）→ 客户端实际速率在秒级内滑落。全程不返回错误：produce 延迟响应 + mute，fetch 返回空响应 + mute，客户端只减速不失败。
 
-#### 3.2 实体与 metric tags 规则
+### 3.2 实体与 metric tags 规则
 
 - **生产方向**：**双锚点**，按现有 11 级优先链决定归属——业务线 producer 的 client-id 稳定时按 client-id 配置；否则配在 topic-partition 上（复用现有扩展；produce 记账已携带 tp 字符串，分区随 leader 落点天然完成 per-broker 切分）；
 - **消费方向**：**双锚点**，按现有 11 级优先链决定归属：
@@ -109,11 +108,11 @@ effRes_e  ≤  dynamicLimit_e  ≤  limit_e
 
 > **开发注意**：`DefaultQuotaCallback.quotaLimit` 与 `quotaMetricTags` 是并行维护的两套分支逻辑，本次修改回退规则与注入 overlay 时必须逐行同步（仓库审查必查项，`docs/review/review-guide.md` §2.1）。
 
-#### 3.3 Phase 1：动态限速控制环（本期实现）
+### 3.3 Phase 1：动态限速控制环（本期实现）
 
 **原则：不改热路径判定语义**。记账/超限/mute 全部沿用现状，唯一变化是限速值由控制环动态计算并注入。新增 `ElasticQuotaController`（每 broker 一个后台线程，produce/fetch 两个方向独立计算）。
 
-##### 3.3.1 符号与输入
+#### 3.3.1 符号与输入
 
 | 符号 | 含义 | 来源 |
 |------|------|------|
@@ -131,7 +130,7 @@ effRes_e  ≤  dynamicLimit_e  ≤  limit_e
 | `K` | 活跃判定记忆周期数 | `elastic.quota.active.window.intervals`，默认 10（记忆时长 = K × 周期 ≈ 10s，与 byte-rate 滑动窗口同量级；迟滞，防间歇业务抖动） |
 | `H` | 新客/待命限速基准 = `C_raw × (1 - s)` | 派生值（容量安全余量），无独立配置 |
 
-##### 3.3.2 每周期计算步骤
+#### 3.3.2 每周期计算步骤
 
 每 `refresh.interval`（默认 1s）对每个方向执行：
 
@@ -204,7 +203,7 @@ dynamicLimit_e = clamp(green_e + extra_e + headroom_e,  下界 effRes_e,  上界
 
 写入 `dynamicLimits` overlay（`ConcurrentHashMap[metricTags → limit]`）：Active 实体写分配值，Standby 实体写待命限速。`DefaultQuotaCallback.quotaLimit` 末端规则：overlay 命中 → 取 `min(静态链结果, overlay 值)`；未命中且该方向启用 → 取 `min(静态链结果, max(res_e, H))`，其中 res_e 按 §3.2 与静态链同实体原子解析——配了保底的实体在 sensor 过期/broker 重启后的冷启动期即受保底保护而非被压到 H，该式与 Standby 待命限速一致（Unknown 与 Standby 待遇统一）；方向未启用 → 仅静态链。并复用现有 `updateQuotaMetricConfigs` 机制刷新已创建 sensor 的 MetricConfig。overlay 读路径为无锁查询，弹性开关关闭时恒为空、直接短路。
 
-##### 3.3.3 数值示例
+#### 3.3.3 数值示例
 
 **示例 1（常态分配，消费方向）**：`C = 900`（1000 × 0.9）。三个消费组，A 上一窗口已被节流（throttled），B/Cbf 未受限：
 
@@ -241,7 +240,7 @@ B 需求上升后，A/Cbf 的借用**在一个周期内被自动收回**——�
 
 结果：`dynamicLimit` X = 571（钳到有效保底，是"地板"而非"占用"）、Y = 429、Z = **850**——纸面超卖 40% 的节点上 Z 仍可用 85% 容量。**未使用的保底不占池子**（Step 3 按需求计 green），超卖状态只是承诺风险信号，不影响空闲分配。若 X 随后猛增：当周期内可瞬时冲到 571（其地板），总量短暂超 C；下周期 X 受限按上限申报、green 吃满 571，spare 收缩至 379、X 与 Z 按权重均分 → Z 被回收（850 → ~190）。
 
-##### 3.3.4 边界情况与瞬态
+#### 3.3.4 边界情况与瞬态
 
 | 场景 | 行为 | 说明 |
 |------|------|------|
@@ -258,7 +257,7 @@ B 需求上升后，A/Cbf 的借用**在一个周期内被自动收回**——�
 | 随机 group 追历史与稳态消费同分区 | 两者共享同一 TP 实体额度，Phase 1 无法区分（配额层拿不到 lag）；好处：追历史撑不破该分区预算，伤不到其他实体 | Phase 2 lag 分类划入低权重；Phase 1 应急手段为临时调低该分区 limit |
 | overlay 条目生命周期 | 与 sensor 过期对齐（1h 不活跃清理） | 防泄漏 |
 
-##### 3.3.5 性能分析与预算
+#### 3.3.5 性能分析与预算
 
 **热路径（每请求）：零新增开销。**
 - 判定逻辑不变（窗口均值 vs bound）；动态限速值存放在 sensor 的 MetricConfig 中，与现状一致；
@@ -285,14 +284,14 @@ B 需求上升后，A/Cbf 的借用**在一个周期内被自动收回**——�
 - 开启 vs 关闭：produce/fetch p99 延迟与吞吐差异在测量噪声内（集成测试场景④）；
 - 单次写锁持有 < 1ms。
 
-#### 3.4 超卖处理与人工协调闭环
+### 3.4 超卖处理与人工协调闭环
 
 - 超卖判定：本机活跃实体 `Σreservation > C`（leader 迁移/宕机导致）；
 - 处理：Step 1 等比缩放（配置值不变，只缩"本机有效承诺"）；缩放的是承诺不是分配，实体用不满的保底经 Step 3 自动流给他人，不浪费；
 - 超卖仅意味着**承诺总和**超过容量，不等于实压：只有当保底实体实际用满其有效保底时 `spare` 才趋于 0（借用停摆）；声明高但实压低时，空闲仍可被他人借用（示例 4）。告警须结合 `green-usage-ratio` 分级：**纸面超卖 + 低实压 = 治理级**（修剪虚高保底），**超卖 + 高实压 = 立即协调**（迁 leader / 扩容）；
 - **人工协调触发器**：超卖比指标 + 进入/退出日志（见 3.7），运维据此迁 leader / 扩容；AutoBalancer 重摊 leader 后自动退出超卖态。
 
-#### 3.5 Phase 2：逐请求精确执行（后续阶段，此处仅立框架）
+### 3.5 Phase 2：逐请求精确执行（后续阶段，此处仅立框架）
 
 **动机**：Phase 1 的保底是"软保底"——控制环周期内的瞬时突发可能短暂挤占，回收粒度为周期（秒级）。若实测不满足，Phase 2 把判定下沉到单请求。
 
@@ -315,7 +314,7 @@ B 需求上升后，A/Cbf 的借用**在一个周期内被自动收回**——�
 
 **produce/fetch 精度不对称**：fetch 的判定在读数据之前，不放行 = 返回空响应（复用 `KafkaApis.scala:1050` 的 unrecord 机制），出向字节真实未发出，管控精确；produce 判定时字节已进入 broker（入向已消耗），单次请求物理上总是放行，判定结果只决定 mute 时长（压制后续速率），入向保护天生滞后一拍（KIP-13 选延迟不选拒绝的同因）。开发与验收时不应期望 produce 逐字节精确拦截。
 
-#### 3.6 配置清单
+### 3.6 配置清单
 
 **broker 级（新增，`KafkaConfig` 注册，支持动态更新）**：
 
@@ -366,7 +365,7 @@ kafka-configs.sh --alter --add-config 'quota_weight=0.1' \
   --entity-type clients --entity-default
 ```
 
-#### 3.7 可观测性
+### 3.7 可观测性
 
 | 指标（每方向） | 类型 | 说明 |
 |------|------|------|
@@ -382,7 +381,7 @@ kafka-configs.sh --alter --add-config 'quota_weight=0.1' \
 
 日志：超卖进入/退出 INFO（含缩放系数与受影响实体数）；每轮分配摘要 DEBUG。
 
-#### 3.8 兼容性
+### 3.8 兼容性
 
 - `elastic.quota.enable=false`（默认）：控制环不启动、overlay 恒空、tags 回退规则不变，行为与现状逐字节一致；
 - 仅新增配置键，无 RPC schema / 元数据 record 变更，不做 MetadataVersion 门控（与 topic-partition 配额先例一致）；**升级顺序要求文档化**：集群全部升级到本版本后才允许配置新键（旧 controller 会拒绝未知键，fail-safe）；
@@ -390,7 +389,7 @@ kafka-configs.sh --alter --add-config 'quota_weight=0.1' \
 - **监控口径变化（仅弹性开启时）**：produce 方向未命中任何静态配置的流量，其 tags 由 `("", clientId, "")` 变为 `("", "", topic-partition)`，对应 byte-rate / throttle-time 配额指标的实体身份随之改变，依赖旧口径聚合的监控看板需同步调整；内部 topic 分区流量不再做配额记账（现网内部 topic 无配额配置，无实际行为差异）；
 - ZK 与 KRaft 两种模式均支持（改动点对齐 TP 配额先例）。
 
-#### 3.9 风险与缓解
+### 3.9 风险与缓解
 
 | 风险 | 影响 | 缓解措施 |
 |-----|------|---------|
@@ -404,7 +403,7 @@ kafka-configs.sh --alter --add-config 'quota_weight=0.1' \
 | 控制环遍历 metrics registry | 周期成本随全局指标数膨胀 | 维护活跃实体索引、按索引点读（§3.3.5），成本只与配额实体数相关 |
 | 容量配置失真（网卡异构/复制占用波动） | 保护失效或过度限流 | 容量与用量指标可视化对照；二期考虑自适应估计 |
 
-### 4. 关键技术决策
+## 4. 关键技术决策
 
 | 决策点 | 选择方案 | 备选方案 | 理由 |
 |--------|---------|---------|------|
@@ -429,7 +428,7 @@ kafka-configs.sh --alter --add-config 'quota_weight=0.1' \
 | user 维度弹性参数 | 不支持：弹性键仅注册到 client-id / TP 实体，命中 user 系静态配置的流量按默认弹性参数参与分配 | user 系全组合支持弹性键 | user 系与 TP 链序交错（精确系 1-4 级优先于 TP、default 系 6-9 级介于 TP 与纯 client-id 之间），支持它会显著复杂化双锚点归属规则；目标场景不以 SASL user 为业务身份 |
 | 内部流量豁免 | 按 topic 维度：`__` 前缀分区绕过弹性记账与限速 | 按 client-id 前缀豁免 | client-id 前缀豁免机制在现有代码中不存在（`INTERNAL_CLIENT_ID_PREFIX` 仅用于命名）；内部流量的稳定标识是 topic，逐分区记账入口天然支持按分区判定 |
 
-### 5. 实现计划
+## 5. 实现计划
 
 | 任务 | 涉及文件 | 状态 |
 |------|---------|------|
@@ -453,7 +452,7 @@ kafka-configs.sh --alter --add-config 'quota_weight=0.1' \
 2. 本地 3-broker 集群实测四场景：①热点突增在空闲集群全放行；②争用时核心实体保底不受挤压、借用按权重收缩（对照示例 2）；③kill 一台 broker 触发超卖，验证等比缩放与告警指标，AutoBalancer 重摊后自动恢复；④开关关闭时与基线版本行为/性能对比无差异；
 3. 对照 `docs/review/review-guide.md` 高频必查项自查后提交 review。
 
-### 6. 变更记录
+## 6. 变更记录
 
 - 2026-07-03：初版。基于调研报告与设计讨论确定：三参数模型、client-id 代理 group、per-broker 范围、超卖比例缩放（不采用优先级分级）、Phase 1 控制环 / Phase 2 执行层分阶段。
 - 2026-07-03：补充"回收 = 调整后续请求准入而非收回字节"、Phase 1/2 的单请求判定流程、权重由控制环承担、produce/fetch 精度不对称。
