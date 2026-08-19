@@ -2,11 +2,8 @@
 title: "CDH节点退役方案"
 ---
 
-## 节点退役方案:
 
-
-
-#### 1.退役前检查HDFS块信息是否有错误,如果有错误的块,先修复
+## 1.退役前检查HDFS块信息是否有错误,如果有错误的块,先修复
 
 (PS:使用hdfs用户执行)
 
@@ -20,7 +17,7 @@ hdfs fsck -list-corruptfileblocks -openforwrite -files -blocks -locations
 hdfs debug  recoverLease  -path /path
 ```
 
-#### 2.退役节点
+## 2.退役节点
 
 CDH中搜索**dfs_hosts_exclude.txt**
 
@@ -36,7 +33,7 @@ hadoop dfsadmin -refreshNodes
 
 此时下线节点状态变为decommissioning(可在web界面查看)
 
-#### 3.等待节点下线完毕
+## 3.等待节点下线完毕
 
 可以在webUi查看,或使用以下命令
 
@@ -74,4 +71,4 @@ Decommissioning datanodes (0):
 * Blocks with corrupt replicas: 副本错误的块
 * Missing blocks: 丢失的块
 
-#### 4.取消datanode授权即可
+## 4.取消datanode授权即可

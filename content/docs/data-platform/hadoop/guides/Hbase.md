@@ -2,7 +2,7 @@
 title: "Hbase"
 ---
 
-## **架构角色：**
+## 架构角色
 
 1. Region Server
 

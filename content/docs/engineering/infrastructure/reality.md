@@ -4,13 +4,13 @@ title: "Reality"
 
 ## reality配置
 
-### 安装xray
+## 安装xray
 
 ```
 apt install xray
 ```
 
-### 生成uuid和密钥对
+## 生成uuid和密钥对
 
 ```
 xray uuid
@@ -24,7 +24,7 @@ Public key: Jz0MYxPV8Xa3bD4Xke9UXSilA1Eq37smrOZtTwGbizs
 
 
 
-### 配置
+## 配置
 
 路径：` /usr/local/etc/xray/config.json`
 
@@ -94,13 +94,13 @@ Public key: Jz0MYxPV8Xa3bD4Xke9UXSilA1Eq37smrOZtTwGbizs
 }
 ```
 
-### 启动
+## 启动
 
 ```
 systemctl restart xray
 ```
 
-### 客户端配置
+## 客户端配置
 
 ```yml
 proxies:
@@ -130,7 +130,7 @@ vless://{uuid}@{server}:{port}?encryption=none&security=reality&sni={servername}
 {}的内容用客户端配置对应字段替换
 ```
 
-### 扩展
+## 扩展
 
 其实上面就可以用了，但是xray占用了443端口，而且有爬虫或者其他的服务来扫服务器的端口，如果伪装的网站是cloudflare这种，就可能被偷跑流量（有类似cdn或者github page这种功能的网站），所以前面需要加一层过滤。
 
