@@ -474,7 +474,7 @@ Executor堆外内存的配置需要在spark-submit脚本里配置，如代码清
 
 调节连接等待时长后，通常可以避免部分的XX文件拉取失败、XX文件lost等报错。
 
-### 第二章       Spark 数据倾斜
+## 第二章       Spark 数据倾斜
 
 Spark中的数据倾斜问题主要指shuffle过程中出现的数据倾斜问题，是由于不同的key对应的数据量不同导致的不同task所处理的数据量不同的问题。
 
@@ -642,7 +642,7 @@ key的数量增加，可能使数据倾斜更严重。
 
 6. 最后将两次join的结果使用union算子合并起来即可，就是最终的join结果。
 
-### 第三章       Spark Troubleshooting
+## 第三章       Spark Troubleshooting
 
 ### 3.1 故障排除一：控制reduce端缓冲大小以避免OOM
 

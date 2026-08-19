@@ -2,9 +2,8 @@
 title: "正确使用Channel"
 ---
 
-## 正确使用channel
 
-### channel的特性
+## channel的特性
 
 * channel会阻塞输入或者输出端，直到有goroutine接收或者写入
 * channel只能由produce端close（调用close函数），输出端close编译不通过（必须要有produce的权限）
@@ -13,9 +12,9 @@ title: "正确使用Channel"
 * channel的接受端可以有两个返回值，如果第二个返回值为false，代表channel关闭
 * 已关闭的channel也可用读取，但是标志位（第二个返回值）会是false
 
-### 使用场景
+## 使用场景
 
-#### spsc
+### spsc
 
 spsc（一个生产者一个消费者）：
 
@@ -33,7 +32,7 @@ func consume(ch <-chan int) {
 }
 ```
 
-#### spmc
+### spmc
 
 spmc（一个生产者多个消费者）：
 
@@ -53,7 +52,7 @@ func consume(ch <-chan int) {
 }
 ```
 
-#### mpsc
+### mpsc
 
 mpsc（多个生产者一个消费者）：
 
@@ -109,7 +108,7 @@ func consume(ch <-chan int,flag chan<- bool) {
 }
 ```
 
-#### mpmc
+### mpmc
 
 mpmc（多个生产者多个消费者）：
 
@@ -139,7 +138,7 @@ func consume(ch chan int) {
 }
 ```
 
-### 总结：
+## 总结：
 
 ```
 * produce端只给`chan<-`权限即可
@@ -157,6 +156,6 @@ channel的关闭原则：
 * 不要在有多个并行的生产者时关闭channel
 * 应该只在唯一或者最后一个生产者协程中关闭channel
 
-### PS
+## PS
 
 time包下有两个特殊的channel，使用After和Tick来实现定时

@@ -277,7 +277,7 @@ sudo chkconfig keepalivedon
 ```
 ### hadoop104
 
-### 更改优先级和真实ip即可
+更改优先级和真实ip即可
 
 
 

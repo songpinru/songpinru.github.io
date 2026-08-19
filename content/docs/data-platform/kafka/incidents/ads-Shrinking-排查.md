@@ -2,11 +2,11 @@
 title: "Ads Shrinking 排查"
 ---
 
-## Kafka ads 集群Shrinking问题排查
+Kafka ads 集群Shrinking问题排查
 
 
 
-### 排查过程
+## 排查过程
 
 发现ads集群Shrinking频率相对也比较频繁，排除了已知的故障原因之后，增加处理FollowerFetchRequest的耗时日志，看看耗时主要是卡在什么地方
 ![输入图片说明](ads-Shrinking-排查.assets/l17Mha604t1mIebW.jpg)
@@ -48,7 +48,7 @@ title: "Ads Shrinking 排查"
 
   
 
-### 问题定位
+## 问题定位
 
 至此Shrinking原因已经比较清楚了：
 
@@ -76,7 +76,7 @@ leader-epoch-checkpoint记录的是每次leader切换，新leader的起始offset
 
   
 
-### 解决方案
+## 解决方案
 
 最开始想到的解决方案是在deleteSegment获得锁之前先把所有segment flush，强制刷盘，但是实际效果不佳，因为只能flush本分区的所有segment，flush所有分区的segment代价太大，而且append方法也会尝试去刷leader-epoch-checkpoint文件，还是会阻塞append方法。
 

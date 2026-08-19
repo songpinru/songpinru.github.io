@@ -2,12 +2,12 @@
 title: "Clickhouse配置Zookeeper遇到的坑"
 ---
 
-## Clickhouse配置zookeeper遇到的坑
 
-背景说明:公司最近要使用clickhouse做实时项目,准备搭一套clickhouse集群
+## 背景说明
+
+公司最近要使用clickhouse做实时项目,准备搭一套clickhouse集群
 
 需要用到zookeeper,根据clickhouse的官网要求,选择了最新的3.6.2 版本的zookeeper
-
 
 
 java版本:
@@ -17,6 +17,8 @@ java version "1.8.0_181"
 Java(TM) SE Runtime Environment (build 1.8.0_181-b13)
 Java HotSpot(TM) 64-Bit Server VM (build 25.181-b13, mixed mode)
 ```
+
+## 问题解决过程
 
 根据官网的要求配置好zoo.cfg和java parameter
 

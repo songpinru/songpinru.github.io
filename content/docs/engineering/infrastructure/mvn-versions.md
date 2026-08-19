@@ -2,7 +2,7 @@
 title: "Mvn Versions"
 ---
 
-### 1.简介
+## 1.简介
 
 versions-maven-plugin插件可以管理项目版本，  
 特别是当Maven工程项目中有大量子模块时，  
@@ -11,7 +11,7 @@ versions-maven-plugin插件可以管理项目版本，
 然后更新子模块版本号与父模块相同，  
 可以避免手工大量修改和遗漏的问题。
 
-### 2.使用
+## 2.使用
 
 ### 2.1.修改版本号
 
@@ -66,7 +66,7 @@ mvn versions:commit
 mvn versions:set -DnewVersion=1.2.0-SNAPSHOT -DgenerateBackupPoms=false
 ```
 
-### 3.参数介绍
+## 3.参数介绍
 
 | 参数                                         | 默认值                   | 说明                           |
 | ------------------------------------------ | --------------------- | ---------------------------- |
@@ -85,7 +85,7 @@ mvn versions:set -DnewVersion=1.2.0-SNAPSHOT -DgenerateBackupPoms=false
 | removeSnapshot | false                 | 移除snapshot快照版本，使之为release稳定版 |
 | updateMatchingVersions                     | true                  | 是否更新在子模块中显式指定的匹配版本(如/项目/版本)  |
 
-### 4.使用技巧
+## 4.使用技巧
 
 为了更好的使用插件修改版本号，  
 减少不必要的版本号修改，  

@@ -87,7 +87,7 @@ public class SwaggerConfig {
 
 ![img](swagger.assets/640.webp)
 
-## 配置Swagger
+### 配置Swagger
 
 1、Swagger实例Bean是Docket，所以通过配置Docket实例来配置Swaggger。
 
@@ -134,7 +134,7 @@ public Docket docket() {
 
 
 
-## 配置扫描接口
+### 配置扫描接口
 
 1、构建Docket时通过select()方法配置怎么扫描接口。
 
@@ -189,9 +189,9 @@ ant(final String antPattern) // 通过ant()控制
 
 ![img](swagger.assets/640-1596301355104.webp)
 
-#### 
 
-## 配置Swagger开关
+
+### 配置Swagger开关
 
 1、通过enable()方法配置是否启用swagger，如果是false，swagger将不能在浏览器中访问了
 
@@ -237,7 +237,7 @@ public Docket docket(Environment environment) {
 
 
 
-## 配置API分组
+### 配置API分组
 
 ![img](swagger.assets/640-1596301355118.webp)
 
@@ -275,7 +275,7 @@ public Docket docket3(){
 
 
 
-## 实体配置
+### 实体配置
 
 1、新建一个实体类
 

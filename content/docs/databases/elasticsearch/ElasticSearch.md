@@ -2,7 +2,7 @@
 title: "ElasticSearch"
 ---
 
-概念：
+## 概念
 
 index：表
 
