@@ -1,8 +1,10 @@
 ---
 title: "Zookeeper"
 ---
+# Zookeeper
 
-# 安装
+
+## 安装
 
 1. 解压
 2. 把conf文件夹下配置文件改个名字
@@ -61,13 +63,13 @@ case $1 in
 esac
 ```
 
-# 选举机制
+## 选举机制
 
 半数机制：集群中半数以上机器存活，集群可用。所以Zookeeper适合安装奇数台服务器。
 
 [用zookeeper实现HA](https://blog.csdn.net/zhongqi2513/article/details/92840447)
 
-# 监听原理
+## 监听原理
 
 
 

@@ -1,8 +1,10 @@
 ---
 title: "Clickhouse配置Zookeeper遇到的坑"
 ---
+# Clickhouse配置Zookeeper遇到的坑
 
-# Clickhouse配置zookeeper遇到的坑
+
+## Clickhouse配置zookeeper遇到的坑
 
 背景说明:公司最近要使用clickhouse做实时项目,准备搭一套clickhouse集群
 

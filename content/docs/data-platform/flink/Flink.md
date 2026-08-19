@@ -54,7 +54,7 @@ val remoteEnv = StreamExecutionEnvironment.createRemoteEnvironment()
 ./flink run –m yarn-cluster -c com.wc.StreamWordCount  FlinkTutorial-1.0-SNAPSHOT-jar-with-dependencies.jar --host lcoalhost –port 7777
 ```
 
-# Flink Source
+## Flink Source
 
 ## 从内存的Source
 
@@ -146,7 +146,7 @@ class SendSource extends RichParallelSourceFunction[SourceReading]{
 }
 ```
 
-# Transformation
+## Transformation
 
 ## 转换算子
 
@@ -304,7 +304,7 @@ class MyFlatMap extends RichFlatMapFunction[Int, (Int, Int)] {
 }
 ```
 
-# Window API
+## Window API
 
 ![640?wx_fmt=png](Flink概念.assets/sssss.jpg)
 
@@ -515,7 +515,7 @@ object TriggerExample {
 }
 ```
 
-# Process Function(Low-Level API)
+## Process Function(Low-Level API)
 
 <!-- 原图缺失：Flink.assets/sssss -->
 
@@ -596,7 +596,7 @@ class TempIncreaseAlertFunction extends KeyedProcessFunction[String,SourceReadin
 
 
 
-# 时间语义和Watermark
+## 时间语义和Watermark
 
 ## Timestamps
 
@@ -674,7 +674,7 @@ class PunctuatedAssigner extends AssignerWithPunctuatedWatermarks[SensorReading]
 }
 ```
 
-# 状态和检查点
+## 状态和检查点
 
 ## State
 
@@ -758,7 +758,7 @@ env.getCheckpointConfig.setMaxConcurrentCheckpoints(1)
 
 ## 选择
 
-# Sink
+## Sink
 
 ## Kafka
 
@@ -909,7 +909,7 @@ env.execute()
 
 
 
-# Table&SQL
+## Table&SQL
 
 ## table:
 
@@ -1005,7 +1005,7 @@ val resultTable: Table = dataTable
 
 https://help.aliyun.com/document_detail/62511.html?spm=a2c4g.11186623.6.642.106219f9uFTFtr
 
-# CEP
+## CEP
 
 POM：
 

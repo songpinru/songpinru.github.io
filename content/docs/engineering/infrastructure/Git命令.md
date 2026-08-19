@@ -2,12 +2,14 @@
 title: "Git命令"
 description: "Git 常用命令、分支工作流与 SSH 配置速查。"
 ---
+# Git命令
 
-# GIT
+
+## GIT
 
 ![git&github](Git命令.assets/Git&GitHub.jpg)
 
-# Git指令
+## Git指令
 
 ```shell
 git status
@@ -83,7 +85,7 @@ git push [-f --force] [-d --delete] [-n --dry-run] [--progress] [-q --quiet]
 | git merge **别名**/**branch-name**           | 抓取后合并分支                                |
 | git pull **别名** **branch-name**            | 拉取分支=fetch+merge                          |
 
-# SSH 登录
+## SSH 登录
 ```shell
 # 1. 进入当前用户的家目录
  $ cd \~   			
@@ -105,13 +107,13 @@ git push [-f --force] [-d --delete] [-n --dry-run] [--progress] [-q --quiet]
 
 
 
-# GitFlow
+## GitFlow
 ![官方命令](Git命令.assets/gitflow工作流.jpg)
-# Gitlab 服务器搭建过程
-## 官网地址
+## Gitlab 服务器搭建过程
+### 官网地址
 首页：https://about.gitlab.com/
 安装说明：https://about.gitlab.com/installation/
-## 安装命令摘录
+### 安装命令摘录
 ```
 sudo yum install -y curl policycoreutils-python openssh-server cronie
 sudo lokkit -s http -s ssh
@@ -137,7 +139,7 @@ curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rp
 sudo EXTERNAL_URL="http://gitlab.example.com" yum -y install gitlab-ce
 ```
 当前步骤完成后重启。
-## gitlab 服务操作
+### gitlab 服务操作
 ```shell
 #初始化配置 gitlab
 gitlab-ctl reconfigure
@@ -146,11 +148,11 @@ gitlab-ctl start
 #停止 gitlab 服务
 gitlab-ctl stop
 ```
-## 浏览器访问
+### 浏览器访问
 访问 Linux 服务器 IP 地址即可，如果想访问 EXTERNAL_URL 指定的域名还需要配置
 域名服务器或本地 hosts 文件。
 
-# Github 私有服务器搭建
+## Github 私有服务器搭建
 
 上一章节中我们远程仓库使用了 Github，Github 公开的项目是免费的，2019 年开始 Github 私有存储库也可以无限制使用。
 
@@ -158,7 +160,7 @@ gitlab-ctl stop
 
 接下来我们将以 Centos 为例搭建 Git 服务器。
 
-### 1、安装Git
+#### 1、安装Git
 
 ```
 $ yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-devel
@@ -172,7 +174,7 @@ $ groupadd git
 $ useradd git -g git
 ```
 
-### 2、创建证书登录
+#### 2、创建证书登录
 
 收集所有需要登录的用户的公钥，公钥位于id_rsa.pub文件中，把我们的公钥导入到/home/git/.ssh/authorized_keys文件里，一行一个。
 
@@ -188,7 +190,7 @@ $ chmod 644 .ssh/authorized_keys
 
 
 
-### 3、初始化Git仓库
+#### 3、初始化Git仓库
 
 首先我们选定一个目录作为Git仓库，假定是/home/gitrepo/runoob.git，在/home/gitrepo目录下输入命令：
 
@@ -208,7 +210,7 @@ Initialized empty Git repository in /home/gitrepo/runoob.git/
 $ chown -R git:git runoob.git
 ```
 
-### 4、克隆仓库
+#### 4、克隆仓库
 
 ```
 $ git clone git@192.168.45.4:/home/gitrepo/runoob.git
@@ -221,7 +223,7 @@ Checking connectivity... done.
 
 这样我们的 Git 服务器安装就完成。
 
-# 资料
+## 资料
 
 [官方PDF][pdf]
 

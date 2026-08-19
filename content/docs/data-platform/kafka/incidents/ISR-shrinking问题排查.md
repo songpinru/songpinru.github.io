@@ -1,12 +1,14 @@
 ---
 title: "ISR Shrinking问题排查"
 ---
+# ISR Shrinking问题排查
+
 
 
 
 C12集群频繁ISR shrinking
 
-# 排查过程
+## 排查过程
 从grafana发现C12集群频繁发生ISR Shrinking，如下：
 ![输入图片说明](ISR-shrinking问题排查.assets/VnBOlsPxUkKfLIx0.png)
 排查监控中的各项指标，没有明显的异常，根据C13集群的经验，收集flush等磁盘相关指标，排查是否是磁盘问题：
@@ -93,7 +95,7 @@ nvm同事给出的结论是：
 
 之前内核出现过一个cgroups泄露的bug，这个bug会导致在读取cgroups数据的时候，需要关闭很长时间的中断，会影响整个系统的延迟和响应
 
-# 问题总结
+## 问题总结
 
 核心逻辑：ISR Shrinking的触发条件是Follower与Leader的“心跳”超时。这个“心跳”就是定期的Fetch请求。
 
@@ -116,7 +118,7 @@ nvm同事给出的结论是：
       
     
 
-# 问题修复
+## 问题修复
 
 07/28 周一配合nvm同事停机升级一台机器，升级后观察相关指标都恢复正常，持续观测几天也再未出现ISR Shrinking的情况。
 

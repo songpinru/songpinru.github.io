@@ -2,12 +2,14 @@
 title: "Hadoop集群关键角色迁移"
 description: "Hadoop 集群 NameNode、ResourceManager 等关键角色的迁移方案与实施记录。"
 ---
+# Hadoop集群关键角色迁移
 
-# hadoop 集群关键角色迁移方案
 
-## Hadoop 迁移
+## hadoop 集群关键角色迁移方案
 
-### Hadoop 迁移变更列表
+### Hadoop 迁移
+
+#### Hadoop 迁移变更列表
 
 -   NameNode IP变更
 -   10.11.20.51-\>10.11.20.213
@@ -42,7 +44,7 @@ description: "Hadoop 集群 NameNode、ResourceManager 等关键角色的迁移�
 -   Hive
 -   其他依赖hdfs、yarn、hive的任务
 
-### Hadoop 迁移时间规划
+#### Hadoop 迁移时间规划
 
 -   07/27 前梳理 NameNode 切换对应用的影响（部分应用）
 -   梳理完毕 NameNode 切换对各应用、框架的影响和具体切换事项
@@ -55,18 +57,18 @@ description: "Hadoop 集群 NameNode、ResourceManager 等关键角色的迁移�
 -   08/09 进行 zookeeper 的扩缩容
 -   重启应用，启用新ZK（部分应用）
 
-### Hadoop 迁移关联的项目列表
+#### Hadoop 迁移关联的项目列表
 
 
 
-### 机器服役年龄统计
+#### 机器服役年龄统计
 
 [IDC
 Server](https://mh4k64q7w1.feishu.cn/sheets/shtcnA7xacn8VvH6Be2M481rcxg)
 
 > 统计了所有hadoop集群使用的机器，平均服役年龄约7年2个月，其中Namenode和ResourceManager都是服役7年的机器，且这几台机器还是单网卡，容灾能力比较差。
 
-### 近段时间硬件故障统计
+#### 近段时间硬件故障统计
 
 -   2022-12-02 149节点硬件故障，拉回维修
 -   2022-12-08 183节点硬件故障，拉回维修
@@ -79,7 +81,7 @@ Server](https://mh4k64q7w1.feishu.cn/sheets/shtcnA7xacn8VvH6Be2M481rcxg)
 
 PS：硬件故障的3台机器服役年龄均为7-8年，和关键角色机器服役年限相近
 
-### 原本的迁移计划
+#### 原本的迁移计划
 
 [集群高可用专项](./集群高可用专项/)
 
@@ -88,9 +90,9 @@ PS：硬件故障的3台机器服役年龄均为7-8年，和关键角色机器�
 
 原计划是等待parllay全部k8s化之后，Hadoop可以使用烽火台去年新采购的机器，但是考虑到最近硬件故障率升高，k8s化周期又比较长，这个方案可能时间上不太适合。
 
-## 新方案
+### 新方案
 
-### 新的计划
+#### 新的计划
 
 最近一个月共3台机器因硬件问题维修，故障率明显升高。按原计划在iparllay完成k8s化后迁移，但是根据目前进度，k8s化周期会比较长，为了保证集群稳定，建议新采购4台机器用作hadoop关键角色。配置需求如下：
 
@@ -102,7 +104,7 @@ PS：硬件故障的3台机器服役年龄均为7-8年，和关键角色机器�
 |       |       | 网络：万兆网卡✖️2                 |       |   |
 
 
-### 角色分配
+#### 角色分配
 
 Master1：
 -   NameNode
@@ -145,7 +147,7 @@ Utility（管理、监控等角色）:
 
 ![](hadoop集群关键角色迁移.assets/image1.png)
 
-### 迁移方案
+#### 迁移方案
 
 需要迁移的角色：
 -   NameNode
@@ -164,11 +166,11 @@ Utility（管理、监控等角色）:
 -   HiveServer2
 -   Hue
 
-### 停机方式
+#### 停机方式
 
 涉及关键角色比较多，停机迁移方式比较容易，集群整体停机约3-4小时，集群迁移之后修改配置文件重启任务即可
 
-### 不停机方式
+#### 不停机方式
 
 NN与RM的不停机迁移基础是HA，迁移前必须测试HA切换没有问题
 
@@ -184,7 +186,7 @@ NN与RM的不停机迁移基础是HA，迁移前必须测试HA切换没有问题
 
 RM的验证同NN，不再赘述
 
-### NN、RM
+#### NN、RM
 
 NN和RM的切换至少需要一次运行任务的重启，以下是详细步骤
 
@@ -210,7 +212,7 @@ NN和RM的切换至少需要一次运行任务的重启，以下是详细步骤
 12. 再次重启所有datanode（依次重启）
 13. 迁移完成
 
-### 简化操作（多次重启任务
+#### 简化操作（多次重启任务
 
 实际操作中可以使用CDH提供的迁移功能，简化操作，但是缺点是任务至少需要重启两次，步骤如下：
 
@@ -237,7 +239,7 @@ NN和RM的切换至少需要一次运行任务的重启，以下是详细步骤
 10. 停止并删除RM2节点，新增RM到MS1（同上）
 11. 重启所有datanode（依次重启）、任务
 
-### ZK、FC、JN、Hbase
+#### ZK、FC、JN、Hbase
 
 这几个服务相对比较简单，对于业务可以无感知迁移，可以在最后处理，步骤如下
 
@@ -245,7 +247,7 @@ NN和RM的切换至少需要一次运行任务的重启，以下是详细步骤
 2.  停止并删除旧的角色即可
 3.  依次进行，不要同时停止多个相同的角色
 
-### Hive、Impala
+#### Hive、Impala
 
 Hive
 server2对业务影响比较大，依赖Mysql，最好先迁移mysql（不过重启不影响业务，可以迁移mysql后分别重启）
@@ -256,7 +258,7 @@ impala相对使用较少，可以直接迁移
 2.  在CDH上新增角色到MS3、Utility
 3.  依次进行，不要同时停止多个相同的角色
 
-### Mysql、Cloudera Manager、ClouderaManager service、DNS
+#### Mysql、Cloudera Manager、ClouderaManager service、DNS
 
 业务无感知，并且可以分别迁移，推荐先迁移MySQL
 
@@ -291,7 +293,7 @@ DNS
 
 确认所有节点使用新的DNS后停止旧节点
 
-### 推荐顺序
+#### 推荐顺序
 
 1.  ZK、FC、JN
 2.  Mysql（Utility节点和49互为主从）
@@ -309,7 +311,7 @@ DNS
 
 PS：kafka可能需要提前释放出来（涉及到zookeeper），最好迁移至新的卡夫卡
 
-### 测试结论
+#### 测试结论
 
 经过一周的完整测试,原迁移方案有些不适合,遇到以下问题:
 
@@ -329,9 +331,9 @@ PS：kafka可能需要提前释放出来（涉及到zookeeper），最好迁移�
 3.  ResourceManager、Hive无状态服务,迁移角色相对比较简单,但是业务肯定会受到影响
   1.  如果完全不停机,需要任务重启两次(最好任务能先停止一小段时间,完全切换后只需重启一次)
 
-### 具体操作步骤及脚本
+#### 具体操作步骤及脚本
 
-#### 前置准备
+##### 前置准备
 
 1.  kafka迁移,释放旧的kafka
 2.  新的4个节点
@@ -367,7 +369,7 @@ b.  其中2台复用旧的namenode域名(ip和域名都可以更换,但是为了
 |                 |                        |    Hue                   |
 |                 |                        |    Oozie                 |
 
-####  mysql迁移
+##### mysql迁移
 
 目标：同步mysql数据到hadoopu1.optaim.com，并和10.11.20.49互为主从
 
@@ -411,7 +413,7 @@ hadoopu1.optaim.com节点需要新安装一个mysql
 
 PS:切换前后MySQL数据做备份
 
-#### CLouderaManager迁移
+##### CLouderaManager迁移
 
 目标：clouderanManger从10.11.20.49迁移到hadoopu1.optaim.com
 
@@ -492,7 +494,7 @@ agent(包括hadoopm3.optaim.com和hadoopu1.optaim.com)
 
 等待所有节点都接入hadoopu1.optaim.com
 
-#### Mysql收尾
+##### Mysql收尾
 
 目标：连接到旧的mysql的服务都改为连接hadoopu1.optaim.com
 
@@ -526,7 +528,7 @@ PS:
 
 至此mysql迁移结束
 
-#### ClouderaManager Service迁移
+##### ClouderaManager Service迁移
 
 停止所有ClouderaManager Service
 
@@ -606,7 +608,7 @@ NameNode需要复用旧的agent的uuid,先停止10.11.20.51并取得uuid
 
 PS：部分任务可能需要重启
 
-#### journalNode迁移
+##### journalNode迁移
 
 journalNode有3个,其中2个和NameNode一起\`借壳重生\`了,还有一个需要迁移到hadoopm3.optaim.com
 
@@ -656,7 +658,7 @@ bjuc52.optaim.com上的NameNode和journalNode同样的方式操作
 
 至此journalNode和NameNode迁移完成
 
-#### zookeeper迁移
+##### zookeeper迁移
 
 zookeeper线上节点是bjuc53.optaim.com,bjuc54.optaim.com,bjuc55.optaim.com
 
@@ -695,7 +697,7 @@ zookeeper线上节点是bjuc53.optaim.com,bjuc54.optaim.com,bjuc55.optaim.com
 
 ![](hadoop集群关键角色迁移.assets/image22.png)
 
-#### ResourceManager等
+##### ResourceManager等
 
 -   ResourceManager
 -   Hive
@@ -709,7 +711,7 @@ zookeeper线上节点是bjuc53.optaim.com,bjuc54.optaim.com,bjuc55.optaim.com
 
 但是这几个服务业务可能会用到，尽量能留出时间，统一操作，业务和服务在这一阶段重启
 
-#### 迁移结束
+##### 迁移结束
 
 迁移结束之后需要退出维护模式
 
@@ -721,7 +723,7 @@ zookeeper线上节点是bjuc53.optaim.com,bjuc54.optaim.com,bjuc55.optaim.com
 
 其他待补充。。。
 
-#### 时间花费
+##### 时间花费
 
 第一阶段
 

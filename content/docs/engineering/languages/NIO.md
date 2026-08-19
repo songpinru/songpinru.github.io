@@ -1,8 +1,10 @@
 ---
 title: "NIO"
 ---
+# NIO
 
-# Buffer
+
+## Buffer
 
 * IntBuffer
 * FloatBuffer
@@ -35,14 +37,14 @@ ByteBuffer:
 * slice：切片
 * 
 
-# Channel
+## Channel
 
 * FileChannel
 * SocketChannel
 * ServerSocketChannel
 * DatagramChannel
 
-## 获取：
+### 获取：
 
 1. 使用getChannel()方法
 
@@ -56,7 +58,7 @@ ByteBuffer:
 
 3. Files.newByteChannel()
 
-## FileChannel
+### FileChannel
 
 零拷贝
 
@@ -102,7 +104,7 @@ inChannel.transferTo(0,inChannel.size(),outChannel);
 * lock：给文件加锁，阻塞
 * tryLock：给文件加锁，非阻塞，不成功返回null
 
-### Charset:
+#### Charset:
 
 ```java
 Charset charset = Charset.forName("UTF-8");
@@ -111,7 +113,7 @@ ByteBuffer encode = charset.encode(allocate);
 CharBuffer decode = charset.decode(encode);
 ```
 
-## Selector
+### Selector
 
 Selector是操作系统帮我们管理socket的文件描述符的管理器，把channel注册上去就可以交给系统管理了
 
@@ -127,7 +129,7 @@ select方法阻塞实际上是底层SelectionKey阻塞，如果select方法执�
 * interestOps：注册的事件选项
 * readyOps：已触发的事件选项
 
-## SocketChannel
+### SocketChannel
 
 ```java
 SocketChannel client = SocketChannel.open();
@@ -151,7 +153,7 @@ selectionKey.isValid();
 selectionKey.readyOps();//就绪的ops集合，即注册的ops
 ```
 
-## ServerSocketChannel
+### ServerSocketChannel
 
 ```java
 ServerSocketChannel server = ServerSocketChannel.open();
@@ -170,7 +172,7 @@ socketChannel.configureBlocking(false);//非阻塞
 
 * StandardProtocolFamily：网络协议（ipv4 | ipv6）
 
-## DatagramChannel
+### DatagramChannel
 
 ```java
 DatagramChannel datagramChannel = DatagramChannel
@@ -183,7 +185,7 @@ datagramChannel.send(byteBuffer,InetSocketAddress.createUnresolved("localhost",8
 datagramChannel.register(selector,SelectionKey.OP_ACCEPT);
 ```
 
-## Pipe
+### Pipe
 
 Pipe是线程间的管道，用来异步通信
 

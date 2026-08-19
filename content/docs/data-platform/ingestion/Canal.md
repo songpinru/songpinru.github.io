@@ -1,8 +1,10 @@
 ---
 title: "Canal"
 ---
+# Canal
 
-# 原理
+
+## 原理
 
 1）Master主库将改变记录写到二进制日志(binary log)中；
 
@@ -14,9 +16,9 @@ title: "Canal"
 
 **Canal的工作原理很简单，就是把自己伪装成Slave，假装从Master复制数据。**
 
-#  安装
+## 安装
 
-## Binlog的分类设置
+### Binlog的分类设置
 
 修改MySQL的/usr/my.cnf配置文件。
 
@@ -83,7 +85,7 @@ update  tt set create_date=now()
 
 另外statement和mixed对于需要对binlog的监控的情况都不方便。
 
-## Canal部署
+### Canal部署
 
 解压
 
@@ -134,7 +136,7 @@ canal.instance.enableDruid=false
 ./bin/startup.sh
 ```
 
-# API
+## API
 
 | **对象名称**  | **介绍**                                                     | **包含内容**                                                 |
 | ------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |

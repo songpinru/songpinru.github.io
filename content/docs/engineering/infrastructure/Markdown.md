@@ -1,8 +1,10 @@
 ---
 title: "Markdown"
 ---
+# Markdown
 
-# Markdown 标题
+
+## Markdown 标题
 
 ```md
 # 一级标题
@@ -13,18 +15,18 @@ title: "Markdown"
 ###### 六级标题
 ```
 
-# 一级标题
+### 一级标题
 
-## 二级标题
-### 三级标题
-#### 四级标题
-##### 五级标题
-###### 六级标题
+### 二级标题
+#### 三级标题
+##### 四级标题
+###### 五级标题
+####### 六级标题
 
 ----
 
-# Markdown 字体
-### 字体
+### Markdown 字体
+#### 字体
 ```md
 *斜体文本*
 _斜体文本_
@@ -42,7 +44,7 @@ __粗体文本__
 ___粗斜体文本___
 
 ----
-###  删除线
+#### 删除线
 ```md
 RUNOOB.COM
 GOOGLE.COM
@@ -53,7 +55,7 @@ GOOGLE.COM
 ~~BAIDU.COM~~
 
 *****
-### 下划线
+#### 下划线
 
 ```
 <u>带下划线文本</u>
@@ -61,7 +63,7 @@ GOOGLE.COM
 <u>带下划线文本</u>
 
 ******
-###  脚注
+#### 脚注
 
 ```
 [^RUNOOB]。
@@ -77,9 +79,9 @@ GOOGLE.COM
 
 [^RUNOOB]: 菜鸟教程 -- 学的不仅是技术，更是梦想！！！
 
-# Markdown 列表
+### Markdown 列表
 
-### 列表
+#### 列表
 ```md
 * 第一项
 * 第二项
@@ -130,7 +132,7 @@ GOOGLE.COM
 -  第二项：
     - 第二项嵌套的第一个元素
     - 第二项嵌套的第二个元素
-### 区块
+#### 区块
 ```md
 > 区块引用
 > 菜鸟教程
@@ -148,7 +150,7 @@ GOOGLE.COM
 > >
 > > > 第二层嵌套
 
-# Markdown 代码
+### Markdown 代码
 
 ```
 `printf()` 函数
@@ -161,8 +163,8 @@ $(document).ready(function () {
 });
 ```
 
-# Markdown 链接
-### 一般使用
+### Markdown 链接
+#### 一般使用
 ```md
 [链接名称](链接地址)
 这是一个链接 [菜鸟教程](https://www.runoob.com)
@@ -180,7 +182,7 @@ $(document).ready(function () {
 <https://www.runoob.com>
 
 -----
-### 高级
+#### 高级
 
 ```
 链接也可以用变量来代替，文档末尾附带变量地址：
@@ -200,9 +202,9 @@ $(document).ready(function () {
 [1]: http://www.google.com/
 [runoob]: http://www.runoob.com/
 
-# Markdown 图片
+### Markdown 图片
 
-### 图片
+#### 图片
 ```
 ![alt 属性文本](图片地址)
 ![RUNOOB 图标](http://static.runoob.com/images/runoob-logo.png)
@@ -224,13 +226,13 @@ $(document).ready(function () {
 
 [3]: http://static.runoob.com/images/runoob-logo.png
 
-### 视频
+#### 视频
 
 您可以使用 `<video>` HTML标记嵌入视频，例如：
 
 `<video src="xxx.mp4" />`
 
-# Markdown 表格
+### Markdown 表格
 
 ```
 | 左对齐 | 右对齐 | 居中对齐 |
@@ -244,9 +246,9 @@ $(document).ready(function () {
 | 单元格 | 单元格 |   单元格 |
 | 单元格 | 单元格 |   单元格 |
 
-# Markdown 高级技巧
+### Markdown 高级技巧
 
-### 支持的 HTML 元素
+#### 支持的 HTML 元素
 
 不在 Markdown 涵盖范围之内的标签，都可以直接在文档里面用 HTML 撰写。
 
@@ -258,7 +260,7 @@ $(document).ready(function () {
 
 使用 <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Del</kbd> 重启电脑
 
-#### 折叠
+##### 折叠
 
 <details>
 <summary>CLICK ME</summary>
@@ -273,7 +275,7 @@ $(document).ready(function () {
 </details>
 ```
 
-### YAML Front Matter
+#### YAML Front Matter
 Typora 现在支持 YAML Front Matter 。 在文章顶部输入 --- 然后按 Enter 键将引入一个，或者从菜单中插入一个元数据块。
 ```
 ---
@@ -283,11 +285,11 @@ Typora 现在支持 YAML Front Matter 。 在文章顶部输入 --- 然后按 En
 
 
 
-### 目录 (TOC)
+#### 目录 (TOC)
 输入 [toc] 然后按 Return 键将创建一个“目录”部分，自动从文档内容中提取所有标题，其内容会自动更新。
 `[TOC]`
 
-### 公式
+#### 公式
 
 当你需要在编辑器中插入数学公式时，可以使用两个美元符 $$ 包裹 TeX 或 LaTeX 格式的数学公式来实现。提交后，问答和文章页会根据需要加载 Mathjax 对数学公式进行渲染。如：
 
@@ -309,7 +311,7 @@ $$
 \frac{\partial X}{\partial v} &  \frac{\partial Y}{\partial v} & 0 \\
 \end{vmatrix}
 $$
-# 图形和流
+### 图形和流
 
 https://mermaid-js.github.io/mermaid
 
@@ -549,7 +551,7 @@ Note right of C: 没人陪我玩
         测试报告                               : 48h
 ```
 
-# 备注
+### 备注
 
 ```
 * [ ]   ]后接空格
@@ -558,15 +560,15 @@ Note right of C: 没人陪我玩
 
 * [ ] 理解Java语言的跨平台实现原理
 
-###### text[^referenceID]
+####### text[^referenceID]
 
 [^referenceID]: Computer Aided Translation[EB/OL].  https://www.microsoft.com/en-us/research/video/computer-aided-translation/, 2016/2018-8.19.
 
-## Markdown 增加文献引用
+### Markdown 增加文献引用
 
 这边文章是介绍如何在 Markdown 中增加文献引用。[xxx][1]
 
-## 参考
+### 参考
 
 
 
@@ -584,11 +586,11 @@ Note right of C: 没人陪我玩
 
 
 
-## Markdown 增加文献引用
+### Markdown 增加文献引用
 
 这边文章是介绍如何在 Markdown 中增加文献引用。[<sup>1</sup>](#refer-anchor-1)
 
-## 参考
+### 参考
 
 <div id="refer-anchor-1"></div>
 

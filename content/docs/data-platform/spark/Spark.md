@@ -2,11 +2,13 @@
 title: "Spark"
 description: "Spark 配置、运行模式、核心参数与开发实践笔记。"
 ---
+# Spark
 
-# Spark配置
 
-##  yarn模式
-### spark-env.sh
+## Spark配置
+
+### yarn模式
+#### spark-env.sh
 ```sh
 YARN_CONF_DIR=/opt/module/hadoop-2.7.2/etc/hadoop
 export SPARK_HISTORY_OPTS="
@@ -17,7 +19,7 @@ export SPARK_HISTORY_OPTS="
 
 
 
-### spark-defalts.conf
+#### spark-defalts.conf
 ```bash
 spark.eventLog.enabled           true
 spark.eventLog.dir               hdfs://hadoop102:9000/directory
@@ -35,7 +37,7 @@ spark.serializer			org.apache.spark.serializer.KryoSerializer
 ## spark.scheduler.mode		FIFO/FAIR
 ## spark.speculation 推测执行
 ```
-### yarn-site.xml
+#### yarn-site.xml
 ```xml
 <property>
     <name>yarn.log.server.url</name>
@@ -43,8 +45,8 @@ spark.serializer			org.apache.spark.serializer.KryoSerializer
 </property>
 ```
 ---
-## standalone模式
-### spark-env.sh 
+### standalone模式
+#### spark-env.sh
 ```shell
 -Dspark.history.ui.port=18080 
 -Dspark.history.fs.logDirectory=hdfs://hadoop102:9000/directory 
@@ -54,20 +56,20 @@ export SPARK_DAEMON_JAVA_OPTS="
 -Dspark.deploy.zookeeper.url=hadoop102,hadoop103,hadoop104 
 -Dspark.deploy.zookeeper.dir=/spark"
 ```
-### spark-defalts.conf
+#### spark-defalts.conf
 ```
 spark.master                     spark://hadoop102:7077
 spark.eventLog.enabled           true
 spark.eventLog.dir               hdfs://hadoop102:9000/directory
 ```
-### slaves
+#### slaves
 ```
 hadoop102
 hadoop103
 hadoop104
 ```
 ---
-## submit
+### submit
 
 ```shell
 # submit参数
@@ -94,7 +96,7 @@ bin/spark-submit \
 
 ```
 
-# Spark core
+### Spark core
 
 POM添加：
 
@@ -106,7 +108,7 @@ POM添加：
 </dependency>
 ```
 
-## RDD创建
+### RDD创建
 
 ```scala
 //创建SparkConf并设置App名称
@@ -125,7 +127,7 @@ val rdd1: RDD[Int] = sc.makeRDD(Array(1, 2, 3, 4, 5, 6, 7, 8))
 val lineWordRdd: RDD[String] = sc.textFile("input")
 ```
 
-## RDD分区
+### RDD分区
 
 > 默认分区数(local[*])是CPU的核心数
 
@@ -184,11 +186,11 @@ if (bytesRemaining != 0) {
           }
 ```
 
-## spark算子
+### spark算子
 
-### Transformation 转换算子
+#### Transformation 转换算子
 
-#### Value型
+##### Value型
 
 | name                                    | description                              |
 | --------------------------------------- | ---------------------------------------- |
@@ -206,7 +208,7 @@ if (bytesRemaining != 0) {
 | sortBy(f,ascending, numPartitions)      | 排序                                     |
 | pipe(command)                           | 管道，脚本调用                           |
 
-#### Value型交互
+##### Value型交互
 
 | name           | description                            |
 | -------------- | -------------------------------------- |
@@ -215,7 +217,7 @@ if (bytesRemaining != 0) {
 | intersection() | 交集，无shuffle                        |
 | zip()          | 拉链(要求严格，每个分区的元素数要相等) |
 
-#### Key-Value型
+##### Key-Value型
 
 | name             | description                                                  |
 | ---------------- | ------------------------------------------------------------ |
@@ -240,7 +242,7 @@ if (bytesRemaining != 0) {
 >   >**flodByKey**，首个值转化，分区内函数=分区间函数
 >   >**reducerByKey**，分区内函数=分区间函数
 
-### Action行动算子
+#### Action行动算子
 
 | name                 | description                                                  |
 | -------------------- | ------------------------------------------------------------ |
@@ -260,7 +262,7 @@ if (bytesRemaining != 0) {
 | saveAsSequenceFile() | 只支持K-V结构                                                |
 | saveAsObjectFile     |                                                              |
 
-## RDD序列化和血缘依赖
+### RDD序列化和血缘依赖
 
 class也需要继承**Serializable**接口
 
@@ -300,9 +302,9 @@ List(org.apache.spark.OneToOneDependency@627d8516)
 List(org.apache.spark.ShuffleDependency@a518813)
 
 ```
-## RDD持久化
+### RDD持久化
 
-### RDD Cache
+#### RDD Cache
 
 ```scala
 mapRdd.cache()
@@ -329,7 +331,7 @@ object StorageLevel {
 
 取消缓存方法为：**unpersist()**
 
-### RDD Checkpoint
+#### RDD Checkpoint
 
 ```scala
 // 需要设置路径，否则抛异常：Checkpoint directory has not been set in the SparkContext
@@ -342,13 +344,13 @@ object StorageLevel {
 		sc.checkpointFile()
 ```
 
-### Cache 和 Checkpoint 的区别
+#### Cache 和 Checkpoint 的区别
 
 * cache是临时性的，app结束就删除，checkpoint是永久的，通常存在hdfs等文件系统
 * cache不切断血缘，checkpoint会切断血缘，后续都从checkpoint读取
 * cache和checkpoint存储内容一样，源码显示：若有cache，从cache中读取数据，不用再走一遍job
 
-### checkpoint存到HDFS
+#### checkpoint存到HDFS
 
 ```scala
 // 设置访问HDFS集群的用户名
@@ -360,9 +362,9 @@ object StorageLevel {
 
 ```
 
-## 分区
+### 分区
 
-### Hash分区
+#### Hash分区
 
 ```scala
 class HashPartitioner(partitions: Int) extends Partitioner {
@@ -389,11 +391,11 @@ class HashPartitioner(partitions: Int) extends Partitioner {
 
 
 
-### Range分区
+#### Range分区
 
 分区内无序，分区间有序
 
-### 自定义分区
+#### 自定义分区
 
 ```scala
 //继承Partitioner,重写两个方法
@@ -405,18 +407,18 @@ override def getPartition(key: Any): Int = {}
 
 ```
 
-##  数据保存
+### 数据保存
 
 * TextFile
 * JsonFile
 * SequenceFile
 * ObjectFile
 
-### HDFS
+#### HDFS
 
 由于Hadoop的API有新旧两个版本，Spark也提供了两套创建操作接口**hadoopRDD**和**newHadoopRDD**
 
-### MySQL
+#### MySQL
 
 就是JDBC
 
@@ -442,11 +444,11 @@ PS：建议使用 foreachPartition()来减少资源消耗
 
 ```
 
-## 累加器
+### 累加器
 
 累加器：分布式共享只写变量。（Executor和Executor之间不能读数据）
 
-### 系统累加器
+#### 系统累加器
 
 ```scala
 //声明累加器
@@ -459,7 +461,7 @@ PS：建议使用 foreachPartition()来减少资源消耗
 	sum1.value
 ```
 
-### 自定义累加器
+#### 自定义累加器
 
 声明累加器
 
@@ -512,7 +514,7 @@ class MyAccumulator extends AccumulatorV2[String, mutable.Map[String, Long]] {
 ```
 >  源码中，每个task执行copyReset（copy+reset）
 
-## 广播变量
+### 广播变量
 
 广播变量：分布式共享只读变量
 
@@ -543,9 +545,9 @@ SparkFiles.get(fileName)
 
 
 
-#  Spark SQL
+### Spark SQL
 
-## 概念
+### 概念
 
 **SparkSQL是spark用于结构化数据的处理模块**
 
@@ -564,7 +566,7 @@ API：
 
 > DataFrame是DataSet的特例，泛型为Row
 
-## Spark SQL编程
+### Spark SQL编程
 
 **SparkSession**：实质是SQLContext和HiveContext的组合
 
@@ -594,27 +596,27 @@ val conf: SparkConf = new SparkConf().setMaster("local[*]").setAppName("SparkSQL
 ```
 
 
-### DataFrame
+#### DataFrame
 
-#### 创建DataFrame
+##### 创建DataFrame
 
 spark.read.json("path").show
 
 Seq.toDF
 
-#### DataFrame转换为RDD
+##### DataFrame转换为RDD
 
 import spark.implicits._
 
 df.rdd.collect
 
-#### DataFrame转换为DataSet
+##### DataFrame转换为DataSet
 
 case class 类名()
 
 df.as[类名]
 
-#### SQL语法和DSL语法
+##### SQL语法和DSL语法
 
 **SQL:**
 
@@ -638,19 +640,19 @@ df.groupBy("age").count.show
 
 ----------------------------------------
 
-### DataSet
+#### DataSet
 
-#### 创建DataSet
+##### 创建DataSet
 
 case class 类名()
 
 Seq(类).toDS
 
-#### DataSet转换为DataFrame
+##### DataSet转换为DataFrame
 
 ds.toDF
 
-#### DataSet转换为RDD
+##### DataSet转换为RDD
 
 import spark.implicits._
 
@@ -658,14 +660,14 @@ ds.rdd
 
 --------------------------
 
-### RDD
+#### RDD
 
 ```scala
 spark.sparkContext.makeRDD()
 spark.sparkContext.textFile()
 ```
 
-#### RDD转换为DataFrame
+##### RDD转换为DataFrame
 
 import spark.implicits._
 
@@ -677,7 +679,7 @@ case class 类名()
 
 spark.createDataFrame(RDD, StructType)
 
-#### RDD转换为DataSet
+##### RDD转换为DataSet
 
 import spark.implicits._
 
@@ -687,17 +689,17 @@ case class 类名()
 
 ---------------------------
 
-### 用户自定义函数
+#### 用户自定义函数
 
-#### UDF
+##### UDF
 
 spark.udf.register("naem",function)
 
 > function:必须有类型，如   (s:Long)=>s+1L
 
-#### UDAF
+##### UDAF
 
-##### 第一种方式，弱类型
+###### 第一种方式，弱类型
 
 * 定义类继承UserDefinedAggregateFunction，并重写其中方法
 
@@ -746,7 +748,7 @@ class MyAveragUDAF extends UserDefinedAggregateFunction {
   def evaluate(buffer: Row): Double = buffer.getLong(0).toDouble / buffer.getLong(1)
 }
 ```
-##### 第二种方式，强类型
+###### 第二种方式，强类型
 
 * 定义样例类，为函数的输入输出缓存类型
 * 定义类继承Aggregator，实现其方法
@@ -800,9 +802,9 @@ class MyAvgUDAF extends Aggregator[User, AgeBuffer, Double]{
   }
 }
 ```
-## SparkSQL数据加载与保存
+### SparkSQL数据加载与保存
 
-### 文件的加载保存
+#### 文件的加载保存
 
 **加载数据的通用方法**：saprk.read.load 
 
@@ -910,7 +912,7 @@ Spark SQL的默认数据源为Parquet格式,不需要使用format
 
 修改配置项spark.sql.sources.default，可修改默认数据源格式
 
-### Hive
+#### Hive
 
 自带hive,在目录下会生成元数据目录
 
@@ -948,9 +950,9 @@ val spark: SparkSession = SparkSession
 
 ```
 
-# Spark Streaming
+### Spark Streaming
 
-## 概念
+### 概念
 
 **流式数据的特点：**
 
@@ -975,7 +977,7 @@ val spark: SparkSession = SparkSession
 * spark.streaming.receiver.maxRate ，可以限制接受速率
 * spark.streaming.backpressure.enabled ，控制是否启用背压机制，默认为false
 
-## DStream
+### DStream
 
 
 使用supervisor监控进程，使其挂了可以自动重启，保证项目运行
@@ -1006,9 +1008,9 @@ POM添加：
     ssc.awaitTermination()
 ```
 
-## 创建DStream
+### 创建DStream
 
-### 从端口中获取
+#### 从端口中获取
 
 **netcat指令：**
 
@@ -1037,7 +1039,7 @@ POM添加：
 
 ```
 
-### Kafka数据源
+#### Kafka数据源
 
 POM添加：
 
@@ -1058,7 +1060,7 @@ bin/kafka-topics.sh --zookeeper hadoop102:2181 --create --topic my-bak --partiti
 bin/kafka-console-producer.sh --broker-list hadoop102:9092 --topic my-bak
 ```
 
-#### 高级API方式一
+##### 高级API方式一
 
 ```scala
 //kafka参数声明
@@ -1076,7 +1078,7 @@ bin/kafka-console-producer.sh --broker-list hadoop102:9092 --topic my-bak
     val kafkaDS: InputDStream[(String, String)] = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](ssc, kafkaParams, Set(topic))
 ```
 
-#### 高级API方式二
+##### 高级API方式二
 
 * 实质就是嵌套一层，将逻辑放在函数中，main只提供入口
 * 调用StreamingContext.getActiveOrCreate("检查点路径",函数)
@@ -1118,9 +1120,9 @@ def main(args: Array[String]): Unit = {
   }
 ```
 
-####   低级API方式
+##### 低级API方式
 
-##### 主要思路
+###### 主要思路
 
 在高级API方式一的基础上增加：
 
@@ -1150,7 +1152,7 @@ def main(args: Array[String]): Unit = {
     offsetToZookeeper(kafkaDStream, kafkaCluster, group)
 ```
 
-##### 从ZK获取offset：
+###### 从ZK获取offset：
 
 * 创建  **本次**  获取offset的容器：new mutable.**Map\[TopicAndPartition, Long\]()**
 * 从KafkaCluster获取offset：
@@ -1200,7 +1202,7 @@ def getOffsetFromZookeeper(kafkaCluster: KafkaCluster, kafkaGroup: String, kafka
 }
 ```
 
-##### 向ZK提交offset：
+###### 向ZK提交offset：
 
 * 使用输出方法：Dstream.foreachRDD
 * 获取DStream中的offset信息：
@@ -1241,7 +1243,7 @@ def getOffsetFromZookeeper(kafkaCluster: KafkaCluster, kafkaGroup: String, kafka
 }
 ```
 
-### 自定义数据源
+#### 自定义数据源
 
 **步骤：**
 
@@ -1307,7 +1309,7 @@ class MyReceiver(host: String, port: Int) extends Receiver[String](StorageLevel.
 }
 ```
 
-### RDD队列
+#### RDD队列
 
 **步骤：**
 
@@ -1343,9 +1345,9 @@ object Spark02_DStreamCreate_RDDQueue {
 }
 ```
 
-## DStream转换
+### DStream转换
 
-### 无状态转换
+#### 无状态转换
 
 **Transform：**
 
@@ -1364,9 +1366,9 @@ val vDStream=DStream.transform(rdd => rdd）
 - reduceByKey(func, [numTasks])
 - repartition(numPartitions)： 改变Dstream分区数
 
-### 有状态转换
+#### 有状态转换
 
-#### UpdateStateByKey
+##### UpdateStateByKey
 
 ```scala
 //设置检查点  用于保存状态
@@ -1389,7 +1391,7 @@ val stateDS: DStream[(String, Int)] = mapDS.updateStateByKey(
     )
 ```
 
-### Window Operations
+#### Window Operations
 
 **1)**     **window(windowLength, slideInterval)**
 
@@ -1425,7 +1427,7 @@ val stateDS: DStream[(String, Int)] = mapDS.updateStateByKey(
 
 通过reduce进入到滑动窗口数据并”反向reduce”离开窗口的旧数据来实现这个操作。
 
-## DStream输出
+### DStream输出
 
 **1)**     **print()**
 
@@ -1461,9 +1463,9 @@ val stateDS: DStream[(String, Int)] = mapDS.updateStateByKey(
 
 PS：在使用JDBC时，用rdd.foreachPartition
 
-## DStream进阶
+### DStream进阶
 
-###  累加器和广播变量
+#### 累加器和广播变量
 
 和Spark core一样，不过要先获得sparkContext
 
@@ -1483,7 +1485,7 @@ val broadcastList: Broadcast[List[(String, Int)]] = ssc.sparkContext.broadcast(l
 fbroadcastList.value
 ```
 
-### Caching / Persist
+#### Caching / Persist
 
 和Spark core一样
 
@@ -1493,7 +1495,7 @@ resDStream.persist()
 resDStream.persist(StorageLevel.MEMORY_ONLY)
 ```
 
-### SQL Operation
+#### SQL Operation
 
 * 获得SparkSession
 * 引入implicits
@@ -1512,7 +1514,7 @@ mapDS.foreachRDD(rdd =>{
 })
 ```
 
-## 优雅的关闭
+### 优雅的关闭
 
 * SparkConf设置优雅的关闭为true
 * 在ssc.start() 之后启动新的线程
@@ -1559,13 +1561,13 @@ new Thread(new Runnable {
 
 
 
-# 附录
+### 附录
 
-## 向HBase读写数据
+### 向HBase读写数据
 
 由于org.apache.hadoop.hbase.mapreduce.TableInputFormat类的实现，Spark可以通过Hadoop输入格式访问HBase。这个输入格式会返回键值对数据，其中键的类型为org.apache.hadoop.hbase.io.ImmutableBytesWritable，而值的类型为org.apache.hadoop.hbase.client.Result。
 
-### 添加依赖
+#### 添加依赖
 
 ```xml
 <dependency>
@@ -1580,7 +1582,7 @@ new Thread(new Runnable {
     <version>1.3.1</version>
 </dependency>
 ```
-### 从HBase读取数据
+#### 从HBase读取数据
 
 ```scala
 package com.atguigu
@@ -1634,7 +1636,7 @@ object HBaseSpark {
 }
 ```
 
-### 往HBase写入
+#### 往HBase写入
 
 ```scala
 def main(args: Array[String]) {

@@ -1,10 +1,12 @@
 ---
 title: "MySQL九阴真经"
 ---
+# MySQL九阴真经
 
-# 第一章 MySQL
 
-## 1.1 数据库概述
+## 第一章 MySQL
+
+### 1.1 数据库概述
 
 （1）为什么要学习数据库
 
@@ -32,7 +34,7 @@ title: "MySQL九阴真经"
 
 ​	非关系型数据库
 
-## 1.2 初识MySQL
+### 1.2 初识MySQL
 
 （1） MySQL产品介绍
 
@@ -98,7 +100,7 @@ title: "MySQL九阴真经"
 
 ​				*/
 
-## 1.3 SQL语言的分类
+### 1.3 SQL语言的分类
 
 ​	**DDL:  Data Definition Language** 数据定义语言   (和数据无关) 
 ​		库和表的管理
@@ -112,9 +114,9 @@ title: "MySQL九阴真经"
 ​		权限 (MySQL没有) 
 ​		事务
 
-## 1.4 DDL 数据定义语言
+### 1.4 DDL 数据定义语言
 
-### 1.4.1 库的管理
+#### 1.4.1 库的管理
 
 ```mysql
 	#显示所有数据库
@@ -126,7 +128,7 @@ title: "MySQL九阴真经"
 	#删除数据库
 		drop database 【if exists】 数据库名;
 ```
-### 1.4.2 表的管理
+#### 1.4.2 表的管理
 
 ​	（1）mysql数据类型：
 ​			**整型：**
@@ -194,9 +196,9 @@ title: "MySQL九阴真经"
 			alter table employee drop name;
 ```
 
-## 1.5 DML 数据操纵语言
+### 1.5 DML 数据操纵语言
 
-### 1.5.1 新增数据  insert into
+#### 1.5.1 新增数据  insert into
 
 **语法1**：insert into 表名(指定列名...) values(值...);   指定部分列的数据
 
@@ -236,7 +238,7 @@ INSERT INTO books
 	,(2,'EmmaT','Jane lura',35,1993,'Joke',22);
 ```
 
-### 1.5.2 修改数据 update
+#### 1.5.2 修改数据 update
 
 **语法**：update 表名 set 需要修改的列名=新值,需要修改的列名=新值,... 【where 修改条件】
 
@@ -276,7 +278,7 @@ INSERT INTO books
 	UPDATE stu SET stu_salary=45000 WHERE NOT stu_phone IS  NULL
 ```
 
-### 1.5.3 删除数据 delete
+#### 1.5.3 删除数据 delete
 
 **语法**： delete from 表名 【where 删除条件】    
 
@@ -303,9 +305,9 @@ INSERT INTO books
 	DELETE FROM class WHERE id>3;
 ```
 
-## 1.6 DQL 数据查询语言
+### 1.6 DQL 数据查询语言
 
-### 1.6.1 简单查询
+#### 1.6.1 简单查询
 
 **语法**： select 常量、字段名、函数、表达式以及上述组合形式 from 表名 where 查询条件; 
 
@@ -387,7 +389,7 @@ SELECT stu_name '姓名',stu_salary,stu_salary*12 年薪 FROM stu;
 SELECT stu_name,stu_salary,stu_salary*12 sum FROM stu ORDER BY sum;
 ```
 
-### 1.6.2 函数
+#### 1.6.2 函数
 
 （1）单行函数
 
@@ -490,7 +492,7 @@ SELECT stu_name,stu_salary,stu_salary*12 sum FROM stu ORDER BY sum;
 	WHERE price<40 GROUP BY note HAVING sum(num)>0
 ```
 
-### 1.6.3 复杂查询
+#### 1.6.3 复杂查询
 
 （1）分支结构
 
@@ -645,7 +647,7 @@ ORDER BY 排序
 LIMIT 分页
 ```
 
-## 1.7 事务
+### 1.7 事务
 
 **事务是由一个或者多个DML语句组成**
 
@@ -671,22 +673,22 @@ UPDATE score SET grade=gade+10 WHERE id=2;
 ROLLBACK;
 ```
 
-# 第二章 JDBC
+## 第二章 JDBC
 
-## 2.1 什么是JDBC?
+### 2.1 什么是JDBC?
 
 ​	**JDBC** (Java Database Connectivity) 独立于特定数据库管理系统、通用的SQL数据库存取和操作的公共接口
 ​	一套接口(一套标准)  SUN公司提出的一套标准   各大数据库厂商去实现标准
 
-## 2.2 简单的JDBC案例
+### 2.2 简单的JDBC案例
 
-### 2.2.1 导入数据库驱动包
+#### 2.2.1 导入数据库驱动包
 
  		①在项目下建一个文件夹
  		②将数据库驱动包粘贴到文件夹中
  		③在驱动包上右键->build path->Add to build path
 
-### 2.2.2 JDBC实现步骤
+#### 2.2.2 JDBC实现步骤
 
  		① 注册驱动  (加载Driver)
  			A: DriverManager.registerDriver(new Driver());
@@ -840,7 +842,7 @@ ROLLBACK;
  		⑤ 关闭资源
  			close();
 
-## 2.3 JDBC的相关API
+### 2.3 JDBC的相关API
 
 （1）java.sql.DriverManager
 		registerDriver(Driver driver)注册驱动
@@ -868,7 +870,7 @@ ROLLBACK;
  		getXXX(String name) 根据结果集的列名取值
  		close()
 
-## 2.4 数据库连接池
+### 2.4 数据库连接池
 
 **功能**：创建和维护数据库连接
 
@@ -889,7 +891,7 @@ ROLLBACK;
 	conn.close();
 ```
 
-## 2.5 数据库连接信息提取到配置文件
+### 2.5 数据库连接信息提取到配置文件
 
 （1）配置文件信息
 ```
@@ -909,7 +911,7 @@ dds.setUsername(pro.getProperty("username"));
 dds.setPassword(pro.getProperty("password"));
 ```
 
-## 2.6 预命令对象
+### 2.6 预命令对象
 
 * 编写sql，并用？做占位符
 * 调用connection的prepareStatement()方法
@@ -929,7 +931,7 @@ psta.setString(3, "123");
 int i = psta.executeUpdate();
 ```
 
-## 2.7 JDBCUtils
+### 2.7 JDBCUtils
 
 * 初始化连接池
 * 提供getConnection
@@ -1008,7 +1010,7 @@ public class JDBCUtils {
 }
 ```
 
-## 2.8 事务
+### 2.8 事务
 
 * 提交 conn.commit();
 * 回滚 conn.rollback();
@@ -1043,7 +1045,7 @@ try {
 		}
 ```
 
-## 2.9 批处理
+### 2.9 批处理
 
 * psta.addBatch()
 
@@ -1072,9 +1074,9 @@ PreparedStatement psta =null;
 	}
 ```
 
-## 2.10 DBUtils
+### 2.10 DBUtils
 
-### 核心
+#### 核心
 
 * QueryRunner 类
 * update()，query()方法
@@ -1101,7 +1103,7 @@ ScalarHandler<Long> sh=new ScalarHandler<>();
 	//泛型是设置query方法的返回值类型
 ```
 
-### 增删改
+#### 增删改
 
 ```java
 public void test1(){
@@ -1120,7 +1122,7 @@ public void test1(){
 	}
 ```
 
-### 查询
+#### 查询
 
 ```java
 public void test3(){
@@ -1139,7 +1141,7 @@ public void test3(){
 	}
 ```
 
-## 2.11 BaseDao
+### 2.11 BaseDao
 
 * 利用DBUtils封装几个方法
 * **update** 数据的增删改

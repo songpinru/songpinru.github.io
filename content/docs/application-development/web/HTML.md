@@ -1,8 +1,10 @@
 ---
 title: "HTML"
 ---
+# HTML
 
-# 结构
+
+## 结构
 
 HTML基本同xml
 
@@ -31,7 +33,7 @@ body才是显示的内容
 </html>
 ```
 
-# head
+## head
 
 可以使用的标签
 ```html
@@ -51,7 +53,7 @@ body才是显示的内容
 <base/>
 ```
 
-# body
+## body
 
 | 标签   | desc     |
 | ------ | -------- |
@@ -66,7 +68,7 @@ body才是显示的内容
 | sup    | 上标     |
 | sub    | 下标     |
 
-## HTML 分组标签
+### HTML 分组标签
 
 块级元素起新行
 
@@ -77,7 +79,7 @@ body才是显示的内容
 | div  | 定义了文档的区域，块级 (block-level)        |
 | span | 用来组合文档中的行内元素， 内联元素(inline) |
 
-## img
+### img
 
 图片标签
 
@@ -85,19 +87,19 @@ body才是显示的内容
 <img src="./main/resources/数据流程.png" alt="图片" title="悬停文字" width="300" height="300" border="1" >
 ```
 
-## video
+### video
 
 视频标签
 
 <video width="320" height="240" controls>   <source src="movie.mp4" type="video/mp4">   <source src="movie.ogg" type="video/ogg"> 您的浏览器不支持Video标签。 </video>
 
-## audio
+### audio
 
 音频标签
 
 <audio controls>   <source src="horse.ogg" type="audio/ogg">   <source src="horse.mp3" type="audio/mpeg"> 您的浏览器不支持 audio 元素。 </audio>
 
-## 链接标签
+### 链接标签
 
 href:链接，不加协议就是相对链接，#就是锚连接
 
@@ -109,7 +111,7 @@ target：默认是本网页跳转，blank是新页面
 <a href="https://www.baidu.com" target="_blank"></a>
 ```
 
-## 列表
+### 列表
 
 无序列表（unoderlist）
 
@@ -144,7 +146,7 @@ dd：define detail
     <dd>121</dd>
     <dd>121</dd>
 </dl>
-## 表格
+### 表格
 
 table
 
@@ -174,7 +176,7 @@ th：table header
         <td>xxx</td>
     </tr>
 </table>
-## HTML 表单标签
+### HTML 表单标签
 
 | 标签     | 描述                                         |
 | :------- | :------------------------------------------- |
@@ -222,7 +224,7 @@ week
 
 
 
-## Iframe
+### Iframe
 
 内嵌一个panel，展示不同的东西
 
@@ -235,7 +237,7 @@ target和name绑定
 <a href="//www.runoob.com" target="iframe_a">RUNOOB.COM</a>
 ```
 
-# 网页结构
+## 网页结构
 
 | 元素名  | desc                 |
 | ------- | -------------------- |

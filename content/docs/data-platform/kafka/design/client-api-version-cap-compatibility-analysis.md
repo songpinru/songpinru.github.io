@@ -1,10 +1,12 @@
 ---
 title: "Client Api Version Cap Compatibility Analysis"
 ---
+# Client Api Version Cap Compatibility Analysis
 
-# 客户端 API 版本封顶兼容性问题排查
 
-## 1. 问题背景
+## 客户端 API 版本封顶兼容性问题排查
+
+### 1. 问题背景
 
 当前分支实现了客户端 API 版本封顶功能。启用后，broker 期望只对客户端 listener 广告并接受以下最高版本：
 
@@ -33,7 +35,7 @@ OFFSET_FOR_LEADER_EPOCH:1
 
 本文记录服务端与客户端源码排查过程、问题原理、验证方法和修复建议。
 
-## 2. 结论摘要
+### 2. 结论摘要
 
 根因是 broker 在 SASL 认证前后提供了互相矛盾的 API 能力：
 
@@ -51,9 +53,9 @@ librdkafka、kafka-go 和较新的 kafka-python 都可能在 SASL 认证前查�
 
 因此，问题并不是这些客户端不会根据正确的 ApiVersions 响应降级，而是它们实际收到的第一份、也是最终使用的 ApiVersions 响应没有被封顶。
 
-## 3. 排查过程
+### 3. 排查过程
 
-### 3.1 确认服务端版本封顶位置
+#### 3.1 确认服务端版本封顶位置
 
 认证后的正常 ApiVersions 请求在 `KafkaApis` 中处理：
 
@@ -84,7 +86,7 @@ if (ClientApiVersionCap.shouldCap(...) &&
 
 这说明认证后的上报层和请求拒绝层都实现了 cap。
 
-### 3.2 确认 SASL 认证前存在独立 ApiVersions 路径
+#### 3.2 确认 SASL 认证前存在独立 ApiVersions 路径
 
 Kafka 允许客户端在 SASL handshake 前发送 ApiVersionsRequest。该请求不进入 `KafkaApis`，而是由 `SaslServerAuthenticator` 直接处理：
 
@@ -114,7 +116,7 @@ version => apiVersionManager.apiVersionResponse(
 | SASL 认证前 | `SaslServerAuthenticator` | 否 |
 | SASL 认证后 | `KafkaApis` | 是 |
 
-### 3.3 确认非 Java 客户端的协商时序
+#### 3.3 确认非 Java 客户端的协商时序
 
 三类客户端的典型连接顺序都是：
 
@@ -137,7 +139,7 @@ version => apiVersionManager.apiVersionResponse(
   -> 超过 cap，被返回 UNSUPPORTED_VERSION
 ```
 
-### 3.4 确认错误响应的协议表现
+#### 3.4 确认错误响应的协议表现
 
 `KafkaApis` 捕获版本异常后，通过以下路径构造每种 API 的标准错误响应：
 
@@ -161,7 +163,7 @@ Fetch、ListOffsets、OffsetFetch、OffsetCommit 和 OffsetsForLeaderEpoch 都�
 
 Metadata 的行为不同，具体见第 6 节。
 
-## 4. 完整失败链路
+### 4. 完整失败链路
 
 以 SASL 客户端为例：
 
@@ -187,9 +189,9 @@ Broker 广告支持版本 X，但随后拒绝同一连接上的版本 X。
 
 客户端没有义务在收到 `UNSUPPORTED_VERSION` 后自动逐级降低版本。常见实现只会断线重连或刷新元数据，而新连接仍会收到相同的未封顶能力表，因此可能无限重复失败。
 
-## 5. 各客户端行为分析
+### 5. 各客户端行为分析
 
-### 5.1 librdkafka
+#### 5.1 librdkafka
 
 librdkafka 每个 API 的正常版本选择逻辑是：
 
@@ -220,7 +222,7 @@ ApiVersions 在 SASL 认证前完成，响应被保存为该 broker 连接的能
 - <https://github.com/confluentinc/librdkafka/blob/master/src/rdkafka_sasl.c>
 - <https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md>
 
-### 5.2 kafka-go
+#### 5.2 kafka-go
 
 kafka-go 同时存在现代 `Client/Transport` 和旧 `Conn/Reader` 两套路径，但两者都会在 SASL 认证前查询 ApiVersions，认证后不重新查询。
 
@@ -255,7 +257,7 @@ OffsetFetch v1
 - <https://github.com/segmentio/kafka-go/blob/v0.4.51/conn.go>
 - <https://github.com/segmentio/kafka-go/blob/v0.4.51/dialer.go>
 
-### 5.3 kafka-python
+#### 5.3 kafka-python
 
 官方 kafka-python 没有 `2.4.x` release。现场所称“2.4 之后”可能是 Kafka broker 版本、vendor fork 或其他 Python 客户端发行版本，应先确认实际安装包和 `kafka.__version__`。
 
@@ -282,15 +284,15 @@ api_version=None
 - <https://github.com/dpkp/kafka-python/blob/2.2.4/kafka/protocol/broker_api_versions.py>
 - <https://github.com/dpkp/kafka-python/blob/3.0.0/kafka/net/connection.py>
 
-### 5.4 与 Kafka Java 客户端的差异
+#### 5.4 与 Kafka Java 客户端的差异
 
 Kafka Java 客户端在认证前的 ApiVersions 主要用于确定 SASL Handshake 和 SaslAuthenticate 版本。认证完成后，NetworkClient 仍会执行正常的 broker API 版本发现。
 
 因此 Java 客户端可能在认证后获得 `KafkaApis` 返回的封顶版本表，而非 Java 客户端直接使用认证前版本表。这使当前问题在跨语言测试中更明显，也说明服务端实现不能依赖 Java 客户端特有的连接状态机。
 
-## 6. 为什么分别表现为 UnsupportedApiVersion 和 UnknownPartition
+### 6. 为什么分别表现为 UnsupportedApiVersion 和 UnknownPartition
 
-### 6.1 UnsupportedApiVersion
+#### 6.1 UnsupportedApiVersion
 
 客户端收到未封顶能力表后可能发送：
 
@@ -316,7 +318,7 @@ UnsupportedVersion
 UNSUPPORTED_VERSION
 ```
 
-### 6.2 UnknownPartition
+#### 6.2 UnknownPartition
 
 `UnknownPartition` 通常不是最初的 broker 错误，而是 Metadata 请求被拒绝后的二级症状。
 
@@ -359,7 +361,7 @@ topic partition not found
 
 因此排查现场问题时，不能只检查最后一条 `UnknownPartition` 日志，还需要向前查找 Metadata 请求版本和服务端的 `UnsupportedVersionException`。
 
-## 7. 生产与消费的影响差异
+### 7. 生产与消费的影响差异
 
 当前默认 cap 不包含 Produce，因此 Produce RPC 本身不会被这组规则直接拒绝。
 
@@ -379,9 +381,9 @@ topic partition not found
 同一客户端已有连接短暂正常，重连后失败
 ```
 
-## 8. 现场验证方法
+### 8. 现场验证方法
 
-### 8.1 抓取第一条 ApiVersionsResponse
+#### 8.1 抓取第一条 ApiVersionsResponse
 
 关键不是认证后的 ApiVersions 响应，而是同一物理连接在 SASL 认证前收到的第一条响应。
 
@@ -398,7 +400,7 @@ OffsetForLeaderEpoch > 1
 
 如果认证前广告高版本，随后相同连接上的业务请求收到错误码 35，即可确认根因。
 
-### 8.2 对比 SASL 与非 SASL listener
+#### 8.2 对比 SASL 与非 SASL listener
 
 分别连接：
 
@@ -410,7 +412,7 @@ OffsetForLeaderEpoch > 1
 - SASL listener 认证前响应未 cap；
 - 非 SASL listener 的 ApiVersions 请求进入 `KafkaApis`，响应已 cap。
 
-### 8.3 服务端日志与抓包字段
+#### 8.3 服务端日志与抓包字段
 
 建议记录或抓取：
 
@@ -429,7 +431,7 @@ OffsetForLeaderEpoch > 1
 ApiVersions -> SaslHandshake -> SaslAuthenticate -> Metadata/Fetch
 ```
 
-### 8.4 客户端侧检查
+#### 8.4 客户端侧检查
 
 librdkafka 建议开启：
 
@@ -456,7 +458,7 @@ client.get_api_versions()
 
 并排除显式 `api_version=(...)` 绕过真实协商的情况。
 
-### 8.5 其他需要排除的变量
+#### 8.5 其他需要排除的变量
 
 还应确认：
 
@@ -466,9 +468,9 @@ client.get_api_versions()
 - 客户端没有复用来自其他集群或 listener 的全局能力表；
 - 运行包与预期版本一致，不是 vendor fork。
 
-## 9. 修复建议
+### 9. 修复建议
 
-### 9.1 必须修复认证前 ApiVersions
+#### 9.1 必须修复认证前 ApiVersions
 
 给 `SaslServerAuthenticator` 注入的 supplier 必须应用与 `KafkaApis` 完全相同的 cap：
 
@@ -495,7 +497,7 @@ version => {
 
 该示例只说明关键逻辑。正式实现还应同时处理 control-plane listener，避免内部 controller 通信被错误封顶。
 
-### 9.2 统一所有 ApiVersions 响应入口
+#### 9.2 统一所有 ApiVersions 响应入口
 
 更稳妥的做法不是在两个位置复制逻辑，而是抽取统一响应构造方法，让以下路径全部调用同一实现：
 
@@ -514,7 +516,7 @@ version => {
 
 这样可以避免认证状态、listener 或后续重构再次产生两份不同能力表。
 
-### 9.3 兜底拒绝逻辑的定位
+#### 9.3 兜底拒绝逻辑的定位
 
 超 cap 拒绝可以保留，用于阻止未协商或恶意客户端硬发高版本，但它只能是最后保护，不能替代正确广告。
 
@@ -526,7 +528,7 @@ ApiVersions 广告 <= cap
 只有绕过协商的请求才收到 UNSUPPORTED_VERSION
 ```
 
-### 9.4 补充集成测试
+#### 9.4 补充集成测试
 
 至少需要覆盖：
 
@@ -543,7 +545,7 @@ ApiVersions 广告 <= cap
 
 现有 `SaslApiVersionsRequestTest.testApiVersionsRequestBeforeSaslHandshakeRequest` 已证明认证前路径存在，但测试没有开启版本 cap，也没有断言目标 API 的最大版本，需要扩展。
 
-## 10. 最终结论
+### 10. 最终结论
 
 当前客户端 API 版本封顶功能只覆盖了认证后的 ApiVersions 请求，没有覆盖 SASL 认证前的版本协商路径。
 

@@ -1,10 +1,12 @@
 ---
 title: "Pandas"
 ---
+# Pandas
 
-# 数据结构
 
-## Series
+## 数据结构
+
+### Series
 
 Series是带有索引的一维数组,数组内的数据类型不需要相同,且索引可以重复，可以视为一行或者一列数据.
 使用方式同数组(numpy数组亦可)
@@ -28,7 +30,7 @@ pd.Series(5., index=['a', 'b', 'c', 'd', 'e'])
 
 ```
 
-## DataFrame
+### DataFrame
 
 DataFrame是含有索引和列的二维数组,可视为由多个相同索引的Series组成(可以是列,也可以是行,如果series的索引是列名,则Series是一行数据)
 
@@ -60,7 +62,7 @@ d = {'one' : pd.Series([1, 2, 3], index=['a', 'b', 'c']),
 df = pd.DataFrame(d)
 ```
 
-# 操作数据
+## 操作数据
 
 Series的操作类似数组和列表,支持切片
 

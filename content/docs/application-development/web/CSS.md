@@ -1,18 +1,20 @@
 ---
 title: "CSS"
 ---
+# CSS
 
-# 导入方式
+
+## 导入方式
 
 最近原则，谁离标签近用谁
 
-## HTML标签内
+### HTML标签内
 
 ```html
 <input type="text" name="name" placeholder="ssss" style="color: #75c575;">
 ```
 
-## HTML文件内
+### HTML文件内
 
 ```html
 <head>
@@ -26,7 +28,7 @@ title: "CSS"
 </head>
 ```
 
-## link外联
+### link外联
 
 ```html
 <head>
@@ -36,7 +38,7 @@ title: "CSS"
 </head>
 ```
 
-## style外联（不推荐）
+### style外联（不推荐）
 
 ```html
 <head>
@@ -46,13 +48,13 @@ title: "CSS"
 </head>
 ```
 
-# 选择器
+## 选择器
 
-## 基本选择器
+### 基本选择器
 
 id->class->tag
 
-### 标签选择器
+#### 标签选择器
 
 标签名+{}
 
@@ -64,7 +66,7 @@ h1 {
 
 不能跨标签，可以用来给定标签的默认样式
 
-### 类选择器
+#### 类选择器
 
 .+类名+{}
 
@@ -76,7 +78,7 @@ h1 {
 
 类似于分组的概念，可以跨标签
 
-### id选择器
+#### id选择器
 
 #+id+{}
 
@@ -88,11 +90,11 @@ h1 {
 
 具体的某个元素的样式，精确控制
 
-## 层次选择器
+### 层次选择器
 
 对样式的范围做限定（不包括自己），就是对其内部或者后续做限定
 
-### 后代选择器
+#### 后代选择器
 
 某个元素后面的所有某类元素都继承
 
@@ -103,7 +105,7 @@ body p{
 /* 这个写法表示body标签下的所有p标签都使用该样式*/
 ```
 
-### 子选择器
+#### 子选择器
 
 只有元素后面的一级子元素继承
 
@@ -114,7 +116,7 @@ body>p{
 /* 这个写法表示body标签下的直属p标签都使用该样式*/
 ```
 
-### 相邻兄弟选择器
+#### 相邻兄弟选择器
 
 这个元素的下一个同级p元素
 
@@ -125,7 +127,7 @@ body+p{
 /* 这个写法表示body标签紧接（闭合后第一个）的那个p标签使用该样式*/
 ```
 
-### 通用选择器
+#### 通用选择器
 
 ```css
 body~p{
@@ -134,7 +136,7 @@ body~p{
 /* 这个写法表示body标签紧接（闭合后的所有）p标签使用该样式*/
 ```
 
-## 伪类
+### 伪类
 
 CSS伪类是用来添加一些选择器的特殊效果（或者限定）。
 
@@ -153,7 +155,7 @@ a:hover {color:#FF00FF;} /* 鼠标划过链接 */
 a:active {color:#0000FF;} /* 已选中的链接 */
 ```
 
-## 属性选择器
+### 属性选择器
 
 语法：[]
 
@@ -188,7 +190,7 @@ p[id $="first"]{
 }
 ```
 
-# CSS 参考手册
+## CSS 参考手册
 
 ------
 
@@ -196,7 +198,7 @@ p[id $="first"]{
 
 "CSS" 列指示属性是在哪个 CSS 版本中定义的 (CSS1, CSS2, 或者 CSS3).
 
-## 动画属性
+### 动画属性
 
 | 属性                                                         | 描述                                                         | CSS  |
 | :----------------------------------------------------------- | :----------------------------------------------------------- | :--- |
@@ -210,7 +212,7 @@ p[id $="first"]{
 | [animation-direction](https://www.runoob.com/cssref/css3-pr-animation-direction.html) | 检索或设置对象动画在循环中是否反向运动                       | 3    |
 | [animation-play-state](https://www.runoob.com/cssref/css3-pr-animation-play-state.html) | 检索或设置对象动画的状态                                     | 3    |
 
-## 背景属性
+### 背景属性
 
 | 属性                                                         | 描述                                                         | CSS  |
 | :----------------------------------------------------------- | :----------------------------------------------------------- | :--- |
@@ -224,7 +226,7 @@ p[id $="first"]{
 | [background-origin](https://www.runoob.com/cssref/css3-pr-background-origin.html) | S设置或检索对象的背景图像计算background-position时的参考原点(位置)。 | 3    |
 | [background-size](https://www.runoob.com/cssref/css3-pr-background-size.html) | 检索或设置对象的背景图像的尺寸大小。                         | 3    |
 
-## 边框(Border) 和 轮廓(Outline) 属性
+### 边框(Border) 和 轮廓(Outline) 属性
 
 | 属性                                                         | 描述                                                         | CSS  |
 | :----------------------------------------------------------- | :----------------------------------------------------------- | :--- |
@@ -266,7 +268,7 @@ p[id $="first"]{
 | box-decoration-break                                         | 规定行内元素被折行                                           | 3    |
 | [box-shadow](https://www.runoob.com/cssref/css3-pr-box-shadow.html) | 向方框添加一个或多个阴影。                                   | 3    |
 
-## 盒子(Box) 属性
+### 盒子(Box) 属性
 
 | 属性                                                         | 描述                                                        | CSS  |
 | :----------------------------------------------------------- | :---------------------------------------------------------- | :--- |
@@ -276,7 +278,7 @@ p[id $="first"]{
 | [rotation](https://www.runoob.com/cssref/css3-pr-rotation.html) | 围绕由 rotation-point 属性定义的点对元素进行旋转。          | 3    |
 | [rotation-point](https://www.runoob.com/cssref/css3-pr-rotation-point.html) | 定义距离上左边框边缘的偏移点。                              | 3    |
 
-## 颜色(Color) 属性
+### 颜色(Color) 属性
 
 | 属性                                                         | 描述                                       | CSS  |
 | :----------------------------------------------------------- | :----------------------------------------- | :--- |
@@ -284,7 +286,7 @@ p[id $="first"]{
 | [opacity](https://www.runoob.com/cssref/css3-pr-opacity.html) | 设置一个元素的透明度级别                   | 3    |
 | rendering-intent                                             | 允许超过默认颜色配置文件渲染意向的其他规范 | 3    |
 
-## 内边距(Padding) 属性
+### 内边距(Padding) 属性
 
 | 属性                                                         | 说明                         | CSS  |
 | :----------------------------------------------------------- | :--------------------------- | :--- |
@@ -294,7 +296,7 @@ p[id $="first"]{
 | [padding-right](https://www.runoob.com/cssref/pr-padding-right.html) | 设置元素的右填充             | 1    |
 | [padding-top](https://www.runoob.com/cssref/pr-padding-top.html) | 设置元素的顶部填充           | 1    |
 
-## 媒体页面内容属性
+### 媒体页面内容属性
 
 | 属性                | 说明                                                       | CSS  |
 | :------------------ | :--------------------------------------------------------- | :--- |
@@ -312,7 +314,7 @@ p[id $="first"]{
 | marks               | 将crop and/or cross标志添加到文档                          | 3    |
 | string-set          |                                                            | 3    |
 
-## 尺寸(Dimension) 属性
+### 尺寸(Dimension) 属性
 
 | 属性                                                         | 描述               | CSS  |
 | :----------------------------------------------------------- | :----------------- | :--- |
@@ -323,7 +325,7 @@ p[id $="first"]{
 | [min-width](https://www.runoob.com/cssref/pr-dim-min-width.html) | 设置元素的最小宽度 | 2    |
 | [width](https://www.runoob.com/cssref/pr-dim-width.html)     | 设置元素的宽度     | 1    |
 
-## 弹性盒子模型（Flexible Box） 属性(新)
+### 弹性盒子模型（Flexible Box） 属性(新)
 
 | 属性                                                         | 说明                                                         | CSS  |
 | :----------------------------------------------------------- | :----------------------------------------------------------- | :--- |
@@ -340,7 +342,7 @@ p[id $="first"]{
 | [justify-content](https://www.runoob.com/cssref/css3-pr-justify-content.html) | 设置或检索弹性盒子元素在主轴（横轴）方向上的对齐方式。       | 3    |
 | [order](https://www.runoob.com/cssref/css3-pr-order.html)    | 设置或检索弹性盒模型对象的子元素出现的順序。                 | 3    |
 
-## 弹性盒子模型（Flexible Box） 属性(旧)
+### 弹性盒子模型（Flexible Box） 属性(旧)
 
 | 属性                                                         | 说明                                                 | CSS  |
 | :----------------------------------------------------------- | :--------------------------------------------------- | :--- |
@@ -353,7 +355,7 @@ p[id $="first"]{
 | [box-orient](https://www.runoob.com/cssref/css3-pr-box-orient.html) | 指定一个框的子元素是否在水平或垂直方向应铺设         | 3    |
 | [box-pack](https://www.runoob.com/cssref/css3-pr-box-pack.html) | 指定横向盒在垂直框的水平位置和垂直位置               | 3    |
 
-## 字体（Font） 属性
+### 字体（Font） 属性
 
 | 属性                                                         | 说明                                                      | CSS  |
 | :----------------------------------------------------------- | :-------------------------------------------------------- | :--- |
@@ -367,7 +369,7 @@ p[id $="first"]{
 | [font-size-adjust](https://www.runoob.com/cssref/css3-pr-font-size-adjust.html) | 为元素规定 aspect 值                                      | 3    |
 | [font-stretch](https://www.runoob.com/cssref/css3-pr-font-stretch.html) | 收缩或拉伸当前的字体系列                                  | 3    |
 
-## 内容生成属性(Generated Content Properties)
+### 内容生成属性(Generated Content Properties)
 
 | 属性                                                         | 说明                                                   | CSS  |
 | :----------------------------------------------------------- | :----------------------------------------------------- | :--- |
@@ -379,14 +381,14 @@ p[id $="first"]{
 | move-to                                                      | 从流中删除元素，然后在文档中后面的点上重新插入。       | 3    |
 | page-policy                                                  | 判定基于页面的给定元素的适用于计数器的字符串值         | 3    |
 
-## 网格（Grid） 属性
+### 网格（Grid） 属性
 
 | 属性                                                         | 说明                   | CSS  |
 | :----------------------------------------------------------- | :--------------------- | :--- |
 | [grid-columns](https://www.runoob.com/cssref/css3-pr-grid-columns.html) | 指定在网格中每列的宽度 | 3    |
 | [grid-rows](https://www.runoob.com/cssref/css3-pr-grid-rows.html) | 指定在网格中每列的高度 | 3    |
 
-## 超链接(Hyperlink) 属性
+### 超链接(Hyperlink) 属性
 
 | 属性                                                         | 说明                                                       | CSS  |
 | :----------------------------------------------------------- | :--------------------------------------------------------- | :--- |
@@ -395,7 +397,7 @@ p[id $="first"]{
 | [target-new](https://www.runoob.com/cssref/css3-pr-target-new.html) | 指定是否有新的目标链接打开一个新窗口或在现有窗口打开新标签 | 3    |
 | [target-position](https://www.runoob.com/cssref/css3-pr-target-position.html) | 指定应该放置新的目标链接的位置                             | 3    |
 
-## 线框(Linebox) 属性
+### 线框(Linebox) 属性
 
 | 属性                       | 说明                                                         | CSS  |
 | :------------------------- | :----------------------------------------------------------- | :--- |
@@ -416,7 +418,7 @@ p[id $="first"]{
 | line-stacking-strategy     | 设置内部包含块元素的堆叠线框的堆叠方法                       | 3    |
 | text-height                | 行内框的文本内容区域设置block-progression维数                | 3    |
 
-## 列表(List) 属性
+### 列表(List) 属性
 
 | 属性                                                         | 说明                           | CSS  |
 | :----------------------------------------------------------- | :----------------------------- | :--- |
@@ -425,7 +427,7 @@ p[id $="first"]{
 | [list-style-position](https://www.runoob.com/cssref/pr-list-style-position.html) | 设置列表项标记的放置位置       | 1    |
 | [list-style-type](https://www.runoob.com/cssref/pr-list-style-type.html) | 设置列表项标记的类型           | 1    |
 
-## 外边距(Margin) 属性
+### 外边距(Margin) 属性
 
 | 属性                                                         | 说明                           | CSS  |
 | :----------------------------------------------------------- | :----------------------------- | :--- |
@@ -435,7 +437,7 @@ p[id $="first"]{
 | [margin-right](https://www.runoob.com/cssref/pr-margin-right.html) | 设置元素的右外边距             | 1    |
 | [margin-top](https://www.runoob.com/cssref/pr-margin-top.html) | 设置元素的上外边距             | 1    |
 
-## 字幕(Marquee) 属性
+### 字幕(Marquee) 属性
 
 | 属性               | 说明                     | CSS  |
 | :----------------- | :----------------------- | :--- |
@@ -444,7 +446,7 @@ p[id $="first"]{
 | marquee-speed      | 设置内容滚动的速度有多快 | 3    |
 | marquee-style      | 设置内容移动的样式       | 3    |
 
-## 多列(Multi-column) 属性
+### 多列(Multi-column) 属性
 
 | 属性                                                         | 说明                                    | CSS  |
 | :----------------------------------------------------------- | :-------------------------------------- | :--- |
@@ -459,7 +461,7 @@ p[id $="first"]{
 | [column-width](https://www.runoob.com/cssref/css3-pr-column-width.html) | 指定列的宽度                            | 3    |
 | [columns](https://www.runoob.com/cssref/css3-pr-columns.html) | 缩写属性设置列宽和列数                  | 3    |
 
-## 页面媒体(Paged Media) 属性
+### 页面媒体(Paged Media) 属性
 
 | 属性              | 说明                                                         | CSS  |
 | :---------------- | :----------------------------------------------------------- | :--- |
@@ -469,7 +471,7 @@ p[id $="first"]{
 | page              | 指定一个元素应显示的页面的特定类型                           | 3    |
 | size              | 指定含有BOX的页面内容的大小和方位                            | 3    |
 
-## 定位（Positioning） 属性
+### 定位（Positioning） 属性
 
 | 属性                                                         | 说明                                                 | CSS  |
 | :----------------------------------------------------------- | :--------------------------------------------------- | :--- |
@@ -487,7 +489,7 @@ p[id $="first"]{
 | [visibility](https://www.runoob.com/cssref/pr-class-visibility.html) | 规定元素是否可见                                     | 2    |
 | [z-index](https://www.runoob.com/cssref/pr-pos-z-index.html) | 设置元素的堆叠顺序                                   | 2    |
 
-## 分页（Print） 属性
+### 分页（Print） 属性
 
 | 属性                                                         | 说明                                                 | CSS  |
 | :----------------------------------------------------------- | :--------------------------------------------------- | :--- |
@@ -497,7 +499,7 @@ p[id $="first"]{
 | [page-break-inside](https://www.runoob.com/cssref/pr-print-pagebi.html) | 设置元素内部的分页行为                               | 2    |
 | widows                                                       | 设置当元素内部发生分页时必须在页面顶部保留的最少行数 | 2    |
 
-## Ruby 属性
+### Ruby 属性
 
 | 属性          | 说明                                                         | CSS  |
 | :------------ | :----------------------------------------------------------- | :--- |
@@ -506,7 +508,7 @@ p[id $="first"]{
 | ruby-position | 它的base控制Ruby文本的位置                                   | 3    |
 | ruby-span     | 控制annotation 元素的跨越行为                                | 3    |
 
-## 语音（Speech） 属性
+### 语音（Speech） 属性
 
 | 属性              | 说明                                                 | CSS  |
 | :---------------- | :--------------------------------------------------- | :--- |
@@ -525,7 +527,7 @@ p[id $="first"]{
 | voice-stress      | 指示着重力度                                         | 3    |
 | voice-volume      | 语音合成是指波形输出幅度                             | 3    |
 
-## 表格（Table） 属性
+### 表格（Table） 属性
 
 | 属性                                                         | 说明                                       | CSS  |
 | :----------------------------------------------------------- | :----------------------------------------- | :--- |
@@ -535,7 +537,7 @@ p[id $="first"]{
 | [empty-cells](https://www.runoob.com/cssref/pr-tab-empty-cells.html) | 规定是否显示表格中的空单元格上的边框和背景 | 2    |
 | [table-layout](https://www.runoob.com/cssref/pr-tab-table-layout.html) | 设置用于表格的布局算法                     | 2    |
 
-## 文本（Text） 属性
+### 文本（Text） 属性
 
 | 属性                                                         | 说明                                                  | CSS  |
 | :----------------------------------------------------------- | :---------------------------------------------------- | :--- |
@@ -563,7 +565,7 @@ p[id $="first"]{
 | [word-break](https://www.runoob.com/cssref/css3-pr-word-break.html) | 指定非CJK文字的断行规则                               | 3    |
 | [word-wrap](https://www.runoob.com/cssref/css3-pr-word-wrap.html) | 设置浏览器是否对过长的单词进行换行。                  | 3    |
 
-## 2D/3D 转换属性
+### 2D/3D 转换属性
 
 | 属性                                                         | 说明                                       | CSS  |
 | :----------------------------------------------------------- | :----------------------------------------- | :--- |
@@ -574,7 +576,7 @@ p[id $="first"]{
 | [perspective-origin](https://www.runoob.com/cssref/css3-pr-perspective-origin.html) | 指定3D元素底部位置                         | 3    |
 | [backface-visibility](https://www.runoob.com/cssref/css3-pr-backface-visibility.html) | 定义一个元素是否应该是可见的，不对着屏幕时 | 3    |
 
-## 过渡（Transition） 属性
+### 过渡（Transition） 属性
 
 | 属性                                                         | 说明                                                         | CSS  |
 | :----------------------------------------------------------- | :----------------------------------------------------------- | :--- |
@@ -584,7 +586,7 @@ p[id $="first"]{
 | [transition-timing-function](https://www.runoob.com/cssref/css3-pr-transition-timing-function.html) | 设置过渡进行的时序函数。                                     | 3    |
 | [transition-delay](https://www.runoob.com/cssref/css3-pr-transition-delay.html) | 指定过渡开始的时间。                                         | 3    |
 
-## 用户外观(User-interface) 属性
+### 用户外观(User-interface) 属性
 
 | 属性                                                         | 说明                                     | CSS  |
 | :----------------------------------------------------------- | :--------------------------------------- | :--- |

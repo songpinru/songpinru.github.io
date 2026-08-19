@@ -2,6 +2,8 @@
 title: "Commit规范"
 description: "Git Commit Message 的结构、类型与编写规范。"
 ---
+# Commit规范
+
 
 ```text
 1. Commit message 的格式规范

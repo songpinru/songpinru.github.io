@@ -1,8 +1,10 @@
 ---
 title: "Kafka"
 ---
+# Kafka
 
-# Kafka 概念
+
+## Kafka 概念
 
 **定义：**
 
@@ -20,7 +22,7 @@ ZAB算法更严谨，实现难度更高，同时也意味着效率更低，为�
 
 raft算法出现比较晚，协议相对比较保守，速度更快
 
-## 架构
+### 架构
 
 ![img](Kafka.assets/7a21564f85793c13ff0f75733a1d5dec.png)
 
@@ -34,7 +36,7 @@ Kafka的架构主要分为：
   
   
 
-## Zookeeper（raft代替）
+### Zookeeper（raft代替）
 
 ![image-20210525231159103](Kafka.assets/image-20210525231159103.png)
 
@@ -59,7 +61,7 @@ zookeeper主要是用来存储Kafka的元数据：
 
 * brokers：broker信息
 
-## broker
+### broker
 
 一台kafka服务器就是一个broker。一个集群由多个broker组成。一个broker可以容纳多个topic；最好是3的倍数
 
@@ -71,15 +73,15 @@ broker之间主要通过zk来交互，主要分为几个部分：
 
 * 元数据管理
 
-### 选举
+#### 选举
 
 broker工作时，只能由一个节点来负责管理并写入元数据，选举出来的leader broker的controller才拥有完整的管理权限，其他角色的controller只有读取zk的元数据的权限
 
-### Topic
+#### Topic
 
 一个消息主题，里面存放一类数据，可以理解为一个队列或者是一个表
 
-### Partition
+#### Partition
 
 分区，为了扩展，一个topic可以分布到多个partition（最好是节点数的倍数），分区内有序
 
@@ -89,7 +91,7 @@ broker工作时，只能由一个节点来负责管理并写入元数据，选�
 * 方便扩展
 * PS:分区策略（是否指定分区，有无key）
 
-### Replication
+#### Replication
 
 副本数，为了数据安全，每个topic可以设置副本数（默认是3），副本其实就是Partition的完整备份，存在不同的节点上，防止节点故障
 
@@ -111,19 +113,19 @@ broker工作时，只能由一个节点来负责管理并写入元数据，选�
 > 
 > 选出新Leader后，其余的follower会先**将各自的log文件高于HW的部分截掉**，然后从新的leader同步数据。
 
-#### leader
+##### leader
 
 为了写入的一致性，只有每个分区的一个副本可以写数据，这个副本就是leader
 
 leader由controller直接决定，取AR中的第一个ISR
 
-#### Offset
+##### Offset
 
 每条消息的id，不是文件的偏移量
 
 > Kafka 0.9版本之前，consumer默认将offset保存在Zookeeper中，从0.9版本开始，consumer默认将offset保存在Kafka一个内置的topic中，该topic为**__consumer_offsets**。
 
-#### Segment
+##### Segment
 
 数据分片，每个分区的细分，每个segment对应一个数据文件和索引文件（1.0之后还有个时间索引，共两个索引文件）
 
@@ -135,21 +137,21 @@ leader由controller直接决定，取AR中的第一个ISR
 * 每个partition分为多个segment（文件的切分），segment是概念，没有实质文件或文件夹
 * 每个segment有两个文件（.log和.index)
 
-### controller
+#### controller
 
 负责写入和读取元数据的角色，集群内只有一个controller可以写，其他只能读
 
-### coordinate
+#### coordinate
 
 参与consumer group的分配
 
-### Kafka高效读写
+#### Kafka高效读写
 
 * 顺序写磁盘
 * 应用Pagecache：把内存当硬盘
 * 零拷贝（零复制）
 
-### 过期数据清理
+#### 过期数据清理
 
 日志清理的策略只有delete和compact两种。
 
@@ -164,13 +166,13 @@ leader由controller直接决定，取AR中的第一个ISR
 
 
 
-## 客户端
+### 客户端
 
-### Kafka生产者
+#### Kafka生产者
 
 
 
-#### send流程
+##### send流程
 
 1. send 方法
 
@@ -184,11 +186,11 @@ leader由controller直接决定，取AR中的第一个ISR
 
 6. 成功后把ReocorderBatch删除
 
-#### 拦截器
+##### 拦截器
 
 生产者拦截器在消息发送之前可以做一些准备工作, 比如 按照某个规则过滤某条消息, 又或者对 消息体做一些改造, 还可以用来在发送回调逻辑之前做一些定制化的需求,例如统计类的工作! 拦截器的执行时机在最前面,在**消息序列化**和**分区计算**之前
 
-#### 分区器
+##### 分区器
 
 如果指定分区，则会使用指定的分区id
 
@@ -208,7 +210,7 @@ leader由controller直接决定，取AR中的第一个ISR
 
 * 自定义
 
-#### ACK
+##### ACK
 
 确认收到回执
 
@@ -225,7 +227,7 @@ leader由controller直接决定，取AR中的第一个ISR
 | 1    | 只要leader落盘就返回，leader故障可能丢失数据      |                |
 | -1   | 全部落盘后返回，可能会数据重复（全部落盘了，但是没有ack就挂了） | At Least Once  |
 
-#### 幂等性
+##### 幂等性
 
 幂等性是指send过程中retry时不会重复提交，原理是提交时增加一个id(ProducerID+SequenceNumber)
 
@@ -236,7 +238,7 @@ leader由controller直接决定，取AR中的第一个ISR
 
 要启用幂等性，只需要将Producer的参数中enable.idempotence设置为true即可
 
-#### 事务
+##### 事务
 
 事务原理是新增了一个log，用于记录事务的状态，不影响写入流程
 
@@ -248,7 +250,7 @@ At Least Once + 幂等性+事务 = Exactly Once(即数据不丢不重)
 
 > kafka事务和数据库的事务不同,kafka的事务中间提交的消息也是可见的,也是顺序写入了data log的,但是与非事务写入不同的是,事务会在底层存储时额外加两个index文件(\*.snapshot,\*.txnindex),消费者需要设置消费的隔离级别为read_committed(默认是read_uncommitted)来只消费事务成功的消息
 
-#### 有序
+##### 有序
 
 分区机制和重试机制是数据乱序的元凶，需要单分区且不能重试，才能保证有序
 
@@ -256,9 +258,9 @@ At Least Once + 幂等性+事务 = Exactly Once(即数据不丢不重)
 
 
 
-### Kafka消费者
+#### Kafka消费者
 
-#### consumer流程
+##### consumer流程
 
 1. find coordinator:  groupid hash后和`__consumer_offsets`分区数取余，找到group所属分区
 2. 所有消费者对group所属分区leader的coordinate发起Join Group请求
@@ -267,24 +269,24 @@ At Least Once + 幂等性+事务 = Exactly Once(即数据不丢不重)
 5. coordinate把分配方案发送给所有consumer
 6. consumer取拉去各自分区的数据
 
-#### Consumer Group （CG）
+##### Consumer Group （CG）
 
 * 消费者组，由多个consumer组成；
 * 消费者组内每个消费者负责消费不同分区的数据，一个分区只能由一个消费者消费；
 * 消费者组之间互不影响。
 * 此举提高了消费者的并发
 
-#### 消费方式
+##### 消费方式
 
 * consumer采用pull（拉）模式从broker中读取数据。
 * 如果kafka没有数据，消费者可能会陷入循环中；可以设置时长参数timeout
 
-#### 分区分配策略
+##### 分区分配策略
 
 * roundrobin：单张发牌模式
 * range：堆发牌模式
 
-#### Rebalance
+##### Rebalance
 
 当有新的消费者加入消费者组、已有的消费者推出消费者组或topic的分区发生变化，就会触发到分区的重新分配，重新分配的过程叫做Rebalance。
 
@@ -300,7 +302,7 @@ At Least Once + 幂等性+事务 = Exactly Once(即数据不丢不重)
 
 
 
-# Kafka安装部署
+### Kafka安装部署
 
 * 解压并创建日志文件夹
 
@@ -340,7 +342,7 @@ zookeeper.connect=hadoop102:2181,hadoop103:2181,hadoop104:2181
 * 配置环境变量  **/etc/profile.d/**
 * 分发并修改**broker.id**
 
-# Kafaka操作命令
+### Kafaka操作命令
 
 ```shell
 # 单点启动
@@ -402,7 +404,7 @@ case $1 in
 esac
 ```
 
-# Kaka API
+### Kaka API
 
 导入依赖：
 
@@ -434,9 +436,9 @@ public static void deleteKafaTopic(String ZkStr,KafkaTopicBean topic) {
 }
 ```
 
-## Producer API
+### Producer API
 
-### 异步发送
+#### 异步发送
 
 * 需要一个properties，设置Producer参数
 
@@ -448,7 +450,7 @@ public static void deleteKafaTopic(String ZkStr,KafkaTopicBean topic) {
 
 * producer.close();
 
-### 同步发送
+#### 同步发送
 
 * 异步发送的基础上，调用send的get方法即可
 
@@ -484,9 +486,9 @@ for (int i = 0; i < 100; i++) {
 producer.close();
 ```
 
-## Consumer API
+### Consumer API
 
-### 自动提交offset
+#### 自动提交offset
 
 - 需要一个properties，设置Producer参数
 - 创建 `KafkaConsumer<K,V>` 实例
@@ -515,7 +517,7 @@ while (true) {
 }
 ```
 
-### 手动提交offset
+#### 手动提交offset
 
 相对于自动提交，手动提交主要改变有：
 
@@ -539,7 +541,7 @@ consumer.commitAsync(new OffsetCommitCallback() {
 });
 ```
 
-### 自定义存储offset
+#### 自定义存储offset
 
 1. 维护一个集合 `Map<TopicPartition,Long>`，用于存放offset；
 
@@ -648,7 +650,7 @@ public class MyconsumerDIY {
     }
 ```
 
-## 自定义拦截器
+### 自定义拦截器
 
 * 实现 ProducerInterceptor接口
 * 实现其方法，核心逻辑onSend，操纵ProducerRecord
@@ -720,9 +722,9 @@ for (int i = 0; i < 10; i++) {
 producer.close();
 ```
 
-# flume和Kafka对接
+### flume和Kafka对接
 
-## Kafaka Source
+### Kafaka Source
 
 ```properties
 # source类型
@@ -739,7 +741,7 @@ a1.sources.s1.batchSize = 5000
 a1.sources.s1.batchDurationMillis = 200
 ```
 
-## Kafka Channel
+### Kafka Channel
 
 ```properties
 # channel类型
@@ -752,7 +754,7 @@ a1.channels.c1.kafka.topic = channel1
 a1.channels.c1.kafka.consumer.group.id = flume-consumer
 ```
 
-## Kafka Sink
+### Kafka Sink
 
 ```properties
 # sink类型
@@ -769,9 +771,9 @@ a1.sinks.k1.kafka.producer.acks = 1
 a1.sinks.k1.kafka.producer.linger.ms = 1
 ```
 
-## 官网详细设置
+### 官网详细设置
 
-### Kafka Source
+#### Kafka Source
 
 | Property Name                    | Default   | Description                                                                                                                                                                                      |
 | -------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -792,7 +794,7 @@ a1.sinks.k1.kafka.producer.linger.ms = 1
 | more consumer security props     |           | 如果使用`SASL_PLAINTEXT`，则`SASL_SSL`或`SSL`会引用Kafka安全性以获取需要在使用者上设置的其他属性。                                                                                                                              |
 | Other Kafka Consumer Properties  | –         | 这些属性用于配置Kafka Consumer。 可以使用Kafka支持的任何consumer property。 唯一的要求是使用前缀`kafka.consumer`添加属性名称。 例如：`kafka.consumer.auto.offset.reset`                                                                 |
 
-### Kafka Channel
+#### Kafka Channel
 
 | Property Name                    | Default       | Description                                                                                                                                                                                          |
 |:-------------------------------- |:------------- |:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -809,7 +811,7 @@ a1.sinks.k1.kafka.producer.linger.ms = 1
 | kafka.producer.security.protocol | PLAINTEXT     | 如果使用某种级别的安全性写入Kafka，则设置为`SASL_PLAINTEXT`，`SASL_SSL`或`SSL`。 有关安全设置的其他信息，请参见下文。                                                                                                                        |
 | kafka.consumer.security.protocol | PLAINTEXT     | 与`kafka.producer.security.protocol`相同，但是用于从Kafkareading/consuming。                                                                                                                                   |
 
-### kafka sink
+#### kafka sink
 
 | Property Name                    | Default             | Description                                                                                                                                       |
 | -------------------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -827,9 +829,9 @@ a1.sinks.k1.kafka.producer.linger.ms = 1
 | *more producer security props*   |                     | 如果使用 SASL_PLAINTEXT, SASL_SSL or SSL 请参考 [Kafka security](http://kafka.apache.org/documentation.html#security) .                                  |
 | Other Kafka Producer Properties  | –                   | 这些属性用于配置Kafka Producer。 可以使用Kafka支持的任何生产者属性。 唯一的要求是在属性名称前添加前缀kafka.producer。 例如：`kafka.producer.linger.ms`                                        |
 
-# Kafka监控
+### Kafka监控
 
-## Kafka Monitor
+### Kafka Monitor
 
 1. 上传jar包KafkaOffsetMonitor-assembly-0.4.6.jar到集群
 
@@ -867,7 +869,7 @@ mkdir /opt/module/kafka-offset-console/mobile-logs
 
 7. 登录页面hadoop102:8086端口查看详情
 
-## Kafka Manager
+### Kafka Manager
 
 1. 上传压缩包kafka-manager-1.3.3.15.zip到集群
 
@@ -887,9 +889,9 @@ bin/kafka-manager
 
 5. 登录hadoop102:9000页面查看详细信息(和hadoop冲突，修改)
 
-# 附录
+### 附录
 
-## Kafka Producer压力测试
+### Kafka Producer压力测试
 
 在/opt/module/kafka/bin目录下面有个文件。
 
@@ -902,7 +904,7 @@ bin/kafka-producer-perf-test.sh \
 --producer-props bootstrap.servers=hadoop102:9092,hadoop103:9092,hadoop104:9092
 ```
 
-## Kafka Consumer压力测试
+### Kafka Consumer压力测试
 
 Consumer的测试，如果这四个指标（IO，CPU，内存，网络）都不能改变，考虑增加分区数来提升性能。
 
@@ -915,7 +917,7 @@ bin/kafka-consumer-perf-test.sh \
 --threads 1
 ```
 
-## 经验
+### 经验
 
 * **Kafka的机器数量**
 

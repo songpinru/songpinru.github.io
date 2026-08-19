@@ -1,24 +1,26 @@
 ---
 title: "Mysql Keepalived"
 ---
+# Mysql Keepalived
+
 
  
 
-# 技术概述
+## 技术概述
 
 对于多数应用来说，MySQL都是作为最关键的数据存储中心的，所以，如何让MySQL提供HA服务，是我们不得不面对的一个问题。MySQL的HA方案不止一种，本文介绍较为常用的一种——基于keepalived的MySQl HA。
 
-## 1.1 MySQL主从复制
+### 1.1 MySQL主从复制
 
 MySQL的HA离不开其主从复制的技术。主从复制是指一台服务器充当主数据库服务器（master），另一台或多台服务器充当从数据库服务器（slave），从服务器（slave）自动向主服务器（master）同步数据。实现MySQL的HA，需使两台服务器互为主从关系。
 
-## 1.2 Keepalived
+### 1.2 Keepalived
 
 Keepalived是基于VRRP（Virtual Router Redundancy Protocol，虚拟路由器冗余协议）协议的一款高可用软件。Keepailived有一台主服务器（master）和多台备份服务器（backup），在主服务器和备份服务器上面部署相同的服务配置，使用一个虚拟IP地址对外提供服务，当主服务器出现故障时，虚拟IP地址会自动漂移到备份服务器。
 
-# MySQL主从复制
+## MySQL主从复制
 
-## 2.1 一主一从
+### 2.1 一主一从
 
 **（1）集群规划**
 
@@ -97,7 +99,7 @@ show slave status\G
 ```
 >  \G 为横向显示
 
-## 2.2 双主（互为主从即可）
+### 2.2 双主（互为主从即可）
 
 **（1）集群规划**
 
@@ -105,7 +107,7 @@ show slave status\G
 | --------- | -------------------------------------- | -------------------------------------- |
 |           | **MySQL（master，slave）** | **MySQL（slave，master）** |
 
-### 配置104
+#### 配置104
 ​	1）修改**hadoop104**中MySQL的/usr/my.cnf配置文件。
 
 ```bash
@@ -130,7 +132,7 @@ sudo service mysql restart
 ```mysql
 mysql> show master status;
 ```
-### 配置103
+#### 配置103
 
 ​	1）修改**hadoop103**中MySQL的/usr/my.cnf配置文件
 ```bash
@@ -176,11 +178,11 @@ show slave status\G
 ```
 >  \G 为横向显示
 >  
-# Keepalived
+## Keepalived
 
 须在hadoop103，hadoop104两台节点上部署Keepalived。
 
-## hadoop103
+### hadoop103
 
 1）通过yum方式安装Keepalived
 ```bash
@@ -277,9 +279,9 @@ sudo chkconfig --del keepalived
 sudo chkconfig --add keepalived
 sudo chkconfig keepalivedon
 ```
-## hadoop104
+### hadoop104
 
-## 更改优先级和真实ip即可
+### 更改优先级和真实ip即可
 
 
 
