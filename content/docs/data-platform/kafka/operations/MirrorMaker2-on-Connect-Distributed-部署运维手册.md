@@ -3,32 +3,6 @@ title: "MirrorMaker2 On Connect Distributed 部署运维手册"
 ---
 
 
-> 文档版本：v3.7
->
-> 更新时间：2026-08-19
->
-> 适用链路：`wbads -> wbbz`
->
-> 适用模式：Kafka Connect Distributed 直接运行 MM2 Connector
->
-> 核对基准：Apache Kafka 3.x 与 4.0 的官方文档和源码
->
-> v3.0 变更：重组章节结构，Connector 配置改为“公共片段 + 专属字段”分层提交，消除重复的集群地址与凭据。
->
-> v3.1 变更：澄清 Connect 内部 topic 可自动创建，补齐 Heartbeat Connector 必需的 `source.cluster.alias`，并修正 topic 配置同步和专用模式反向心跳的边界条件。
->
-> v3.2 变更：补充 Worker 与 Connector 的配置边界，说明 Source Task producer、converter 和权限的来源。
->
-> v3.3 变更：移除外部 JSON 处理依赖和配置片段合并流程，改为四个可直接提交的完整 Connector JSON，并补充凭据重复的原因。
->
-> v3.4 变更：澄清独立管理集群下 Source Task producer 的默认目标与 `producer.override.*` 覆盖机制。
->
-> v3.5 变更：明确 Heartbeat Connector 为可选监控组件，调整默认提交脚本只提交 Source 和 Checkpoint。
->
-> v3.6 变更：澄清单向复制的标准心跳拓扑，以及反向 Heartbeat 缺少 `producer.override.*` 时的错误行为。
->
-> v3.7 变更：恢复双方向 Heartbeat 为默认提交项，保留可选说明但不再通过环境变量控制。
-
 ## 1. 架构总览
 
 将原 `connect-mirror-maker.sh` 专用模式转换为普通 Kafka Connect Distributed 部署，转换后具备：

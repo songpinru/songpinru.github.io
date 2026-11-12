@@ -1,5 +1,8 @@
 /.idea/
 
+# macOS
+.DS_Store
+
 # Hugo output and caches
 public/
 resources/
