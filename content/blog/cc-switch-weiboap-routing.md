@@ -1,8 +1,9 @@
 ---
 title: 使用 CC Switch 配置微博 WeiboAP 大模型路由
 date: 2026-09-04
-tags: [cc-switch, weiboap, 路由, 大模型]
 description: WeiboAP 不支持 Responses API，通过 CC Switch 的路由功能将 Chat Completions 协议转换为 Responses 格式，实现 Codex 等客户端正常调用。
+categories: ["operations-guide"]
+tags: ["ai-tools", "协议转换", "大模型"]
 ---
 
 ## 背景

@@ -5,21 +5,10 @@
 ```
 content/
 ├── _index.md          # 首页
-├── blog/              # 博客文章（中文，按日期归档）
+├── blog/              # 全部文章（中文，按日期归档）
 │   ├── _index.md
-│   └── *.md           # Markdown 源文件
-└── docs/              # 技术文档
-    ├── _index.md
-    ├── engineering/   # 工程基础
-    │   ├── languages/     # 编程语言 (Java, Python, Rust, Go, Shell, Markdown)
-    │   ├── systems/       # 操作系统与系统维护
-    │   ├── infrastructure/# 基础设施与工具 (容器、CI/CD、Git、监控、代理)
-    │   ├── 数据结构与算法.md
-    │   └── 源码编译通用步骤.md
-    ├── databases/
-    ├── data-platform/     # 数据平台 (Hadoop, Kafka, Flink, Spark, Pandas)
-    └── application-development/
-layouts/               # Hugo 模板覆盖
+│   ├── *.md           # Markdown 源文件
+│   └── *.assets/      # 与文章同目录的图片资源
 public/                # 生成站点（已加入 gitignore）
 hugo.yaml              # 站点配置
 .github/workflows/     # CI/CD 流水线
@@ -40,12 +29,14 @@ hugo --gc --minify --baseURL "https://songpinru.github.io/"
 hugo --gc --minify --baseURL "$CF_PAGES_URL"
 ```
 
-本站使用 [Hugo](https://gohugo.io) 与 [Hextra](https://github.com/imfing/hextra) 主题，需要安装 Hugo 扩展版。站点已启用 KaTeX 数学公式渲染。
+本站使用 [Hugo](https://gohugo.io) 与 [Hextra](https://github.com/imfing/hextra) 主题，需要安装 Hugo 扩展版。站点已启用 KaTeX 数学公式渲染。文章列表通过 `content/blog/_index.md` 中的内联 shortcode 实现，侧边栏支持分类和标签多选筛选，标签及其计数随已选分类动态更新；不新增 `layouts/` 覆盖，也不单独生成分类、标签归档页。
 
 ## 内容规范
 
-- 内容使用 Markdown 编写；frontmatter 必须包含 `title`，可选字段包括 `description`、`date`、`tags`。
-- 博客文章放在 `content/blog/`，文档放在 `content/docs/`，并使用 `_index.md` 作为栏目索引。
+- 内容使用 Markdown 编写；frontmatter 必须包含 `title`、`date`、`categories` 和 `tags`，可选字段包括 `description`。
+- 所有正文统一放在 `content/blog/` 根目录，不再按技术主题嵌套目录；图片等资源与文章一同移动并保持相对路径不变。
+- 分类只表示写作目的，不表示技术领域。每篇只设置一个分类：`essays`（随笔）、`incident-review`（故障复盘）、`operations-guide`（运维手册）、`tech-sharing`（技术分享）、`design-research`（设计调研）、`learning-notes`（学习记录，包括自己的学习实践、知识归纳和外部教程资料整理）、`other`（其他）。新增文章优先归入现有分类，不要为技术、内容来源或单篇文章新建分类。
+- 标签只表示涉及的技术、组件、机制或技术主题，每篇设置 3～5 个，如 `kafka`、`kraft`、`性能优化`。不要使用“故障排查”“运维”“方案设计”“技术调研”“入门教程”“速查表”等与目的分类重复的标签。主要技术标签应能跨分类聚合同一技术的全部文章；使用受控、可复用的标签，避免过细和同义标签。
 - 文件名在合适时使用中文，并保持描述性。
 - 与内容同目录存放的图片使用 `![alt](path.assets/image.png)`。
 - KaTeX 数学公式使用 `$$` 块级分隔符。

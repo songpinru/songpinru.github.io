@@ -1,0 +1,14 @@
+---
+title: "编译Spark"
+date: 2024-05-29
+categories: ["learning-notes"]
+tags: ["spark", "hadoop", "yarn", "maven", "源码编译"]
+---
+
+
+- 去spark官网下载源码，解压到/opt/software/source
+- 进入该目录，编译
+
+```bash
+./dev/make-distribution.sh --name without-hive --tgz -Pyarn -Phadoop-3.1 -Dhadoop.version=3.1.3 -Pparquet-provided -Porc-provided -Phadoop-provided
+```

@@ -1,5 +1,8 @@
 ---
 title: "Polyv"
+date: 2024-05-29
+categories: ["design-research"]
+tags: ["workflow", "live-streaming", "web"]
 ---
 
 Polyv集成设计文档

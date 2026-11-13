@@ -14,6 +14,10 @@ outputs:
   page: [html, markdown]
   section: [html, rss]
 
+disableKinds:
+  - taxonomy
+  - term
+
 module:
   hugoVersion:
     extended: true
@@ -49,38 +53,13 @@ enableInlineShortcodes: true
 
 menu:
   main:
-    - name: "文档"
-      identifier: docs
-      pageRef: /docs
-      weight: 1
-    - name: "工程基础"
-      parent: docs
-      pageRef: /docs/engineering
-      weight: 1
-    - name: "应用开发"
-      parent: docs
-      pageRef: /docs/application-development
-      weight: 2
-    - name: "数据平台"
-      parent: docs
-      pageRef: /docs/data-platform
-      weight: 3
-    - name: "数据库"
-      parent: docs
-      pageRef: /docs/databases
-      weight: 4
-    - name: "博客"
+    - name: "文章"
       pageRef: /blog
-      weight: 2
+      weight: 1
     - name: "搜索"
-      weight: 3
+      weight: 2
       params:
         type: search
-    - name: "GitHub"
-      url: "https://github.com/songpinru/songpinru.github.io"
-      weight: 4
-      params:
-        icon: github
 
 params:
   description: "SongPinru 的技术笔记、工作经验与学习记录"
@@ -105,6 +84,8 @@ params:
   blog:
     list:
       displayTags: true
+      sortBy: date
+      sortOrder: desc
 
   search:
     enable: true
@@ -120,7 +101,7 @@ params:
     base: "https://github.com/songpinru/songpinru.github.io/edit/main/content"
 
   toc:
-    displayTags: true
+    displayTags: false
 
   highlight:
     copy:

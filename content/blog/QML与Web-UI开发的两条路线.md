@@ -1,8 +1,9 @@
 ---
 title: "QML 与 Web：UI 开发的两条路线"
 date: 2026-11-12
-tags: [QML, Qt, Web, JavaScript, UI 框架, 架构]
 description: "从 QML 的语法选择，到 HTML/CSS/JS 的历史分工，再到「为什么不能轻易替换 JavaScript」的思想实验，理解 UI 框架为什么走向两条不同的路。"
+categories: ["essays"]
+tags: ["qml", "web", "html"]
 ---
 
 > 当 UI 是封闭应用的一部分，我们关心组件是否内聚；当 UI 是开放内容网络的一部分，我们关心语义能否被外部世界读懂。两条路线，本质上是两种系统边界下的不同最优解。
